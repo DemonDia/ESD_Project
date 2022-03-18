@@ -10,13 +10,13 @@ CORS(app)
 
 
 firebaseConfig = {
-    "apiKey": "AIzaSyATNL8Kmwu9OcnT_kIf-I_6Jy_oyPtH6qk",
-    "authDomain": "usermicroservice-6f100.firebaseapp.com",
-    "databaseURL": "https://usermicroservice-6f100-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "projectId": "usermicroservice-6f100",
-    "storageBucket": "usermicroservice-6f100.appspot.com",
-    "messagingSenderId":  "660450931889",
-    "appId": "1:660450931889:web:0ea383811be60b73561e90"
+  "apiKey": "AIzaSyCCD_YMl1GVhCacEWtj424cMrmqHWqyzw0",
+  "authDomain": "jobmicroservice-13a0c.firebaseapp.com",
+  "databaseURL": "https://jobmicroservice-13a0c-default-rtdb.asia-southeast1.firebasedatabase.app",
+  "projectId": "jobmicroservice-13a0c",
+  "storageBucket": "jobmicroservice-13a0c.appspot.com",
+  "messagingSenderId": "209394015065",
+  "appId": "1:209394015065:web:b6612fd69caeaea6124a48"
 }
 
 firebase = pb.initialize_app(firebaseConfig)
@@ -38,9 +38,10 @@ def getUsers():
             print("value:",user.val())
             userDict[user.key()] = user.val()
         # return userDict
-        return userDict #return all user data
+        return json.dumps(userDict) #return all user data
     except Exception as e:
-        return e
+        print(e)
+        return "NOT OK"
 
 @app.route("/login",methods = ["POST"])
 def login():
@@ -71,13 +72,14 @@ def findByEmail(email):
 # bool(userDict["users"])
 
         if(bool(userDict["users"])): #yes theres an existing user
-            return userDict
+            return json.dumps(userDict)
         else:
             return "404"  #empty user valu
     # print(userDict.values())
     # print(type(user))
     #     # pass
-    except:
+    except Exception as e:
+        print(e)
         return "NOT OK"
 
 @app.route("/user/add_education/<string:email>",methods = ["POST"])

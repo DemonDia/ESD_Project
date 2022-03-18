@@ -16,7 +16,7 @@ CORS(app)
 # error_URL = "http://localhost:5004/error"
 
 
-@app.route("/job??", methods=['POST'])
+@app.route("/job", methods=['POST'])
 def create_job():
     # Simple check of input format and data of the request are JSON
     if request.is_json:
@@ -31,7 +31,7 @@ def create_job():
 
         except Exception as e:
             # Unexpected error in code
-            exc_type, ```exc_obj, exc_tb = sys.exc_info()
+            exc_type,exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
             print(ex_str)
