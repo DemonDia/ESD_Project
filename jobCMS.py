@@ -9,20 +9,20 @@ from invokes import invoke_http
 app = Flask(__name__)
 CORS(app)
 
-book_URL = "http://localhost:5000/book"
-order_URL = "http://localhost:5001/order"
-shipping_record_URL = "http://localhost:5002/shipping_record"
-activity_log_URL = "http://localhost:5003/activity_log"
-error_URL = "http://localhost:5004/error"
+# book_URL = "http://localhost:5000/book"
+# order_URL = "http://localhost:5001/order"
+# shipping_record_URL = "http://localhost:5002/shipping_record"
+# activity_log_URL = "http://localhost:5003/activity_log"
+# error_URL = "http://localhost:5004/error"
 
 
-@app.route("/place_order", methods=['POST'])
-def place_order():
+@app.route("/job??", methods=['POST'])
+def create_job():
     # Simple check of input format and data of the request are JSON
     if request.is_json:
         try:
-            order = request.get_json()
-            print("\nReceived an order in JSON:", order)
+            job = request.get_json()
+            print("\nReceived an order in JSON:", job)
 
             # do the actual work
             # 1. Send order info {cart items}
@@ -31,7 +31,7 @@ def place_order():
 
         except Exception as e:
             # Unexpected error in code
-            exc_type, exc_obj, exc_tb = sys.exc_info()
+            exc_type, ```exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
             print(ex_str)
@@ -48,12 +48,12 @@ def place_order():
     }), 400
 
 
-def processPlaceOrder(order):
+def processJob(JobId):
     # 2. Send the order info {cart items}
     # Invoke the order microservice
     print('\n-----Invoking order microservice-----')
-    order_result = invoke_http(order_URL, method='POST', json=order)
-    print('order_result: ', order_result)
+    job_result = invoke_http(job_URL, method='POST', json=job)
+    print('order_result: ', order_job)
 
     # 4. Record new order
     # record the activity log anyway
