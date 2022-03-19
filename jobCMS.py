@@ -6,14 +6,25 @@ from invokes import invoke_http
 import requests
 
 
+#to remove if we dont use rabbit amqp
+#import amqp_setup
+import pika
+import json
+
+
+
 app = Flask(__name__)
 CORS(app)
+
+
+create_job_URL = "http://localhost:5001/jobs"
 
 # book_URL = "http://localhost:5000/book"
 # order_URL = "http://localhost:5001/order"
 # shipping_record_URL = "http://localhost:5002/shipping_record"
 # activity_log_URL = "http://localhost:5003/activity_log"
 # error_URL = "http://localhost:5004/error"
+
 
 
 @app.route("/apply_job", methods=['POST'])
@@ -68,6 +79,11 @@ def processApplyJob(order):
     code = order_result["code"]
     if code not in range(200, 300):
 
+
+       
+        print("\nJob status ({:d}) published to the RabbitMQ Exchange:".format(
+            code), job_result)
+
         # Inform the error microservice
         print('\n\n-----Invoking error microservice as order fails-----')
         invoke_http(error_URL, method="POST", json=order_result)
@@ -75,6 +91,7 @@ def processApplyJob(order):
         # continue even if this invocation fails
         print("Order status ({:d}) sent to the error microservice:".format(
             code), order_result)
+
 
         # 7. Return error
         return {
@@ -95,6 +112,9 @@ def processApplyJob(order):
     code = shipping_result["code"]
     if code not in range(200, 300):
 
+
+        # invoke_http(activity_log_URL, method="POST", json=job_result)            
+        #amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="job.info", body=message)
         # Inform the error microservice
         print('\n\n-----Invoking error microservice as shipping fails-----')
         invoke_http(error_URL, method="POST", json=shipping_result)
@@ -119,6 +139,7 @@ def processApplyJob(order):
             "shipping_result": shipping_result
         }
     }
+
 
 
 # Execute this program if it is run as a main script (not by 'import')
