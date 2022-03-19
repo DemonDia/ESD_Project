@@ -7,14 +7,14 @@ import requests
 from invokes import invoke_http
 
 #to remove if we dont use rabbit amqp
-import amqp_setup
+#import amqp_setup
 import pika
 import json
 
 app = Flask(__name__)
 CORS(app)
 
-create_job_URL = "http://localhost:5000/jobs"
+create_job_URL = "http://localhost:5001/jobs"
 
 @app.route("/job", methods=['POST'])
 def create_job():
@@ -67,8 +67,7 @@ def processJob(job):
         print('\n\n-----Publishing the (job error) message with routing_key=job.error-----')
 
         # invoke_http(error_URL, method="POST", json=order_result)
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="job.error", 
-            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        #amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="job.error", body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
         # make message persistent within the matching queues until it is received by some receiver 
         # (the matching queues have to exist and be durable and bound to the exchange)
 
@@ -94,8 +93,7 @@ def processJob(job):
         print('\n\n-----Publishing the (job info) message with routing_key=job.info-----')        
 
         # invoke_http(activity_log_URL, method="POST", json=job_result)            
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="job.info", 
-            body=message)
+        #amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="job.info", body=message)
 
     print("\nJob published to RabbitMQ Exchange.\n")
     # - reply from the invocation is not used;
