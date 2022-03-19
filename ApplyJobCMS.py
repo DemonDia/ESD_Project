@@ -18,6 +18,7 @@ CORS(app)
 
 
 JobsURL = "http://127.0.0.1:5001/jobs"
+ApplicationURL = "http://127.0.0.1:5003/applications/"
 # check if job is there
 
 
@@ -27,11 +28,19 @@ def apply_job():
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
-
+        print(data)
+        print(JobsURL+"/"+data["JID"])
         result = invoke_http(JobsURL+"/"+data["JID"],method ="GET")
-        return result
-    except:
-        pass
+        result = jsonify(result)
+        if(result == "404"):
+            return "NOT OK"
+        else:
+            result = invoke_http(ApplicationURL+data["JID"],method ="POST",json =data)
+            # print(result)
+        return "OK"
+    except Exception as e:
+        print(e)
+        return "NOT OK"
 
 
 
