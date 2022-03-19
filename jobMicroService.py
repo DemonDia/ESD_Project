@@ -9,7 +9,6 @@ CORS(app)
 
 # dialect+driver://username:password@host:port/database
 
-
 firebaseConfig = {
   "apiKey": "AIzaSyCCD_YMl1GVhCacEWtj424cMrmqHWqyzw0",
   "authDomain": "jobmicroservice-13a0c.firebaseapp.com",
@@ -31,7 +30,6 @@ def get_all():
     try:
         jobs = db.child("jobs").get()
         jobsDict = {}        
-                
     
         for job in jobs.each():
             print(type(job.key()))
@@ -71,7 +69,7 @@ def get_job_by_id(JobID):
         print(jobDict[JobID])
         # print(user.key())
         print(bool(jobDict[JobID])) #return true and false
-
+        
     # bool(userDict["users"])
 
         if(bool(jobDict[JobID])): #yes theres an existing user
@@ -82,9 +80,6 @@ def get_job_by_id(JobID):
     except:
 
         return "NOT OK"
-
-
-
 
 if __name__ == "__main__":
     app.run(port = 5001,debug = True)
