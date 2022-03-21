@@ -55,24 +55,6 @@ def create_job():
             }
             ), 201
       
-create_job_URL = "http://127.0.0.1:5001/jobs"
-# check if job is there
-
-@app.route("/create_job/<string:CID>",methods = ["POST"])
-def create_job(CID):
-    try:
-        data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
-        data = json.loads(data)
-        print(data)
-        invoke_http(create_job_URL,method = "POST",json = data)
-        return "OK"
-    except Exception as e:
-        print(e)
-        return "NOT OK"
-
-
-
-
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
