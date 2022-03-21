@@ -100,7 +100,7 @@ def get_job_by_id(JobID):
         else:
             return "404"  #empty user valu
 
-    except:
+    except Exception as e:
         # return "NOT OK"
         return jsonify(
             {
