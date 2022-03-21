@@ -27,7 +27,7 @@ db = firebase.database() #user realtime db
 
 # db.create_all()
 
-@app.route("/jobs/create_job") # get all jobs
+@app.route("/jobs") # get all jobs
 def get_all():
     try:
         jobs = db.child("jobs").get()
@@ -53,19 +53,15 @@ def get_all():
             }
         ), 500
 
-@app.route("/jobs/<string:CID>",methods = ["POST"])
-def post_job(CID):
 
-        return "NOT OK"
-
-@app.route("/jobs/create_jobs",methods = ["POST"])
+@app.route("/jobs/create",methods = ["POST"])
 def post_job():
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
         print(type(data))
         data["posted_timestamp"] = str(datetime.now())
-        db.child("jobs").child(CID).push(data)
+        db.child("jobs").push(data)
 
     except Exception as e:
         print(e)
@@ -103,9 +99,37 @@ def get_job_by_id(JobID):
         else:
             return "404"  #empty user valu
 
-    except:
+    except Exception as e:
+        # return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
+            }
+        ), 500
 
-        return "NOT OK"
+@app.route("/update_vacancy/<string:JID>",methods = ["PUT"]) # update vacancy
+def update_vacancy(JID):
+    try:
+        data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+        data = json.loads(data)
+        vacancy = db.child('jobs/'+JID+'/vacancy').get()
+        if(vacancy > 0):
+            updated_v = vacancy-1
+            db.child("jobs/"+JID).update({"vacancy":updated_v})
+            return data["vacancy"]
+        else:
+            return "500"
+        # return decision
+    except Exception as e:
+        print(e)
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating the job. " + str(e)
+            }
+        ), 500
 
 if __name__ == "__main__":
     app.run(port = 5001,debug = True)
