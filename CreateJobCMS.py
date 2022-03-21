@@ -46,7 +46,7 @@ def create_job():
 
             # record new job
             # record the activity log
-            invoke_http(activity_log_URL,method = "POST",json = job_result)
+            # invoke_http(activity_log_URL,method = "POST",json = job_result)
 
             code = job_result["code"]
             if code not in range(200, 300):
