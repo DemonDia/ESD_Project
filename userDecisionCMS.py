@@ -8,6 +8,7 @@ CORS(app)
 
 # app.config['CORS_HEADERS'] = 'Content-Type'
 ApplicationSMS = "http://127.0.0.1:5003/applications"
+JobSMS = "http://127.0.0.1:5001/jobs"
 
 @app.route("/get_applications")
 def getUsers(UID):
@@ -15,6 +16,7 @@ def getUsers(UID):
         pass
     except:
         pass
+
 @app.route("/get_applications/<string:UID>") # process you auto fill company ID
 def owner_get_applications(UID):
     try:
@@ -22,8 +24,6 @@ def owner_get_applications(UID):
         return applications
     except Exception as e:
         return "NOT OK"
-
-
 
 
 if __name__ == "__main__":
