@@ -27,12 +27,13 @@ db = firebase.database() #user realtime db
 # db.create_all()
 
 
-@app.route("/applications/<string:jobID>",methods = ["POST"]) # create_app
-def create_application(jobID):
+@app.route("/applications/<string:JID>",methods = ["POST"]) # create_app
+def create_application(JID):
     try:
+
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
-        data["JID"] = jobID
+        data["JID"] = JID
         # print(data)
 
         db.child("applications").push(data)
@@ -61,7 +62,7 @@ def get_all():
         return "NOT OK"
 
 @app.route("/applications/job/<string:JID>") # get all applications to certain jobs
-def get_all_applications_of_a_job(JID):
+def get_application_by_JID(JID):
     try:
         applications = db.child("applications").order_by_child("JID").equal_to(JID).get()
         applicationsDict = {}        
@@ -79,6 +80,28 @@ def get_all_applications_of_a_job(JID):
     except Exception as e:
         print(e)
         return "NOT OK"
+
+
+@app.route("/applications/job/aid/<string:AID>") # get applications based on AID
+def get_application_by_AID(AID):
+    try:
+        applications = db.child("applications/"+AID).get()
+        applicationsDict = {}        
+                
+    
+        for application in applications.each():
+            print(type(application.key()))
+            print("___________") 
+            print("key:",application.key())
+            print("value:",application.val())
+            applicationsDict[application.key()] = application.val()
+        # print("Job dict:",applicationsDict)
+        # return userDict
+        return json.dumps(applicationsDict) #return all user data
+    except Exception as e:
+        print(e)
+        return "NOT OK"
+
 
 @app.route("/applications/company/<string:CID>") # get all applications to certain company
 def get_all_applications_of_a_company(CID):
@@ -98,7 +121,13 @@ def get_all_applications_of_a_company(CID):
         return json.dumps(applicationsDict) #return all user data
     except Exception as e:
         print(e)
-        return "NOT OK"
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while obtaining applications " + str(e)
+            }
+        ), 500
 
 @app.route("/applications/user/<string:UID>") # get jobs user applied to
 def get_all_applications_of_a_user(UID):
@@ -118,7 +147,13 @@ def get_all_applications_of_a_user(UID):
         return json.dumps(applicationsDict) #return all user data
     except Exception as e:
         print(e)
-        return "NOT OK"
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while processing the application " + str(e)
+            }
+        ), 500
 
 
 if __name__ == "__main__":
