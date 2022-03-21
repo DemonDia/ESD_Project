@@ -44,7 +44,7 @@ def get_all():
         print(e)
         return "NOT OK"
 
-@app.route("/jobs",methods = ["POST"])
+@app.route("/jobs/create_jobs",methods = ["POST"])
 def post_job():
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
