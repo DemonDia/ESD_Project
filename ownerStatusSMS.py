@@ -26,12 +26,18 @@ def owner_process_application(AID):
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data) #gets
-        db.child("applications/"+AID).update({"app_status":data["app_status"]})
-        return data["app_status"]
+        db.child("applications/"+AID).update({"owner_status":data["owner_status"]})
+        return data["owner_status"]
         # return decision
     except Exception as e:
         print(e)
-        return "NOT OK"
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating the job. " + str(e)
+            }
+        ), 500
 
 
 

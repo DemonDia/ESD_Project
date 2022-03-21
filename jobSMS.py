@@ -108,6 +108,28 @@ def get_job_by_id(JobID):
             }
         ), 500
 
+@app.route("/update_vacancy/<string:JID>",methods = ["PUT"]) # update vacancy
+def update_vacancy(JID):
+    try:
+        data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+        data = json.loads(data)
+        vacancy = db.child('jobs/'+JID+'/vacancy').get()
+        if(vacancy > 0):
+            updated_v = vacancy-1
+            db.child("jobs/"+JID).update({"vacancy":updated_v})
+            return data["vacancy"]
+        else:
+            return "500"
+        # return decision
+    except Exception as e:
+        print(e)
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating the job. " + str(e)
+            }
+        ), 500
 
 if __name__ == "__main__":
     app.run(port = 5001,debug = True)
