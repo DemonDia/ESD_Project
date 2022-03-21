@@ -29,11 +29,18 @@ def processApplication(AID):
         data = json.loads(data) #gets
         print(data)
         db.child("applications/"+AID).update({"accepted":data["accepted"]})
-        return data["accepted"]
+        # print(data["accepted"])
+        return str(data["accepted"])
         # return decision
     except Exception as e:
         print(e)
-        return "NOT OK"
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while processing the application " + str(e)
+            }
+        ), 500
 
 
 
