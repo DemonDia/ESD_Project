@@ -57,13 +57,6 @@ def get_all():
 #create 1 job
 @app.route("/jobs/<string:CID>",methods = ["POST"])
 def post_job(CID):
-
-
-        return "NOT OK"
-
-@app.route("/jobs/create_job",methods = ["POST"])
-def post_job():
-
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
