@@ -2,6 +2,9 @@
 # The above shebang (#!) operator tells Unix-like environments
 # to run this file as a python3 script
 
+
+# receive http status code that are not 400
+
 import json
 import os
 
