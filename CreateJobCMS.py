@@ -18,7 +18,7 @@ import requests
 
 
 #to remove if we dont use rabbit amqp
-#import amqp_setup
+import amqp_setup
 import pika
 import json
 
