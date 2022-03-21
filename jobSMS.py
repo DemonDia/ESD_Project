@@ -99,9 +99,15 @@ def get_job_by_id(JobID):
         else:
             return "404"  #empty user valu
 
-    except:
+    except Exception as e:
+        # return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
+            }
+        ), 500
 
-        return "NOT OK"
 
 if __name__ == "__main__":
     app.run(port = 5001,debug = True)
