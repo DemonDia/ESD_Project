@@ -1,8 +1,11 @@
 #from crypt import methods
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from datetime import datetime
 import pyrebase as pb
 import json
+
 app = Flask(__name__)
 CORS(app)
 # sqlalchemy
@@ -24,8 +27,7 @@ db = firebase.database() #user realtime db
 
 # db.create_all()
 
-
-@app.route("/jobs") # get all jobs
+@app.route("/jobs/create_job") # get all jobs
 def get_all():
     try:
         jobs = db.child("jobs").get()
@@ -40,8 +42,20 @@ def get_all():
         print("Job dict:",jobsDict)
         # return userDict
         return json.dumps(jobsDict) #return all user data
+    
     except Exception as e:
         print(e)
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
+            }
+        ), 500
+
+@app.route("/jobs/<string:CID>",methods = ["POST"])
+def post_job(CID):
+
         return "NOT OK"
 
 @app.route("/jobs/create_jobs",methods = ["POST"])
@@ -49,13 +63,26 @@ def post_job():
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
-        db.child("jobs").push(data)
+        print(type(data))
+        data["posted_timestamp"] = str(datetime.now())
+        db.child("jobs").child(CID).push(data)
 
-        return "OK"
     except Exception as e:
         print(e)
 
-        return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating the job. " + str(e)
+            }
+        ), 500
+    
+    return jsonify(
+        {
+            "code": 201,
+            "data": data
+        }
+        ), 201
 
 
 @app.route("/jobs/<string:JobID>")
@@ -63,7 +90,6 @@ def get_job_by_id(JobID):
     try:
         job = db.child("jobs/"+JobID).get()
         jobDict = {}
-
 
         jobDict[job.key()] = job.val()
         print(jobDict[JobID])
