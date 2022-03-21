@@ -27,7 +27,7 @@ db = firebase.database() #user realtime db
 
 # db.create_all()
 
-@app.route("/jobs/create_job") # get all jobs
+@app.route("/jobs") # get all jobs
 def get_all():
     try:
         jobs = db.child("jobs").get()
