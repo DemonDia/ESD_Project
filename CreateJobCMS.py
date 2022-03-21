@@ -37,7 +37,7 @@ def create_job():
             data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
             data = json.loads(data)
             #print(data)
-            invoke_http(JobsURL+"/"+data["CID"],method = "POST",json = data)
+            invoke_http(JobsURL+"/create",method = "POST",json = data)
 
         except Exception as e:
             print(e)

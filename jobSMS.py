@@ -53,15 +53,14 @@ def get_all():
             }
         ), 500
 
-@app.route("/jobs/<string:CID>",methods = ["POST"])
-def post_job(CID):
-
+@app.route("/jobs/create",methods = ["POST"])
+def post_job():
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
         print(type(data))
         data["posted_timestamp"] = str(datetime.now())
-        db.child("jobs").child(CID).push(data)
+        db.child("jobs").push(data)
 
     except Exception as e:
         print(e)
