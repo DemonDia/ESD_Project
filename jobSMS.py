@@ -27,8 +27,7 @@ db = firebase.database() #user realtime db
 
 # db.create_all()
 
-#get all jobs
-@app.route("/jobs") 
+@app.route("/jobs/create_job") # get all jobs
 def get_all():
     try:
         jobs = db.child("jobs").get()
@@ -54,16 +53,13 @@ def get_all():
             }
         ), 500
 
-#create 1 job
 @app.route("/jobs/<string:CID>",methods = ["POST"])
 def post_job(CID):
-
 
         return "NOT OK"
 
 @app.route("/jobs/create_job",methods = ["POST"])
 def post_job():
-
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
@@ -88,7 +84,7 @@ def post_job():
         }
         ), 201
 
-#get job by .. (need to fix)
+
 @app.route("/jobs/<string:JobID>")
 def get_job_by_id(JobID):
     try:
