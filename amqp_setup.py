@@ -28,10 +28,6 @@ channel.exchange_declare(exchange=exchangename, exchange_type=exchangetype, dura
 # Here can be a place to set up all queues needed by the microservices,
 # - instead of setting up the queues using RabbitMQ UI.
 
-# create job topic
-exchangename="createjob_topic"
-exchangetype="topic"
-channel.exchange_declare(exchange=exchangename, exchange_type=exchangetype, durable=True)
 
 ############   Error queue   #############
 #delcare Error queue
