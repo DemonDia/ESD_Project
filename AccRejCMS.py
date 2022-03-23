@@ -32,7 +32,14 @@ def owner_process_application(AID):
         applications = invoke_http(OwnerStatusSMS+AID,method = "PUT",json = data)
         return jsonify(applications)
     except Exception as e:
-        return "NOT OK"
+        print(e)
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating the job. " + str(e)
+            }
+        ), 500
 
 def send_to_broker(): #for the broker
     pass

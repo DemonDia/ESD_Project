@@ -53,7 +53,6 @@ def get_all():
             }
         ), 500
 
-
 @app.route("/jobs/create",methods = ["POST"])
 def post_job():
     try:
@@ -111,13 +110,27 @@ def get_job_by_id(JobID):
 @app.route("/update_vacancy/<string:JID>",methods = ["PUT"]) # update vacancy
 def update_vacancy(JID):
     try:
-        data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
-        data = json.loads(data)
-        vacancy = db.child('jobs/'+JID+'/vacancy').get()
+        # data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+        # data = json.loads(data)
+        print('jobs/'+JID+'/vacancy')
+        getGivenJob = db.child('jobs/'+JID).get()
+        givenJobDict = {}        
+                
+    
+        for field in getGivenJob.each():
+            print(type(field.key()))
+            print("___________") 
+            print("key:",field.key())
+            print("value:",field.val())
+            givenJobDict[field.key()] = field.val()
+        print(givenJobDict)
+        vacancy = givenJobDict["vacancy"]
+        # return vacanciesDict
+
         if(vacancy > 0):
             updated_v = vacancy-1
             db.child("jobs/"+JID).update({"vacancy":updated_v})
-            return data["vacancy"]
+            return str(updated_v)
         else:
             return "500"
         # return decision
@@ -127,7 +140,7 @@ def update_vacancy(JID):
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while creating the job. " + str(e)
+                "message": "An error occurred while updating vacancy. " + str(e)
             }
         ), 500
 
