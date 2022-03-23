@@ -82,6 +82,67 @@ def findByEmail(email):
         print(e)
         return "NOT OK"
 
+@app.route("/user/add_skill/<string:email>",methods = ["POST"])
+def addSkill(email):
+    # try:
+    userDict = {}
+    user = db.child("users").order_by_child("email").equal_to(email).get()
+    print(user)
+    user_id = user.key()
+    userDict[user.key()] = user.val()
+    for user_result in user.each():
+        user_id = user_result.key()
+        # print(user.key()) 
+    # print(user.val())
+    # print(userDict["users"])
+    # print(user.key())
+    print(bool(userDict["users"]))
+    if(bool(userDict["users"])):
+        
+        data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+        data = json.loads(data)
+        print(data)
+        path = "users/{0}/skills".format(user_id)
+        print(path)
+        # print("users/{0}/{1}/education".format(user_id,email))
+        db.child(path).push(data)
+        # user.child("education").push(data)
+        # add skill
+        return "OK"
+    else:
+        return "404" 
+@app.route("/user/add_work/<string:email>",methods = ["POST"])
+def addWork(email):
+    # try:
+    userDict = {}
+    user = db.child("users").order_by_child("email").equal_to(email).get()
+    print(user)
+    user_id = user.key()
+    userDict[user.key()] = user.val()
+    for user_result in user.each():
+        user_id = user_result.key()
+        # print(user.key()) 
+    # print(user.val())
+    # print(userDict["users"])
+    # print(user.key())
+    print(bool(userDict["users"]))
+    if(bool(userDict["users"])):
+        
+        data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+        data = json.loads(data)
+        print(data)
+        path = "users/{0}/work_experience".format(user_id)
+        print(path)
+        # print("users/{0}/{1}/education".format(user_id,email))
+        db.child(path).push(data)
+        # user.child("education").push(data)
+        # add skill
+        return "OK"
+    else:
+        return "404" 
+
+
+
 @app.route("/user/add_education/<string:email>",methods = ["POST"])
 def addEducation(email):
     # try:
@@ -102,7 +163,7 @@ def addEducation(email):
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
         print(data)
-        path = "users/{0}/{1}/education".format(user_id,email)
+        path = "users/{0}/education".format(user_id)
         print(path)
         # print("users/{0}/{1}/education".format(user_id,email))
         db.child(path).push(data)
