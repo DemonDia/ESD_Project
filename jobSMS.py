@@ -41,7 +41,13 @@ def get_all():
             jobsDict[job.key()] = job.val()
         print("Job dict:",jobsDict)
         # return userDict
-        return json.dumps(jobsDict) #return all user data
+        # return json.dumps(jobsDict) #return all user data
+        return jsonify(
+                    {
+                        "code": 201,
+                        "data": json.dumps(jobsDict)
+                    }
+                    ), 201
     
     except Exception as e:
         print(e)
@@ -62,6 +68,13 @@ def post_job():
         data["posted_timestamp"] = str(datetime.now())
         db.child("jobs").push(data)
 
+        return jsonify(
+            {
+                "code": 201,
+                "data": data
+            }
+            ), 201
+
     except Exception as e:
         print(e)
 
@@ -72,13 +85,6 @@ def post_job():
             }
         ), 500
     
-    return jsonify(
-        {
-            "code": 201,
-            "data": data
-        }
-        ), 201
-
 
 @app.route("/jobs/<string:JobID>")
 def get_job_by_id(JobID):
@@ -94,9 +100,20 @@ def get_job_by_id(JobID):
     # bool(userDict["users"])
 
         if(bool(jobDict[JobID])): #yes theres an existing user
-            return json.dumps(jobDict)
-        else:
-            return "404"  #empty user valu
+            result = json.dumps(jobDict)
+            return jsonify(
+                {
+                    "code": 201,
+                    "data": result
+                }
+                ), 201
+            # return "404"  #empty user valu
+            return jsonify(
+                {
+                    "code": 400,
+                    "data": "The user value is empty"
+                }
+            ), 400
 
     except Exception as e:
         # return "NOT OK"

@@ -37,8 +37,44 @@ def create_job():
         try:
             data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
             data = json.loads(data)
-            #print(data)
-            invoke_http(JobsURL+"/create",method = "POST",json = data)
+            print(data)
+
+            # Send the job info
+            job_result = invoke_http(JobsURL+"/create",method = "POST",json = data)
+
+            # print(job_result)
+
+            # record new job
+            # record the activity log
+            # invoke_http(activity_log_URL,method = "POST",json = job_result)
+
+            # print('my job_result', job_result)
+
+            code = job_result["code"]
+            if code not in range(200, 300):
+                message = json.dumps(job_result)
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.error", 
+                body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+                # return error
+                return {
+                    "code": 500,
+                    "data": {"job_result": job_result},
+                    "message": "Job creation failure sent for error handling."
+                }
+            else:
+                # Record new job
+                # record the activity log anyway
+                message = json.dumps(job_result)
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.info", 
+                body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+                return jsonify(
+                    {
+                        "code": 201,
+                        "result": job_result
+                    }
+                    ), 201
 
         except Exception as e:
             print(e)

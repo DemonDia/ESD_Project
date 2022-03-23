@@ -1,4 +1,4 @@
-#from crypt import methods
+# from crypt import methods
 from flask import Flask, request, jsonify
 import json
 from flask_cors import CORS
@@ -37,10 +37,22 @@ def create_application(JID):
         # print(data)
 
         db.child("applications").push(data)
-        return "OK"
+        # return "OK"
+        return jsonify(
+                {
+                    "code": 201,
+                    "data": json.dumps(data)
+                }
+                ), 201
     except Exception as e:
         print(e)
-        return "NOT OK"
+        # return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while applying for job. " + str(e)
+            }
+        ), 500
 
 @app.route("/applications")
 def get_all():
