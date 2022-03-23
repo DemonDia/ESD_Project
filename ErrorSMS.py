@@ -1,11 +1,31 @@
 #!/usr/bin/env python3
 # The above shebang (#!) operator tells Unix-like environments
 # to run this file as a python3 script
+import os, sys
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import pyrebase as pb
+import json
+app = Flask(__name__)
+CORS(app)
 
 import json
 import os
 
 import amqp_setup
+
+firebaseConfig = {
+    "apiKey": "AIzaSyC6vFvSWpcY6sS8g1nXvWC3Rgo3X_ZwrqY",
+    "authDomain": "errormicroservice.firebaseapp.com",
+    "databaseURL": "https://errormicroservice-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "projectId": "errormicroservice",
+    "storageBucket": "errormicroservice.appspot.com",
+    "messagingSenderId": "356092494930",
+    "appId": "1:356092494930:web:22814fccd220402ae00b8b"
+}
+
+firebase = pb.initialize_app(firebaseConfig)
+db = firebase.database() #user realtime db
 
 monitorBindingKey='*.error'
 
@@ -28,10 +48,12 @@ def processError(errorMsg):
     print("Printing the error message:")
     try:
         error = json.loads(errorMsg)
+        db.child("errors").push(error)
         print("--JSON:", error)
     except Exception as e:
         print("--NOT JSON:", e)
         print("--DATA:", errorMsg)
+        db.child("errors").push(e)
     print()
 
 

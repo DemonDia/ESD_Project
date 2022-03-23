@@ -8,8 +8,8 @@ import os, sys
 import requests
 
 #to remove if we dont use rabbit amqp
-#import amqp_setup
-#import pika
+import amqp_setup
+import pika
 from flask_cors import CORS
 
 import os, sys
@@ -29,10 +29,11 @@ CORS(app)
 
 
 JobsURL = "http://127.0.0.1:5001/jobs"
+activity_log_URL = "http://127.0.0.1:5010/activities"
 
 @app.route("/create_job", methods = ["POST"])
 def create_job():
-    #if request.is_json:
+    if request.is_json:
         try:
             data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
             data = json.loads(data)
@@ -48,12 +49,12 @@ def create_job():
             }
             ), 500
         
-        return jsonify(
-            {
-                "code": 201,
-                "data": data
-            }
-            ), 201
+    return jsonify(
+        {
+            "code": 400,
+            "data": str(request.get_data())
+        }
+        ), 400
       
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":

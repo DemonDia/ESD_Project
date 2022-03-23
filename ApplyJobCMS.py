@@ -7,7 +7,7 @@ import requests
 
 
 #to remove if we dont use rabbit amqp
-#import amqp_setup
+# import amqp_setup
 import pika
 import json
 
@@ -33,6 +33,9 @@ def apply_job():
         result = invoke_http(JobsURL+"/"+data["JID"],method ="GET")
         result = jsonify(result)
         if(result == "404"):
+            # message = result["code"]
+            # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="job.error", 
+            # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
             return "NOT OK"
         else:
             result = invoke_http(ApplicationURL+data["JID"],method ="POST",json =data)
