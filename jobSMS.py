@@ -108,12 +108,12 @@ def get_job_by_id(JobID):
                 }
                 ), 201
             # return "404"  #empty user valu
-            return jsonify(
-                {
-                    "code": 400,
-                    "data": "The user value is empty"
-                }
-            ), 400
+        return jsonify(
+            {
+                "code": 400,
+                "data": "The user value is empty"
+            }
+        ), 400
 
     except Exception as e:
         # return "NOT OK"

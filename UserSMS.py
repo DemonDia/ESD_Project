@@ -10,13 +10,13 @@ CORS(app)
 
 
 firebaseConfig = {
-    "apiKey": "AIzaSyATNL8Kmwu9OcnT_kIf-I_6Jy_oyPtH6qk",
-    "authDomain": "usermicroservice-6f100.firebaseapp.com",
-    "databaseURL": "https://usermicroservice-6f100-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "projectId": "usermicroservice-6f100",
-    "storageBucket": "usermicroservice-6f100.appspot.com",
-    "messagingSenderId":  "660450931889",
-    "appId": "1:660450931889:web:0ea383811be60b73561e90"
+  "apiKey": "AIzaSyCCD_YMl1GVhCacEWtj424cMrmqHWqyzw0",
+  "authDomain": "jobmicroservice-13a0c.firebaseapp.com",
+  "databaseURL": "https://jobmicroservice-13a0c-default-rtdb.asia-southeast1.firebasedatabase.app",
+  "projectId": "jobmicroservice-13a0c",
+  "storageBucket": "jobmicroservice-13a0c.appspot.com",
+  "messagingSenderId": "209394015065",
+  "appId": "1:209394015065:web:b6612fd69caeaea6124a48"
 }
 
 firebase = pb.initialize_app(firebaseConfig)
@@ -38,18 +38,10 @@ def getUsers():
             print("value:",user.val())
             userDict[user.key()] = user.val()
         # return userDict
-        return userDict #return all user data
+        return json.dumps(userDict) #return all user data
     except Exception as e:
-<<<<<<< Updated upstream:userMicroservice.py
-        return e
-=======
-        return jsonify(
-            {
-                "code": 500,
-                "message": "An error occurred while finding the jobs. " + str(e)
-            }
-        ), 500
->>>>>>> Stashed changes:UserSMS.py
+        print(e)
+        return "NOT OK"
 
 @app.route("/login",methods = ["POST"])
 def login():
@@ -62,13 +54,9 @@ def login():
     
         # print("HHHA")
         return "OK"
-    except Exception as e:
-        return jsonify(
-            {
-                "code": 500,
-                "message": "An error occurred while finding the jobs. " + str(e)
-            }
-        ), 500
+    except:
+        # print("Invalid email and/or password!")
+        return "NOT OK"
 
 
 @app.route("/user/<string:email>")
@@ -84,24 +72,15 @@ def findByEmail(email):
 # bool(userDict["users"])
 
         if(bool(userDict["users"])): #yes theres an existing user
-            return userDict
+            return json.dumps(userDict)
         else:
             return "404"  #empty user valu
     # print(userDict.values())
     # print(type(user))
     #     # pass
-<<<<<<< Updated upstream:userMicroservice.py
-    except:
-        return "NOT OK"
-
-=======
     except Exception as e:
-        return jsonify(
-            {
-                "code": 500,
-                "message": "An error occurred while finding the jobs. " + str(e)
-            }
-        ), 500
+        print(e)
+        return "NOT OK"
 
 @app.route("/user/add_skill/<string:email>",methods = ["POST"])
 def addSkill(email):
@@ -131,13 +110,7 @@ def addSkill(email):
         # add skill
         return "OK"
     else:
-        return jsonify(
-            {
-                "code": 404,
-                "message": "An error occurred while finding the jobs. "
-            }
-        ), 500
-
+        return "404" 
 @app.route("/user/add_work/<string:email>",methods = ["POST"])
 def addWork(email):
     # try:
@@ -166,16 +139,10 @@ def addWork(email):
         # add skill
         return "OK"
     else:
-        return jsonify(
-            {
-                "code": 404,
-                "message": "An error occurred while finding the jobs. "
-            }
-        ), 500 
+        return "404" 
 
 
 
->>>>>>> Stashed changes:UserSMS.py
 @app.route("/user/add_education/<string:email>",methods = ["POST"])
 def addEducation(email):
     # try:
@@ -196,7 +163,7 @@ def addEducation(email):
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
         print(data)
-        path = "users/{0}/{1}/education".format(user_id,email)
+        path = "users/{0}/education".format(user_id)
         print(path)
         # print("users/{0}/{1}/education".format(user_id,email))
         db.child(path).push(data)
@@ -204,12 +171,7 @@ def addEducation(email):
         # add skill
         return "OK"
     else:
-        return jsonify(
-            {
-                "code": 404,
-                "message": "An error occurred while finding the jobs. "
-            }
-        ), 500 
+        return "404" 
     # print(userDict.values())
     # print(type(user))
     #     # pass
@@ -239,21 +201,13 @@ def register():
             db.child("users").push(data)
             return "OK"
         else:
-            return jsonify(
-            {
-                "code": 404,
-                "message": "An error occurred while finding the jobs. "
-            }
-        ), 500
+            print("GG")
+            return "NOT OK"
         
     except Exception as e:
-        return jsonify(
-            {
-                "code": 500,
-                "message": "An error occurred while finding the jobs. " + str(e)
-            }
-        ), 500
+        print(e)
+        return "NOT OK"
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port = 5000,debug = True)
+    app.run(host="0.0.0.0",port = 5007,debug = True)
