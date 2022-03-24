@@ -40,8 +40,12 @@ def getUsers():
         # return userDict
         return json.dumps(userDict) #return all user data
     except Exception as e:
-        print(e)
-        return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
+            }
+        ), 500
 
 @app.route("/login",methods = ["POST"])
 def login():
@@ -54,9 +58,13 @@ def login():
     
         # print("HHHA")
         return "OK"
-    except:
-        # print("Invalid email and/or password!")
-        return "NOT OK"
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while logging in. " + str(e)
+            }
+        ), 500
 
 
 @app.route("/user/<string:email>")
@@ -205,8 +213,12 @@ def register():
             return "NOT OK"
         
     except Exception as e:
-        print(e)
-        return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while registering. " + str(e)
+            }
+        ), 500
 
 
 if __name__ == "__main__":

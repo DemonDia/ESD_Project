@@ -73,7 +73,7 @@ def get_all():
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while finding the jobs. " + str(e)
+                "message": "An error occurred while gettng applications. " + str(e)
             }
         ), 500
 
@@ -97,7 +97,7 @@ def get_application_by_JID(JID):
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while finding the jobs. " + str(e)
+                "message": "An error occurred while getting applications. " + str(e)
             }
         ), 500
 
@@ -122,7 +122,7 @@ def get_application_by_AID(AID):
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while finding the jobs. " + str(e)
+                "message": "An error occurred while getting applications." + str(e)
             }
         ), 500
 
@@ -149,7 +149,7 @@ def get_all_applications_of_a_company(CID):
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while obtaining applications " + str(e)
+                "message": "An error occurred while obtaining applications." + str(e)
             }
         ), 500
 
@@ -175,7 +175,7 @@ def get_all_applications_of_a_user(UID):
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while processing the application " + str(e)
+                "message": "An error occurred while processing the application." + str(e)
             }
         ), 500
 

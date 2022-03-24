@@ -55,7 +55,7 @@ def get_all():
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while finding the jobs. " + str(e)
+                "message": "An error occurred while getting the jobs. " + str(e)
             }
         ), 500
 
