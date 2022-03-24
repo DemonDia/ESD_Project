@@ -45,7 +45,7 @@ def create_application(JID):
                 }
                 ), 201
     except Exception as e:
-        print(e)
+        # print(e)
         # return "NOT OK"
         return jsonify(
             {
@@ -70,8 +70,12 @@ def get_all():
         # return userDict
         return json.dumps(applicationsDict) #return all user data
     except Exception as e:
-        print(e)
-        return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
+            }
+        ), 500
 
 @app.route("/applications/job/<string:JID>") # get all applications to certain jobs
 def get_application_by_JID(JID):
@@ -90,8 +94,12 @@ def get_application_by_JID(JID):
         # return userDict
         return json.dumps(applicationsDict) #return all user data
     except Exception as e:
-        print(e)
-        return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
+            }
+        ), 500
 
 
 @app.route("/applications/job/aid/<string:AID>") # get applications based on AID
@@ -111,8 +119,12 @@ def get_application_by_AID(AID):
         # return userDict
         return json.dumps(applicationsDict) #return all user data
     except Exception as e:
-        print(e)
-        return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
+            }
+        ), 500
 
 
 @app.route("/applications/company/<string:CID>") # get all applications to certain company
@@ -132,7 +144,7 @@ def get_all_applications_of_a_company(CID):
         # return userDict
         return json.dumps(applicationsDict) #return all user data
     except Exception as e:
-        print(e)
+        # print(e)
 
         return jsonify(
             {
@@ -158,7 +170,7 @@ def get_all_applications_of_a_user(UID):
         # return userDict
         return json.dumps(applicationsDict) #return all user data
     except Exception as e:
-        print(e)
+        # print(e)
 
         return jsonify(
             {

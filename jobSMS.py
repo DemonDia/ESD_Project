@@ -50,7 +50,7 @@ def get_all():
                     ), 201
     
     except Exception as e:
-        print(e)
+        # print(e)
 
         return jsonify(
             {
@@ -76,7 +76,7 @@ def post_job():
             ), 201
 
     except Exception as e:
-        print(e)
+        # print(e)
 
         return jsonify(
             {
@@ -152,7 +152,7 @@ def update_vacancy(JID):
             return "500"
         # return decision
     except Exception as e:
-        print(e)
+        # print(e)
 
         return jsonify(
             {
