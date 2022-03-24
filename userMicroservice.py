@@ -40,7 +40,16 @@ def getUsers():
         # return userDict
         return userDict #return all user data
     except Exception as e:
+<<<<<<< Updated upstream:userMicroservice.py
         return e
+=======
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
+            }
+        ), 500
+>>>>>>> Stashed changes:UserSMS.py
 
 @app.route("/login",methods = ["POST"])
 def login():
@@ -53,9 +62,13 @@ def login():
     
         # print("HHHA")
         return "OK"
-    except:
-        # print("Invalid email and/or password!")
-        return "NOT OK"
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
+            }
+        ), 500
 
 
 @app.route("/user/<string:email>")
@@ -77,9 +90,92 @@ def findByEmail(email):
     # print(userDict.values())
     # print(type(user))
     #     # pass
+<<<<<<< Updated upstream:userMicroservice.py
     except:
         return "NOT OK"
 
+=======
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
+            }
+        ), 500
+
+@app.route("/user/add_skill/<string:email>",methods = ["POST"])
+def addSkill(email):
+    # try:
+    userDict = {}
+    user = db.child("users").order_by_child("email").equal_to(email).get()
+    print(user)
+    user_id = user.key()
+    userDict[user.key()] = user.val()
+    for user_result in user.each():
+        user_id = user_result.key()
+        # print(user.key()) 
+    # print(user.val())
+    # print(userDict["users"])
+    # print(user.key())
+    print(bool(userDict["users"]))
+    if(bool(userDict["users"])):
+        
+        data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+        data = json.loads(data)
+        print(data)
+        path = "users/{0}/skills".format(user_id)
+        print(path)
+        # print("users/{0}/{1}/education".format(user_id,email))
+        db.child(path).push(data)
+        # user.child("education").push(data)
+        # add skill
+        return "OK"
+    else:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "An error occurred while finding the jobs. "
+            }
+        ), 500
+
+@app.route("/user/add_work/<string:email>",methods = ["POST"])
+def addWork(email):
+    # try:
+    userDict = {}
+    user = db.child("users").order_by_child("email").equal_to(email).get()
+    print(user)
+    user_id = user.key()
+    userDict[user.key()] = user.val()
+    for user_result in user.each():
+        user_id = user_result.key()
+        # print(user.key()) 
+    # print(user.val())
+    # print(userDict["users"])
+    # print(user.key())
+    print(bool(userDict["users"]))
+    if(bool(userDict["users"])):
+        
+        data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+        data = json.loads(data)
+        print(data)
+        path = "users/{0}/work_experience".format(user_id)
+        print(path)
+        # print("users/{0}/{1}/education".format(user_id,email))
+        db.child(path).push(data)
+        # user.child("education").push(data)
+        # add skill
+        return "OK"
+    else:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "An error occurred while finding the jobs. "
+            }
+        ), 500 
+
+
+
+>>>>>>> Stashed changes:UserSMS.py
 @app.route("/user/add_education/<string:email>",methods = ["POST"])
 def addEducation(email):
     # try:
@@ -108,7 +204,12 @@ def addEducation(email):
         # add skill
         return "OK"
     else:
-        return "404" 
+        return jsonify(
+            {
+                "code": 404,
+                "message": "An error occurred while finding the jobs. "
+            }
+        ), 500 
     # print(userDict.values())
     # print(type(user))
     #     # pass
@@ -138,12 +239,20 @@ def register():
             db.child("users").push(data)
             return "OK"
         else:
-            print("GG")
-            return "NOT OK"
+            return jsonify(
+            {
+                "code": 404,
+                "message": "An error occurred while finding the jobs. "
+            }
+        ), 500
         
     except Exception as e:
-        print(e)
-        return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
+            }
+        ), 500
 
 
 if __name__ == "__main__":
