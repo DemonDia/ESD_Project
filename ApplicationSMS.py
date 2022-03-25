@@ -102,7 +102,7 @@ def get_application_by_JID(JID):
         ), 500
 
 
-@app.route("/applications/job/aid/<string:AID>") # get applications based on AID
+@app.route("/applications/aid/<string:AID>") # get applications based on AID
 def get_application_by_AID(AID):
     try:
         applications = db.child("applications/"+AID).get()

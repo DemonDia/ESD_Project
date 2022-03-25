@@ -71,7 +71,7 @@ def post_job():
         return jsonify(
             {
                 "code": 201,
-                "data": data
+                "data": json.dumps(data)
             }
             ), 201
 
@@ -111,7 +111,7 @@ def get_job_by_id(JobID):
         return jsonify(
             {
                 "code": 400,
-                "data": "The user value is empty"
+                "data": "The job value is empty"
             }
         ), 400
 
