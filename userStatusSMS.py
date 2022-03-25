@@ -21,7 +21,6 @@ firebaseConfig = {
 
 firebase = pb.initialize_app(firebaseConfig)
 db = firebase.database() #user realtime db
-
 @app.route("/applications/<string:AID>",methods = ["PUT"]) # create_app
 def processApplication(AID):
     try:
@@ -30,7 +29,13 @@ def processApplication(AID):
         print(data)
         db.child("applications/"+AID).update({"accepted":data["accepted"]})
         # print(data["accepted"])
-        return str(data["accepted"])
+        # return str(data["accepted"])
+
+        return jsonify({
+            "code": 201,
+            "data": str(data["accepted"])
+        }), 201
+
         # return decision
     except Exception as e:
         print(e)
@@ -41,6 +46,26 @@ def processApplication(AID):
                 "message": "An error occurred while processing the application " + str(e)
             }
         ), 500
+
+# @app.route("/applications/<string:AID>",methods = ["PUT"]) # create_app
+# def processApplication(AID):
+#     try:
+#         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+#         data = json.loads(data) #gets
+#         print(data)
+#         db.child("applications/"+AID).update({"accepted":data["accepted"]})
+#         # print(data["accepted"])
+#         return str(data["accepted"])
+#         # return decision
+#     except Exception as e:
+#         print(e)
+
+#         return jsonify(
+#             {
+#                 "code": 500,
+#                 "message": "Why like this An error occurred while processing the application " + str(e)
+#             }
+#         ), 500
 
 
 
