@@ -20,14 +20,7 @@ OwnerStatusSMS = "http://127.0.0.1:5004/status/"
 def owner_get_applications(CID):
     try:
         applications = invoke_http(ApplicationSMS+"/company/"+CID,method = "GET")
-        # return applications
-
-        return jsonify(
-            {
-                "code": 201,
-                "data": jsonify(applications)
-            }
-            ), 201
+        return applications
 
     except Exception as e:
         # return "NOT OK"
@@ -46,9 +39,11 @@ def owner_process_application(AID):
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data) #gets
-        print(data)
+        # print(data)
         applications = invoke_http(OwnerStatusSMS+AID,method = "PUT",json = data)
+        # print(applications['code'])
         # return jsonify(applications)
+
 
         if applications['code'] not in range(200, 300):
             message = json.dumps(applications)
@@ -68,12 +63,7 @@ def owner_process_application(AID):
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="updateApp.info", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
-            return jsonify(
-                {
-                    "code": 201,
-                    "result": jsonify(applications)
-                }
-                ), 201
+            return jsonify(applications)
 
     except Exception as e:
         print(e)

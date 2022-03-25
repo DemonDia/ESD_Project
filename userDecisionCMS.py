@@ -21,18 +21,22 @@ def processApplication(AID):
         print(data)
         user_status = invoke_http(UserStatusSMS+AID,json = data,method = "PUT") #returns boolean
         # print("user_status:"+str(user_status))
+        print(user_status)
 
         result = processAMQP(user_status)
-        if result['code'] == 500:
+        if result['code'] not in range(200, 300):
+            # print (result)
             return result
+
         else:
-            if user_status == True:
+            if user_status['data'] == True:
+
                 print("AID:"+AID)
                 application = invoke_http(ApplicationSMS+"/job/aid/"+AID,method = "GET")
                 result = processAMQP(application) #send msg to RabbitMQ
 
                  #failed to process application
-                if result['code'] == 500:      
+                if result['code'] not in range(200, 300):      
                     return result
 
                 #success, proceed to update vacancy
@@ -44,8 +48,8 @@ def processApplication(AID):
                     vacancy = updateVacancy(JID)
                     return vacancy
             else:
-                return str(user_status) #returns false
-                
+                return user_status['data'] #returns false
+
     except Exception as e:
         print(e)
 
@@ -110,14 +114,10 @@ def processAMQP(data):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="processApp.info", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
-        return jsonify(
-            {
-                "code": 201,
-                "result": jsonify(data)
-            }
-            ), 201
-    
-
+        return {
+            "code": 201,
+            "result": jsonify(data),
+        }
 
 
 if __name__ == "__main__":

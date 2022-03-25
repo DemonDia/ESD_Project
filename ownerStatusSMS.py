@@ -34,7 +34,7 @@ def owner_process_application(AID):
             "code": 201,
             "data:": data["owner_status"]
         }), 201
-        
+
     except Exception as e:
         print(e)
 
