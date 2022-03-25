@@ -1,4 +1,4 @@
-#from crypt import methods
+# from crypt import methods
 from flask import Flask, request, jsonify
 import json
 from flask_cors import CORS
@@ -37,10 +37,22 @@ def create_application(JID):
         # print(data)
 
         db.child("applications").push(data)
-        return "OK"
+        # return "OK"
+        return jsonify(
+                {
+                    "code": 201,
+                    "data": json.dumps(data)
+                }
+                ), 201
     except Exception as e:
-        print(e)
-        return "NOT OK"
+        # print(e)
+        # return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while applying for job. " + str(e)
+            }
+        ), 500
 
 @app.route("/applications")
 def get_all():
@@ -58,8 +70,12 @@ def get_all():
         # return userDict
         return json.dumps(applicationsDict) #return all user data
     except Exception as e:
-        print(e)
-        return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while gettng applications. " + str(e)
+            }
+        ), 500
 
 @app.route("/applications/job/<string:JID>") # get all applications to certain jobs
 def get_application_by_JID(JID):
@@ -78,8 +94,12 @@ def get_application_by_JID(JID):
         # return userDict
         return json.dumps(applicationsDict) #return all user data
     except Exception as e:
-        print(e)
-        return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while getting applications. " + str(e)
+            }
+        ), 500
 
 
 @app.route("/applications/job/aid/<string:AID>") # get applications based on AID
@@ -99,8 +119,12 @@ def get_application_by_AID(AID):
         # return userDict
         return json.dumps(applicationsDict) #return all user data
     except Exception as e:
-        print(e)
-        return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while getting applications." + str(e)
+            }
+        ), 500
 
 
 @app.route("/applications/company/<string:CID>") # get all applications to certain company
@@ -120,12 +144,12 @@ def get_all_applications_of_a_company(CID):
         # return userDict
         return json.dumps(applicationsDict) #return all user data
     except Exception as e:
-        print(e)
+        # print(e)
 
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while obtaining applications " + str(e)
+                "message": "An error occurred while obtaining applications." + str(e)
             }
         ), 500
 
@@ -146,12 +170,12 @@ def get_all_applications_of_a_user(UID):
         # return userDict
         return json.dumps(applicationsDict) #return all user data
     except Exception as e:
-        print(e)
+        # print(e)
 
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while processing the application " + str(e)
+                "message": "An error occurred while processing the application." + str(e)
             }
         ), 500
 

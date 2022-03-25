@@ -40,8 +40,12 @@ def getUsers():
         # return userDict
         return json.dumps(userDict) #return all user data
     except Exception as e:
-        print(e)
-        return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
+            }
+        ), 500
 
 @app.route("/login",methods = ["POST"])
 def login():
@@ -54,9 +58,13 @@ def login():
     
         # print("HHHA")
         return "OK"
-    except:
-        # print("Invalid email and/or password!")
-        return "NOT OK"
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while logging in. " + str(e)
+            }
+        ), 500
 
 
 @app.route("/user/<string:email>")
@@ -82,40 +90,126 @@ def findByEmail(email):
         print(e)
         return "NOT OK"
 
+@app.route("/user/add_skill/<string:email>",methods = ["POST"])
+def addSkill(email):
+    try:
+        userDict = {}
+        user = db.child("users").order_by_child("email").equal_to(email).get()
+        print(user)
+        user_id = user.key()
+        userDict[user.key()] = user.val()
+        for user_result in user.each():
+            user_id = user_result.key()
+            # print(user.key()) 
+        # print(user.val())
+        # print(userDict["users"])
+        # print(user.key())
+        print(bool(userDict["users"]))
+        if(bool(userDict["users"])):
+            
+            data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+            data = json.loads(data)
+            print(data)
+            path = "users/{0}/skills".format(user_id)
+            print(path)
+            # print("users/{0}/{1}/education".format(user_id,email))
+            db.child(path).push(data)
+            # user.child("education").push(data)
+            # add skill
+            return "OK"
+        else:
+            return "404" 
+    except Exception as e:
+        # print(e)
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while adding skill. " + str(e)
+            }
+        ), 500
+@app.route("/user/add_work/<string:email>",methods = ["POST"])
+def addWork(email):
+    try:
+        userDict = {}
+        user = db.child("users").order_by_child("email").equal_to(email).get()
+        print(user)
+        user_id = user.key()
+        userDict[user.key()] = user.val()
+        for user_result in user.each():
+            user_id = user_result.key()
+            # print(user.key()) 
+        # print(user.val())
+        # print(userDict["users"])
+        # print(user.key())
+        print(bool(userDict["users"]))
+        if(bool(userDict["users"])):
+            
+            data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+            data = json.loads(data)
+            print(data)
+            path = "users/{0}/work_experience".format(user_id)
+            print(path)
+            # print("users/{0}/{1}/education".format(user_id,email))
+            db.child(path).push(data)
+            # user.child("education").push(data)
+            # add skill
+            return "OK"
+        else:
+            return "404" 
+    except Exception as e:
+        # print(e)
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while adding work experience. " + str(e)
+            }
+        ), 500
+
+
+
 @app.route("/user/add_education/<string:email>",methods = ["POST"])
 def addEducation(email):
-    # try:
-    userDict = {}
-    user = db.child("users").order_by_child("email").equal_to(email).get()
-    print(user)
-    user_id = user.key()
-    userDict[user.key()] = user.val()
-    for user_result in user.each():
-        user_id = user_result.key()
-        # print(user.key()) 
-    # print(user.val())
-    # print(userDict["users"])
-    # print(user.key())
-    print(bool(userDict["users"]))
-    if(bool(userDict["users"])):
-        
-        data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
-        data = json.loads(data)
-        print(data)
-        path = "users/{0}/{1}/education".format(user_id,email)
-        print(path)
-        # print("users/{0}/{1}/education".format(user_id,email))
-        db.child(path).push(data)
-        # user.child("education").push(data)
-        # add skill
-        return "OK"
-    else:
-        return "404" 
+    try:
+        userDict = {}
+        user = db.child("users").order_by_child("email").equal_to(email).get()
+        print(user)
+        user_id = user.key()
+        userDict[user.key()] = user.val()
+        for user_result in user.each():
+            user_id = user_result.key()
+            # print(user.key()) 
+        # print(user.val())
+        # print(userDict["users"])
+        # print(user.key())
+        print(bool(userDict["users"]))
+        if(bool(userDict["users"])):
+            
+            data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+            data = json.loads(data)
+            print(data)
+            path = "users/{0}/education".format(user_id)
+            print(path)
+            # print("users/{0}/{1}/education".format(user_id,email))
+            db.child(path).push(data)
+            # user.child("education").push(data)
+            # add skill
+            return "OK"
+        else:
+            return "404" 
     # print(userDict.values())
     # print(type(user))
     #     # pass
-    # except:
-    #     return "NOT OK"
+    except Exception as e:
+        # print(e)
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while adding education. " + str(e)
+            }
+        ), 500
 
 @app.route("/register",methods = ["POST"])
 # @cross_origin()
@@ -144,8 +238,12 @@ def register():
             return "NOT OK"
         
     except Exception as e:
-        print(e)
-        return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while registering. " + str(e)
+            }
+        ), 500
 
 
 if __name__ == "__main__":
