@@ -68,12 +68,23 @@ def get_all():
             print("value:",application.val())
             applicationsDict[application.key()] = application.val()
         # return userDict
-        return json.dumps(applicationsDict) #return all user data
+        # return json.dumps(applicationsDict) #return all user data
+
+        return jsonify(
+            {
+                "code": 201,
+                "data": json.dumps(applicationsDict)
+            }
+            ), 201
+
     except Exception as e:
+        print(e)
+        # return "NOT OK"
+
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while gettng applications. " + str(e)
+                "message": "An error occurred while applying for job. " + str(e)
             }
         ), 500
 
@@ -92,12 +103,22 @@ def get_application_by_JID(JID):
             applicationsDict[application.key()] = application.val()
         # print("Job dict:",applicationsDict)
         # return userDict
-        return json.dumps(applicationsDict) #return all user data
+        # return json.dumps(applicationsDict) #return all user data
+
+        return jsonify(
+            {
+                "code": 201,
+                "data": json.dumps(applicationsDict)
+            }
+            ), 201
+
     except Exception as e:
+        print(e)
+        # return "NOT OK"
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while getting applications. " + str(e)
+                "message": "An error occurred while obtaining applications. " + str(e)
             }
         ), 500
 
@@ -117,12 +138,22 @@ def get_application_by_AID(AID):
             applicationsDict[application.key()] = application.val()
         # print("Job dict:",applicationsDict)
         # return userDict
-        return json.dumps(applicationsDict) #return all user data
+        # return json.dumps(applicationsDict) #return all user data
+
+        return jsonify(
+            {
+                "code": 201,
+                "data": json.dumps(applicationsDict)
+            }
+            ), 201
+
     except Exception as e:
+        print(e)
+        # return "NOT OK"
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while getting applications." + str(e)
+                "message": "An error occurred while obtaining application. " + str(e)
             }
         ), 500
 
@@ -142,14 +173,21 @@ def get_all_applications_of_a_company(CID):
             applicationsDict[application.key()] = application.val()
         # print("Job dict:",applicationsDict)
         # return userDict
-        return json.dumps(applicationsDict) #return all user data
+        # return json.dumps(applicationsDict) #return all user data
+
+        return jsonify(
+            {
+                "code": 201,
+                "data": json.dumps(applicationsDict)
+            }
+            ), 201
     except Exception as e:
         # print(e)
 
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while obtaining applications." + str(e)
+                "message": "An error occurred while obtaining applications. " + str(e)
             }
         ), 500
 
@@ -168,7 +206,14 @@ def get_all_applications_of_a_user(UID):
             applicationsDict[application.key()] = application.val()
         # print("Job dict:",applicationsDict)
         # return userDict
-        return json.dumps(applicationsDict) #return all user data
+        # return json.dumps(applicationsDict) #return all user data
+        return jsonify(
+            {
+                "code": 201,
+                "data": json.dumps(applicationsDict)
+            }
+            ), 201
+            
     except Exception as e:
         # print(e)
 

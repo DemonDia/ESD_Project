@@ -12,13 +12,13 @@ CORS(app)
 # sqlalchemy
 
 firebaseConfig = {
-    "apiKey": "AIzaSyARQ8P2pOqIaSxca0QL_H5ItCMgaS4g1pA",
-    "authDomain": "ownernotificationmicroservice.firebaseapp.com",
-    "databaseURL": "https://ownernotificationmicroservice-default-rtdb.asia-southeast1.firebasedatabase.app",    
-    "projectId": "ownernotificationmicroservice",
-    "storageBucket": "ownernotificationmicroservice.appspot.com",
-    "messagingSenderId": "904826677540",
-    "appId": "1:904826677540:web:ce6364b2b581541c39ebb1"
+    "apiKey": "AIzaSyDBk5Wd0fQBoADxAqOHc39VmVvW9t6Xrts",
+    "authDomain": "usernotificationmicroservice.firebaseapp.com",
+    "projectId": "usernotificationmicroservice",
+    "databaseURL": "https://usernotificationmicroservice-default-rtdb.asia-southeast1.firebasedatabase.app",    
+    "storageBucket": "usernotificationmicroservice.appspot.com",
+    "messagingSenderId": "91494900010",
+    "appId": "1:91494900010:web:3175580a34bdf9b7aefe53" 
 }
 
 firebase = pb.initialize_app(firebaseConfig)
@@ -31,7 +31,7 @@ db = firebase.database() #user realtime db
 #    "UID": "666666"
 # }
 
-@app.route("/ownerNotification")
+@app.route("/userNotification")
 def get_all():
     try:
         jobApp = db.child("jobApp").get()
@@ -47,15 +47,7 @@ def get_all():
 
         print("Job dict:",jobAppDict)
         # return userDict 
-        # return json.dumps(jobAppDict) #return all user data
-
-        
-        return jsonify(
-            {
-                "code": 201,
-                "data": json.dumps(jobAppDict)
-            }
-            ), 201
+        return json.dumps(jobAppDict) #return all user data
     
     except Exception as e:
         print(e)
@@ -63,12 +55,12 @@ def get_all():
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while finding the jobs. " + str(e)
+                "message": "An error occurred while getting notification. " + str(e)
             }
         ), 500
 
 
-@app.route("/ownerNotification/<string:CID>", methods = ["POST"])
+@app.route("/userNotification/<string:CID>", methods = ["POST"])
 def post_noti(CID):
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
@@ -90,7 +82,7 @@ def post_noti(CID):
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while creating the job. " + str(e)
+                "message": "An error occurred while posting the user's notification. " + str(e)
             }
         ), 500
     
