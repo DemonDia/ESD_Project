@@ -50,12 +50,12 @@ def get_all():
                     ), 201
     
     except Exception as e:
-        print(e)
+        # print(e)
 
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while finding the jobs. " + str(e)
+                "message": "An error occurred while getting the jobs. " + str(e)
             }
         ), 500
 
@@ -71,12 +71,12 @@ def post_job():
         return jsonify(
             {
                 "code": 201,
-                "data": data
+                "data": json.dumps(data)
             }
             ), 201
 
     except Exception as e:
-        print(e)
+        # print(e)
 
         return jsonify(
             {
@@ -108,12 +108,12 @@ def get_job_by_id(JobID):
                 }
                 ), 201
             # return "404"  #empty user valu
-            return jsonify(
-                {
-                    "code": 400,
-                    "data": "The user value is empty"
-                }
-            ), 400
+        return jsonify(
+            {
+                "code": 400,
+                "data": "The job value is empty"
+            }
+        ), 400
 
     except Exception as e:
         # return "NOT OK"
@@ -152,7 +152,7 @@ def update_vacancy(JID):
             return "500"
         # return decision
     except Exception as e:
-        print(e)
+        # print(e)
 
         return jsonify(
             {
