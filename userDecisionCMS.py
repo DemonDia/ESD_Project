@@ -6,6 +6,9 @@ from flask_cors import CORS,cross_origin
 app = Flask(__name__)
 CORS(app)
 
+import amqp_setup
+import pika
+
 # app.config['CORS_HEADERS'] = 'Content-Type'
 ApplicationSMS = "http://127.0.0.1:5003/applications"
 JobSMS = "http://127.0.0.1:5001/"
@@ -18,18 +21,31 @@ def processApplication(AID):
         print(data)
         user_status = invoke_http(UserStatusSMS+AID,json = data,method = "PUT") #returns boolean
         # print("user_status:"+str(user_status))
-        if user_status == True:
-            print("AID:"+AID)
-            application = invoke_http(ApplicationSMS+"/job/aid/"+AID,method = "GET")
-            JID  = application["JID"]
-            # return application
-            # JID = application["JID"]
-            # print(application)
-            vacancy = updateVacancy(JID)
-            return vacancy
 
+        result = processAMQP(user_status)
+        if result['code'] == 500:
+            return result
         else:
-            return str(user_status) #returns false
+            if user_status == True:
+                print("AID:"+AID)
+                application = invoke_http(ApplicationSMS+"/job/aid/"+AID,method = "GET")
+                result = processAMQP(application) #send msg to RabbitMQ
+
+                 #failed to process application
+                if result['code'] == 500:      
+                    return result
+
+                #success, proceed to update vacancy
+                else:                           
+                    JID  = application["JID"]
+                    # return application
+                    # JID = application["JID"]
+                    # print(application)
+                    vacancy = updateVacancy(JID)
+                    return vacancy
+            else:
+                return str(user_status) #returns false
+                
     except Exception as e:
         print(e)
 
@@ -72,6 +88,36 @@ def owner_get_applications(UID):
                 "message": "An error occurred while creating the job. " + str(e)
             }
         ), 500
+
+def processAMQP(data):
+    if data['code'] not in range(200, 300):
+        data['type'] = 'processApp'
+        message = json.dumps(data)
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="processApp.error", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+        # return error
+        return {
+            "code": 500,
+            "result": jsonify(data),
+            "message": "process application failure sent for error handling."
+        }
+
+    else:
+        # record the activity log anyway
+        data['type'] = 'processApp'
+        message = json.dumps(data)
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="processApp.info", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+        return jsonify(
+            {
+                "code": 201,
+                "result": jsonify(data)
+            }
+            ), 201
+    
+
 
 
 if __name__ == "__main__":
