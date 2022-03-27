@@ -13,6 +13,7 @@ import pika
 
 ApplicationSMS = "http://127.0.0.1:5003/applications"
 OwnerStatusSMS = "http://127.0.0.1:5004/status/"
+UserNotiURL = "http://127.0.0.1:5011/userNotification/"
 
 
 
@@ -20,14 +21,7 @@ OwnerStatusSMS = "http://127.0.0.1:5004/status/"
 def owner_get_applications(CID):
     try:
         applications = invoke_http(ApplicationSMS+"/company/"+CID,method = "GET")
-        # return applications
-
-        return jsonify(
-            {
-                "code": 201,
-                "data": jsonify(applications)
-            }
-            ), 201
+        return applications
 
     except Exception as e:
         # return "NOT OK"
@@ -44,11 +38,15 @@ def owner_get_applications(CID):
 @app.route("/process_application/<string:AID>",methods = ["PUT"]) # process you auto fill company ID
 def owner_process_application(AID):
     try:
+        # get 
+        
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data) #gets
         print(data)
         applications = invoke_http(OwnerStatusSMS+AID,method = "PUT",json = data)
+        # print(applications['code'])
         # return jsonify(applications)
+
 
         if applications['code'] not in range(200, 300):
             message = json.dumps(applications)
@@ -65,15 +63,12 @@ def owner_process_application(AID):
         else:
             # record the activity log anyway
             message = json.dumps(applications)
+            # notifySeeker(data)
+            notifySeeker(AID,data)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="updateApp.info", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
-            return jsonify(
-                {
-                    "code": 201,
-                    "result": jsonify(applications)
-                }
-                ), 201
+            return jsonify(applications)
 
     except Exception as e:
         print(e)
@@ -81,12 +76,41 @@ def owner_process_application(AID):
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while creating the job. " + str(e)
+                "message": "An error occurred while processing the application. " + str(e)
             }
         ), 500
 
-def send_to_broker(): #for the broker
-    pass
+# def send_to_broker(): #for the broker
+#     pass
+def notifySeeker(AID,data):
+    print(ApplicationSMS+"/aid/"+AID)
+    get_application = invoke_http(ApplicationSMS+"/aid/"+AID,method = "GET")
+    application_cid = json.loads(get_application["data"])["CID"]
+    # get_application = json.loads(get_application)
+    # print("app:",get_application["CID"])
+    notiresult = invoke_http(UserNotiURL+application_cid,method ="POST",json =data)
+    notiresult['type'] = 'ownerNoti'
+    message = json.dumps(notiresult)
+    if notiresult["code"] not in range(200, 300):
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.error", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+        # return error
+        return jsonify(
+            {
+                "code": 500,
+                "data": message
+            }), 500
+    else:
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.info", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+        # return error
+        return jsonify(
+            {
+                "code": 200,
+                "data": message
+            }), 200
 
 if __name__ == "__main__":
     app.run(port = 5006,debug = True)

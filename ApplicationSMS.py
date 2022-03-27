@@ -85,7 +85,8 @@ def get_all():
             {
                 "code": 500,
                 "message": "An error occurred while applying for job. " + str(e)
-
+            }
+        ), 500
 
 @app.route("/applications/job/<string:JID>") # get all applications to certain jobs
 def get_application_by_JID(JID):
@@ -118,7 +119,6 @@ def get_application_by_JID(JID):
             {
                 "code": 500,
                 "message": "An error occurred while obtaining applications. " + str(e)
-
             }
         ), 500
 
@@ -148,14 +148,12 @@ def get_application_by_AID(AID):
             ), 201
 
     except Exception as e:
-
         print(e)
         # return "NOT OK"
         return jsonify(
             {
                 "code": 500,
                 "message": "An error occurred while obtaining application. " + str(e)
-
             }
         ), 500
 
@@ -190,7 +188,6 @@ def get_all_applications_of_a_company(CID):
             {
                 "code": 500,
                 "message": "An error occurred while obtaining applications. " + str(e)
-
             }
         ), 500
 
