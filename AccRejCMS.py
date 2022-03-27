@@ -85,10 +85,16 @@ def owner_process_application(AID):
 def notifySeeker(AID,data):
     print(ApplicationSMS+"/aid/"+AID)
     get_application = invoke_http(ApplicationSMS+"/aid/"+AID,method = "GET")
-    application_cid = json.loads(get_application["data"])["CID"]
+    get_application = json.loads(get_application["data"])
+    print(get_application)
+
+    data["CID"] = get_application["CID"]
+    data["JID"] = get_application["JID"]
+    data["UID"] = get_application["UID"]
+
     # get_application = json.loads(get_application)
     # print("app:",get_application["CID"])
-    notiresult = invoke_http(UserNotiURL+application_cid,method ="POST",json =data)
+    notiresult = invoke_http(UserNotiURL+get_application["CID"],method ="POST",json =data)
     notiresult['type'] = 'ownerNoti'
     message = json.dumps(notiresult)
     if notiresult["code"] not in range(200, 300):
