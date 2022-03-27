@@ -68,7 +68,7 @@ def get_all():
         ), 500
 
 
-@app.route("/ownerNotification/<string:CID>", methods = ["POST"])
+@app.route("/ownerNotified/<string:CID>", methods = ["POST"])
 def post_noti(CID):
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 

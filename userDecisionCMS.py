@@ -13,6 +13,7 @@ import pika
 ApplicationSMS = "http://127.0.0.1:5003/applications"
 JobSMS = "http://127.0.0.1:5001/"
 UserStatusSMS = "http://127.0.0.1:5002/applications/"
+OwnerNotificationSMS = "http://127.0.0.1:5010/ownerNotified/"
 @app.route("/process_application/<string:AID>",methods = ["PUT"])
 def processApplication(AID):
     try:
@@ -23,7 +24,7 @@ def processApplication(AID):
         # print("user_status:"+str(user_status))
         print(user_status)
 
-        result = processAMQP(user_status)
+        result = processAMQP(user_status,AID)
         if result['code'] not in range(200, 300):
             # print (result)
             return result
@@ -33,7 +34,7 @@ def processApplication(AID):
 
                 print("AID:"+AID)
                 application = invoke_http(ApplicationSMS+"/job/aid/"+AID,method = "GET")
-                result = processAMQP(application) #send msg to RabbitMQ
+                result = processAMQP(application,AID) #send msg to RabbitMQ
 
                  #failed to process application
                 if result['code'] not in range(200, 300):      
@@ -93,7 +94,7 @@ def owner_get_applications(UID):
             }
         ), 500
 
-def processAMQP(data):
+def processAMQP(data,AID):
     if data['code'] not in range(200, 300):
         data['type'] = 'processApp'
         message = json.dumps(data)
@@ -108,6 +109,12 @@ def processAMQP(data):
         }
 
     else:
+        get_application = invoke_http(ApplicationSMS+"/aid/"+AID,method = "GET")
+        application_cid = json.loads(get_application["data"])["CID"]
+        # get_application = json.loads(get_application)
+        # print("app:",get_application["CID"])
+        notiresult = invoke_http(OwnerNotificationSMS+application_cid,method ="POST",json =data)
+
         # record the activity log anyway
         data['type'] = 'processApp'
         message = json.dumps(data)

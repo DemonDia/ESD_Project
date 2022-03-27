@@ -67,7 +67,7 @@ def post_noti(CID):
         data = json.loads(data)
         print(type(data))
         data["posted_timestamp"] = str(datetime.now())
-        db.child(CID).push(data)
+        db.child("jobApp").push(data)
 
         return jsonify(
             {
