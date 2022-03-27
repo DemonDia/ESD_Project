@@ -85,6 +85,7 @@ def get_all():
             {
                 "code": 500,
                 "message": "An error occurred while applying for job. " + str(e)
+            }), 500
 
 
 @app.route("/applications/job/<string:JID>") # get all applications to certain jobs
