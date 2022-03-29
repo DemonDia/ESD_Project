@@ -52,7 +52,7 @@ def create_job():
 
             code = job_result["code"]
             if code not in range(200, 300):
-                message['type']= "createjob"
+                # message['type']= "createjob"
                 message = json.dumps(job_result)
                 amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.error", 
                 body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -66,7 +66,7 @@ def create_job():
             else:
                 # Record new job
                 # record the activity log anyway
-                message['type']= "createjob"
+                # message['type']= "createjob"
                 message = json.dumps(job_result)
                 amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.info", 
                 body=message, properties=pika.BasicProperties(delivery_mode = 2)) 

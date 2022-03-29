@@ -75,7 +75,7 @@ def post_noti(CID):
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
         data["CID"] = CID
-        data.pop("data")
+        # data.pop("data")
         print("DATA",data)
         data["posted_timestamp"] = str(datetime.now())
         db.child(CID).push(data)
