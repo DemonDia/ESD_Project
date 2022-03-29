@@ -27,7 +27,7 @@ db = firebase.database() #user realtime db
 
 # db.create_all()
 
-@app.route("/jobs") # get all jobs
+@app.route("/jobs/all") # get all jobs 
 def get_all():
     try:
         jobs = db.child("jobs").get()
@@ -56,6 +56,49 @@ def get_all():
             {
                 "code": 500,
                 "message": "An error occurred while getting the jobs. " + str(e)
+            }
+        ), 500
+
+@app.route("/jobs/company/<string:CompanyName>") # get all jobs for a company
+def get_company_jobs(CompanyName):
+    try:
+        print(CompanyName)
+        jobs = db.child("jobs").get()
+        jobsDict = {} 
+        
+        for job in jobs.each():
+            value = job.val()["company_name"]
+            if value == CompanyName:
+                print("___________") 
+                print("key:",job.key())
+                print("value:",job.val())
+                jobsDict[job.key()] = job.val()
+
+        print(jobsDict) 
+        if(len(jobsDict)>0): #yes theres an existing jobs for this company
+
+            result = json.dumps(jobsDict)
+            return jsonify(
+                {
+                    "code": 201,
+                    "data": result
+                }
+                ), 201
+        
+        # return "404"  #empty user valu
+        return jsonify(
+            {
+                "code": 400,
+                "data": "This company has no jobs yet"
+            }
+        ), 400
+
+    except Exception as e:
+        # return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
             }
         ), 500
 
@@ -90,10 +133,11 @@ def post_job():
 def get_job_by_id(JobID):
     try:
         job = db.child("jobs/"+JobID).get()
+        print(job)
         jobDict = {}
 
         jobDict[job.key()] = job.val()
-        print(jobDict[JobID])
+        print("this is job value",job.val())
         # print(user.key())
         print(bool(jobDict[JobID])) #return true and false
         
