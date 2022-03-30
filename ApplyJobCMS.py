@@ -7,8 +7,8 @@ import requests
 
 
 #to remove if we dont use rabbit amqp
-import amqp_setup
-import pika
+# import amqp_setup
+# import pika
 import json
 
 
@@ -44,8 +44,8 @@ def apply_job():
             # send error message to error queue
             message = json.dumps(result)
 
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="applyjob.error", 
-            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+            # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="applyjob.error", 
+            # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
             # return error
             return jsonify(
@@ -65,8 +65,8 @@ def apply_job():
                 message = json.dumps(application_result)
                 print(message)
 
-                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="applyjob.eror", 
-                body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+                # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="applyjob.eror", 
+                # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
                 print('this is my application result', application_result)
 
                 # return error
@@ -85,8 +85,8 @@ def apply_job():
                 message = json.dumps(application_result)
                 print(message)
 
-                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="applyjob.info", 
-                body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+                # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="applyjob.info", 
+                # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
                 print('this is my application result', application_result)
                 return jsonify(
                     {
@@ -111,8 +111,8 @@ def notifyOwner(data):
     message = json.dumps(notiresult)
     if notiresult["code"] not in range(200, 300):
 
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.error", 
-        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.error", 
+        # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
         # return error
         return jsonify(
@@ -121,8 +121,8 @@ def notifyOwner(data):
                 "data": message
             }), 500
     else:
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.info", 
-        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.info", 
+        # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
         # return error
         return jsonify(
@@ -131,6 +131,73 @@ def notifyOwner(data):
                 "data": message
             }), 200
 
+@app.route("/view_job/<JID>", methods = ["GET"])
+def view_job(JID):
+    if request:
+        try:
+            #data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+
+            # data = json.loads(request.data)
+            # print("clean data",data)
+
+            # Send the job info
+            job_result = invoke_http(JobsURL+"/"+JID,method = "GET")
+
+            print("result",job_result)
+
+            # record new job
+            # record the activity log
+            # invoke_http(activity_log_URL,method = "POST",json = job_result)
+
+            # print('my job_result', job_result)
+
+            code = job_result["code"]
+
+            print("code",code)
+            print("job result",job_result)
+
+            if code not in range(200, 300):
+                #message['type']= "createjob"
+                #message = json.dumps(job_result)
+                #amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.error", 
+                #body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+                # return error
+                return {
+                    "code": code,
+                    "data": job_result,
+                    "message": "Job creation failure sent for error handling."
+                }
+            else:
+                # Record new job
+                # record the activity log anyway
+                
+                #message['type']= "createjob"
+                #message = json.dumps(job_result)
+                #amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.info", 
+                #body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+                print("result type",type(job_result))
+                return jsonify(
+                    {
+                        "code": code,
+                        "result": job_result["data"]
+                    }
+                    ), 201
+
+        except Exception as e:
+            print(e)
+            return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating the job. " + str(e)
+            }
+            ), 500
+        
+    return jsonify(
+        {
+            "code": 400,
+            "data": str(request.get_data())
+        }
+        ), 400
 
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":

@@ -19,7 +19,7 @@ onload="showOneJob({{JID}})";
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="/apply">
+    <a class="nav-link" aria-current="page" href="/view">
         Apply for a Job
     </a>
 </li>
@@ -79,7 +79,7 @@ onload="showOneJob({{JID}})";
     </tr>
   </tbody>
 </table>
-<button type="button" class="btn btn-success btn-lg">Apply</button>
+<a href="" ><button type="button" class="btn btn-success btn-lg">Apply</button></a>
 {% endblock %}
 
 {% block popup %} 
@@ -92,14 +92,18 @@ onload="showOneJob({{JID}})";
     function showOneJob(JID) {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://127.0.0.1:5001/jobs/'+JID, true);
+        request.open('GET', 'http://127.0.0.1:5008/view_job/'+JID, true);
         
         request.onload = function() {  
 
             var json_obj = JSON.parse(request.responseText);
-            var jobs = JSON.parse(json_obj.data);
+            console.log(json_obj);
+            // var jobs = json.loads(json.obj);
+            var jobs = JSON.parse(json_obj.result);
 
-            var job_title = jobs[JID].job_title;
+            console.log(jobs);
+
+            var job_title = jobs.job_title;
             var email = jobs[JID].contact_email;
             var person = jobs[JID].contact_person;
             var company = jobs[JID].company_name;

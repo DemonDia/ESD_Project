@@ -40,14 +40,15 @@ def get_all():
             print("value:",job.val())
             jobsDict[job.key()] = job.val()
         print("Job dict:",jobsDict)
+
         # return userDict
         # return json.dumps(jobsDict) #return all user data
         return jsonify(
                     {
-                        "code": 201,
-                        "data": json.dumps(jobsDict)
+                    "code": 201,
+                    "data": json.dumps(jobsDict)
                     }
-                    ), 201
+                ), 201
     
     except Exception as e:
         # print(e)
@@ -129,21 +130,16 @@ def post_job():
         ), 500
     
 
-@app.route("/jobs/<string:JobID>")
+@app.route("/jobs/<string:JobID>", methods = ["GET"])
 def get_job_by_id(JobID):
     try:
         job = db.child("jobs/"+JobID).get()
-        print(job)
-        jobDict = {}
-
-        jobDict[job.key()] = job.val()
-        print("this is job value",job.val())
-        # print(user.key())
-        print(bool(jobDict[JobID])) #return true and false
+        jobDict = {}      
+    
+        for info in job.each():
+            jobDict[info.key()] = info.val()
         
-    # bool(userDict["users"])
-
-        if(bool(jobDict[JobID])): #yes theres an existing user
+        if(len(jobDict) > 3): #yes theres an existing user
             result = json.dumps(jobDict)
             return jsonify(
                 {

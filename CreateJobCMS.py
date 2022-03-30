@@ -70,7 +70,7 @@ def create_job():
             else:
                 # Record new job
                 # record the activity log anyway
-                
+
                 #message['type']= "createjob"
                 #message = json.dumps(job_result)
                 #amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.info", 
@@ -98,6 +98,8 @@ def create_job():
             "data": str(request.get_data())
         }
         ), 400
+
+
       
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":
