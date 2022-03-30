@@ -51,8 +51,8 @@ def get_all():
         #             ), 201
         return jsonify(
                     {
-                    "code": 201,
-                    "data": json.dumps(jobsDict)
+                        "code": 201,
+                        "data": json.dumps(jobsDict)
                     }
                 ), 201
     

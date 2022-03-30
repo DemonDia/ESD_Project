@@ -28,6 +28,7 @@ def processApplication(AID):
         # print("user_status:"+str(user_status))
         print("user_status",user_status)
 
+
         result = processAMQP(user_status,AID,JID)
         if result['code'] not in range(200, 300):
             # print (result)
@@ -89,6 +90,7 @@ def owner_get_applications(UID):
     try:
         applications = invoke_http(ApplicationSMS+"/user/"+UID,method = "GET")
         return applications
+    
     except Exception as e:
         print(e)
 
@@ -125,7 +127,7 @@ def processAMQP(data,AID,JID):
         
         # get_application = json.loads(get_application)
         # print("app:",get_application["CID"])
-
+        print('here', get_application)
         message = json.dumps(get_application['data'])
         direct_amqp_setup.channel.basic_publish(exchange=direct_amqp_setup.exchangename, routing_key="ownerNotification", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 

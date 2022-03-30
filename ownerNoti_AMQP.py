@@ -41,18 +41,29 @@ def receiveOwnerNotification():
 
 def callback(channel, method, properties, body): # required signature for the callback; no return
     print("\nReceived a notification by " + __file__)
+    processNotification(body)
     # processNotification(json.loads(body))
-    processNotification(json.loads(body))
 
     print() # print a new line feed
 
 # ownernoti  {'UID': 'mouse', 'JID': '-MzPxkCGomRlRCTllVil', 'CID': '988'}
 def processNotification(data):
     data = json.loads(data)
-    print(data['CID'])
-    CID = data['CID']
-    data["posted_timestamp"] = str(datetime.now()) 
-    db.child(CID).push(data)
+    print(data)
+    print(type(data))
+
+    if type(data) == str:
+        data2 = json.loads(data)
+        print(data2)
+        print(type(data2))
+        CID = data2['CID']
+        data2["posted_timestamp"] = str(datetime.now()) 
+        db.child(CID).push(data2)
+    else:
+    # print(data['CID'])
+        CID = data['CID']
+        data["posted_timestamp"] = str(datetime.now()) 
+        db.child(CID).push(data)
 
     # for key in data:
     #     if key == 'data':

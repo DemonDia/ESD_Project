@@ -75,7 +75,14 @@ def get_user_noti(UID):
 
         print("Job dict:",jobAppDict)
         # return userDict 
-        return json.dumps(jobAppDict) #return all user data
+        # return json.dumps(jobAppDict) #return all user data
+
+        return jsonify(
+            {
+                "code": 201,
+                "data":  json.dumps(jobAppDict)
+            }
+            ), 201
     
     except Exception as e:
         print(e)
