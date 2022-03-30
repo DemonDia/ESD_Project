@@ -61,6 +61,10 @@ def job(JID):
 def authenticate():
     return render_template("authenticate.php")
 
+@app.route("/applications")
+def applications():
+    return render_template("applications.php")
+
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
           " applying for a job...")
