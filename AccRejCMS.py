@@ -45,6 +45,7 @@ def owner_process_application(AID):
         data = json.loads(data) #gets
         print(data)
         applications = invoke_http(OwnerStatusSMS+AID,method = "PUT",json = data)
+        print(applications)
         # print(applications['code'])
         # return jsonify(applications)
 

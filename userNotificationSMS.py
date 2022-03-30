@@ -31,33 +31,33 @@ db = firebase.database() #user realtime db
 #    "UID": "666666"
 # }
 
-# @app.route("/userNotification")
-# def get_all():
-#     try:
-#         jobApp = db.child("jobApp").get()
-#         print('this is jobApp', jobApp)
-#         jobAppDict = {}    
+@app.route("/userNotification")
+def get_all():
+    try:
+        jobApp = db.child("jobApp").get()
+        print('this is jobApp', jobApp)
+        jobAppDict = {}    
 
-#         for app in jobApp.each():
-#             print(type(app.key()))
-#             print("___________") 
-#             print("key:",app.key())
-#             print("value:",app.val())
-#             jobAppDict[app.key()] = app.val()
+        for app in jobApp.each():
+            print(type(app.key()))
+            print("___________") 
+            print("key:",app.key())
+            print("value:",app.val())
+            jobAppDict[app.key()] = app.val()
 
-#         print("Job dict:",jobAppDict)
-#         # return userDict 
-#         return json.dumps(jobAppDict) #return all user data
+        print("Job dict:",jobAppDict)
+        # return userDict 
+        return json.dumps(jobAppDict) #return all user data
     
-#     except Exception as e:
-#         print(e)
+    except Exception as e:
+        print(e)
 
-#         return jsonify(
-#             {
-#                 "code": 500,
-#                 "message": "An error occurred while getting notification. " + str(e)
-#             }
-#         ), 500
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while getting notification. " + str(e)
+            }
+        ), 500
 
 @app.route("/userNotification/<string:UID>")
 def get_user_noti(UID):
