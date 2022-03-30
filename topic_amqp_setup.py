@@ -51,7 +51,7 @@ channel.queue_declare(queue=queue_name, durable=True)
 channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='#') 
     # bind the queue to the exchange via the key
     # 'routing_key=#' => any routing_key would be matched
-    
+
 
 """
 This function in this module sets up a connection and a channel to a local AMQP broker,
