@@ -53,6 +53,10 @@ def apply():
 def view():
     return render_template("View_Job.php")
 
+@app.route("/owner_status")
+def accrej():
+    return render_template("AccRej.php")
+
 @app.route("/job/<JID>")
 def job(JID):
     return render_template("One_Job.php",JID=JID)

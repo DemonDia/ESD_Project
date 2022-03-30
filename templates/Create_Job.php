@@ -23,7 +23,7 @@ Company Name
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="/view">
+    <a class="nav-link" aria-current="page" href="/owner_status">
         View applications
     </a>
 </li>
@@ -203,7 +203,7 @@ Company Name
         console.log(job_title);
         console.log(employment_type);
 
-        var createJobCMS = "http://10.120.1.251:5009/create_job"
+        var createJobCMS = "http://192.168.0.125:5009/create_job"
         var params = '{'+'"job_title":"'+job_title+'","company_name":"'+company_name+'","employment_type":"'+employment_type+'","industry":"'+industry+'","job_description":"'+job_description+'","salary":"'+salary+'","location":"'+location+'","contact_email":"'+contact_email+'","contact_person":"'+contact_person+'","vacancy":"'+vacancy+'"}';
         console.log(params);
         request.open('POST',createJobCMS, true);
