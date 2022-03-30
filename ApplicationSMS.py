@@ -3,6 +3,8 @@ from flask import Flask, request, jsonify
 import json
 from flask_cors import CORS
 import pyrebase as pb
+from datetime import datetime
+
 app = Flask(__name__)
 CORS(app)
 # sqlalchemy
@@ -33,6 +35,7 @@ def create_application(JID):
 
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
+        data["posted_timestamp"] = str(datetime.now()) 
         data["JID"] = JID
         # print(data)
 
