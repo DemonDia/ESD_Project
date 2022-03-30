@@ -34,11 +34,9 @@ activity_log_URL = "http://127.0.0.1:5010/activities"
 @app.route("/create_job", methods = ["POST"])
 def create_job():
     if request:
-        print("req data",request.data)
         try:
             #data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
             data = json.loads(request.data)
-            print("clean data",data)
 
             # Send the job info
             job_result = invoke_http(JobsURL+"/create",method = "POST",json = data)

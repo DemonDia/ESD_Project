@@ -7,8 +7,8 @@ import requests
 
 
 #to remove if we dont use rabbit amqp
-# import amqp_setup
-# import pika
+import amqp_setup
+import pika
 import json
 
 
@@ -32,7 +32,8 @@ def apply_job():
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
-        print(data)
+        print("this is data",data)
+        print("this is jobs url")
         print(JobsURL+"/"+data["JID"])
 
         # get jobs with the JID
@@ -44,8 +45,8 @@ def apply_job():
             # send error message to error queue
             message = json.dumps(result)
 
-            # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="applyjob.error", 
-            # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="applyjob.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
             # return error
             return jsonify(
@@ -55,18 +56,18 @@ def apply_job():
                 }
             ), 500
         else:
-            application_result = invoke_http(ApplicationURL+data["JID"],method ="POST",json =data)
-
+            application_result = invoke_http(ApplicationURL+data["JID"],method ="POST",json=data)
+            print(application_result)
             code = application_result['code']
 
             if code not in range (200, 300):
                 # send application failture message to error queue
                 application_result['type'] = 'applyjob'
                 message = json.dumps(application_result)
-                print(message)
+                print("this is message",message)
 
-                # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="applyjob.eror", 
-                # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="applyjob.eror", 
+                body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
                 print('this is my application result', application_result)
 
                 # return error
@@ -85,8 +86,8 @@ def apply_job():
                 message = json.dumps(application_result)
                 print(message)
 
-                # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="applyjob.info", 
-                # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="applyjob.info", 
+                body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
                 print('this is my application result', application_result)
                 return jsonify(
                     {
