@@ -27,7 +27,7 @@ db = firebase.database() #user realtime db
 
 # db.create_all()
 
-@app.route("/jobs") # get all jobs
+@app.route("/jobs/all") # get all jobs 
 def get_all():
     try:
         jobs = db.child("jobs").get()
@@ -40,6 +40,7 @@ def get_all():
             print("value:",job.val())
             jobsDict[job.key()] = job.val()
         print("Job dict:",jobsDict)
+
         # return userDict
         # return json.dumps(jobsDict) #return all user data
         # return jsonify(
@@ -50,10 +51,10 @@ def get_all():
         #             ), 201
         return jsonify(
                     {
-                        "code": 201,
-                        "data": jobsDict
+                    "code": 201,
+                    "data": json.dumps(jobsDict)
                     }
-                    ), 201
+                ), 201
     
     except Exception as e:
         # print(e)
@@ -62,6 +63,49 @@ def get_all():
             {
                 "code": 500,
                 "message": "An error occurred while getting the jobs. " + str(e)
+            }
+        ), 500
+
+@app.route("/jobs/company/<string:CompanyName>") # get all jobs for a company
+def get_company_jobs(CompanyName):
+    try:
+        print(CompanyName)
+        jobs = db.child("jobs").get()
+        jobsDict = {} 
+        
+        for job in jobs.each():
+            value = job.val()["company_name"]
+            if value == CompanyName:
+                print("___________") 
+                print("key:",job.key())
+                print("value:",job.val())
+                jobsDict[job.key()] = job.val()
+
+        print(jobsDict) 
+        if(len(jobsDict)>0): #yes theres an existing jobs for this company
+
+            result = json.dumps(jobsDict)
+            return jsonify(
+                {
+                    "code": 201,
+                    "data": result
+                }
+                ), 201
+        
+        # return "404"  #empty user valu
+        return jsonify(
+            {
+                "code": 400,
+                "data": "This company has no jobs yet"
+            }
+        ), 400
+
+    except Exception as e:
+        # return "NOT OK"
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding the jobs. " + str(e)
             }
         ), 500
 
@@ -99,20 +143,16 @@ def post_job():
         ), 500
     
 
-@app.route("/jobs/<string:JobID>")
+@app.route("/jobs/<string:JobID>", methods = ["GET"])
 def get_job_by_id(JobID):
     try:
         job = db.child("jobs/"+JobID).get()
-        jobDict = {}
-
-        jobDict[job.key()] = job.val()
-        print(jobDict[JobID])
-        # print(user.key())
-        print(bool(jobDict[JobID])) #return true and false
+        jobDict = {}      
+    
+        for info in job.each():
+            jobDict[info.key()] = info.val()
         
-    # bool(userDict["users"])
-
-        if(bool(jobDict[JobID])): #yes theres an existing user
+        if(len(jobDict) > 3): #yes theres an existing user
             result = json.dumps(jobDict)
             return jsonify(
                 {

@@ -55,10 +55,10 @@ onload="showAllJobs()"
 
 <script>
     
-    function showAllJobs() {
+    function showAllApps(CID) {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://127.0.0.1:5001/jobs/all', true);
+        request.open('GET', 'http://127.0.0.1:5003/applications/company/'+CID, true);
         
         request.onload = function() {  
 
