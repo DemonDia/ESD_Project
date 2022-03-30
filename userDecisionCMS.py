@@ -13,17 +13,20 @@ import pika
 ApplicationSMS = "http://127.0.0.1:5003/applications"
 JobSMS = "http://127.0.0.1:5001/"
 UserStatusSMS = "http://127.0.0.1:5002/applications/"
+OwnerNotificationSMS = "http://127.0.0.1:5010/ownerNotified/"
 @app.route("/process_application/<string:AID>",methods = ["PUT"])
 def processApplication(AID):
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data) #gets
         print(data)
+        given_application = invoke_http(ApplicationSMS+"/aid/"+AID,method = "GET")
+        JID = json.loads(given_application["data"])["JID"]
         user_status = invoke_http(UserStatusSMS+AID,json = data,method = "PUT") #returns boolean
         # print("user_status:"+str(user_status))
-        print(user_status)
+        print("user_status",user_status)
 
-        result = processAMQP(user_status)
+        result = processAMQP(user_status,AID,JID)
         if result['code'] not in range(200, 300):
             # print (result)
             return result
@@ -33,7 +36,8 @@ def processApplication(AID):
 
                 print("AID:"+AID)
                 application = invoke_http(ApplicationSMS+"/job/aid/"+AID,method = "GET")
-                result = processAMQP(application) #send msg to RabbitMQ
+                print("application:",application)
+                # result = processAMQP(application,AID,JID) #send msg to RabbitMQ
 
                  #failed to process application
                 if result['code'] not in range(200, 300):      
@@ -41,14 +45,14 @@ def processApplication(AID):
 
                 #success, proceed to update vacancy
                 else:                           
-                    JID  = application["JID"]
+                    # JID  = application["JID"]
                     # return application
                     # JID = application["JID"]
                     # print(application)
                     vacancy = updateVacancy(JID)
                     return vacancy
             else:
-                return user_status['data'] #returns false
+                return user_status['accepted'] #returns false
 
     except Exception as e:
         print(e)
@@ -93,10 +97,11 @@ def owner_get_applications(UID):
             }
         ), 500
 
-def processAMQP(data):
+def processAMQP(data,AID,JID):
     if data['code'] not in range(200, 300):
         data['type'] = 'processApp'
-        message = json.dumps(data)
+        # message = json.dumps(data)
+        print("msg",message)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="processApp.error", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
@@ -108,7 +113,20 @@ def processAMQP(data):
         }
 
     else:
+        get_application = invoke_http(ApplicationSMS+"/aid/"+AID,method = "GET")
+        application_cid = json.loads(get_application["data"])["CID"]
+        print("output",data)
+        data["accepted"] = data["data"]
+        # data.pop("data")
+        data["AID"] = AID
+        data["JID"] = JID
+        
+        # get_application = json.loads(get_application)
+        # print("app:",get_application["CID"])
+        notiresult = invoke_http(OwnerNotificationSMS+application_cid,method ="POST",json =data)
+
         # record the activity log anyway
+        # data.pop('data')
         data['type'] = 'processApp'
         message = json.dumps(data)
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="processApp.info", 

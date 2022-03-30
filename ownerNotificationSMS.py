@@ -58,6 +58,7 @@ def get_all():
             ), 201
     
     except Exception as e:
+        print("OMG")
         print(e)
 
         return jsonify(
@@ -68,12 +69,14 @@ def get_all():
         ), 500
 
 
-@app.route("/ownerNotification/<string:CID>", methods = ["POST"])
+@app.route("/ownerNotified/<string:CID>", methods = ["POST"])
 def post_noti(CID):
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
-        print(type(data))
+        data["CID"] = CID
+        # data.pop("data")
+        print("DATA",data)
         data["posted_timestamp"] = str(datetime.now())
         db.child(CID).push(data)
 
@@ -85,6 +88,7 @@ def post_noti(CID):
             ), 201
 
     except Exception as e:
+        print("NOO")
         print(e)
 
         return jsonify(

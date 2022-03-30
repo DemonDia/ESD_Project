@@ -65,9 +65,9 @@ def post_noti(CID):
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
-        print(type(data))
+        print(data)
         data["posted_timestamp"] = str(datetime.now())
-        db.child(CID).push(data)
+        db.child("jobApp").push(data)
 
         return jsonify(
             {

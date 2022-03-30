@@ -79,6 +79,7 @@ onload="showOneJob({{JID}})";
     </tr>
   </tbody>
 </table>
+
 <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#newApp">Apply</button>
 {% endblock %}
 
@@ -172,6 +173,10 @@ onload="showOneJob({{JID}})";
     </div>
 </div>
 
+<button type="button" class="btn btn-success btn-lg">Apply</button>
+{% endblock %}
+
+{% block popup %} 
 {% endblock %}
 
 {% block script %}
@@ -182,7 +187,6 @@ onload="showOneJob({{JID}})";
 
         var request = new XMLHttpRequest();
         request.open('GET', "http://127.0.0.1:5008/view_job/"+JID, true);
-        
         request.onload = function() {  
 
             var json_obj = JSON.parse(request.responseText);
@@ -256,7 +260,7 @@ onload="showOneJob({{JID}})";
             }
         };
         request.send(params);
-        }
+   }
   
 
 </script>

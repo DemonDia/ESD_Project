@@ -18,6 +18,7 @@ connection = pika.BlockingConnection(
     # For rare cases, it's incompatibility between RabbitMQ and the machine running it,
     # - Use the Docker version of RabbitMQ instead: https://www.rabbitmq.com/download.html
 channel = connection.channel()
+print("done")
 # Set up the exchange if the exchange doesn't exist
 # - use a 'topic' exchange to enable interaction
 exchangename="job_topic"

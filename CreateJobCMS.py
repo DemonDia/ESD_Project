@@ -50,6 +50,11 @@ def create_job():
             # print('my job_result', job_result)
 
             code = job_result["code"]
+            if code not in range(200, 300):
+                # message['type']= "createjob"
+                message = json.dumps(job_result)
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.error", 
+                body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
             print("code",code)
             print("job result",job_result)
@@ -69,10 +74,14 @@ def create_job():
                 # Record new job
                 # record the activity log anyway
 
-                #message['type']= "createjob"
-                #message = json.dumps(job_result)
-                #amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.info", 
-                #body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+                message['type']= "createjob"
+                message = json.dumps(job_result)
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.info", 
+                body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+                message['type']= "createjob"
+                message = json.dumps(job_result)
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.info", 
+                body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
                 return jsonify(
                     {
