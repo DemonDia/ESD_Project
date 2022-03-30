@@ -57,6 +57,10 @@ def view():
 def job(JID):
     return render_template("One_Job.php",JID=JID)
 
+@app.route("/authenticate")
+def authenticate():
+    return render_template("authenticate.php")
+
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
           " applying for a job...")
