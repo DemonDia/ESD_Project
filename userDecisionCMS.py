@@ -1,5 +1,8 @@
 from flask import Flask, request, jsonify
 import json
+
+import os, sys
+from os import environ
 import pyrebase as pb
 from invokes import invoke_http
 from flask_cors import CORS,cross_origin
@@ -12,10 +15,19 @@ import topic_amqp_setup
 import pika
 
 # app.config['CORS_HEADERS'] = 'Content-Type'
-ApplicationSMS = "http://127.0.0.1:5003/applications"
-JobSMS = "http://127.0.0.1:5001/"
-UserStatusSMS = "http://127.0.0.1:5002/applications/"
-OwnerNotificationSMS = "http://127.0.0.1:5010/ownerNotified/"
+# ApplicationSMS = "http://127.0.0.1:5003/applications"
+# JobSMS = "http://127.0.0.1:5001/"
+# UserStatusSMS = "http://127.0.0.1:5002/applications/"
+# OwnerNotificationSMS = "http://127.0.0.1:5010/ownerNotified/"
+
+
+applicationSMS = environ.get('applicationSMS') or "http://localhost:5003/applications" 
+jobSMS = environ.get('jobSMS') or "http://localhost:5001/" 
+userStatusSMS = environ.get('userStatusSMS') or "http://localhost:5002/applications/" 
+ownerNotificationSMS = environ.get('ownerNotificationSMS') or "http://localhost:5010/ownerNotified/" 
+
+
+
 @app.route("/process_application/<string:AID>",methods = ["PUT"])
 def processApplication(AID):
     try:

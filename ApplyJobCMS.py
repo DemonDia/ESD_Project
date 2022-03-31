@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 import os, sys
+from os import environ
 from invokes import invoke_http
 import requests
 
@@ -18,11 +19,13 @@ app = Flask(__name__)
 CORS(app)
 
 
-JobsURL = "http://127.0.0.1:5001/jobs"
-ApplicationURL = "http://127.0.0.1:5003/applications/"
-OwnerNotiURL = "http://127.0.0.1:5010/ownerNotification/"
+# jobSMS = "http://127.0.0.1:5001/jobs"
+# applicatioNSMS = "http://127.0.0.1:5003/applications/"
+# ownerNotifiationSMS = "http://127.0.0.1:5010/ownerNotification/"
 # check if job is there
-
+jobSMS = environ.get('jobSMS') or "http://localhost:5001/jobs" 
+applicatioNSMS = environ.get('applicatioNSMS') or "http://localhost:5003/applications/" 
+ownerNotifiationSMS = environ.get('ownerNotifiationSMS') or "http://localhost:5010/ownerNotification/" 
 
 #  flow: 
 # 1. user send job search information {job search} to job SMS
