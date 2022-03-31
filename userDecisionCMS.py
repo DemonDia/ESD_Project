@@ -30,6 +30,7 @@ def processApplication(AID):
 
 
         result = processAMQP(user_status,AID,JID)
+        print(result)
         if result['code'] not in range(200, 300):
             # print (result)
             return result

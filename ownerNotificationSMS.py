@@ -7,8 +7,6 @@ from datetime import datetime
 import pyrebase as pb
 import json
 
-import direct_amqp_setup
-
 app = Flask(__name__)
 CORS(app)
 # sqlalchemy
@@ -26,60 +24,109 @@ firebaseConfig = {
 firebase = pb.initialize_app(firebaseConfig)
 db = firebase.database() #user realtime db
 
-@app.route("/ownerNotification/<string:CID>")
-def get_owner_noti(CID):
-    try:
-        jobApp = db.child(CID).get()
-        print('this is jobApp', jobApp)
-        jobAppDict = {}    
+# db.create_all()
 
-        for app in jobApp.each():
-            jobAppDict[app.key()] = app.val()
-        
-        return jsonify(
-            {
-                "code": 201,
-                "data": json.dumps(jobAppDict)
-            }
-            ), 201
+# {
+#    "JID": "-MyVtBZxF7DzNc969y7_", 
+#    "UID": "666666"
+# }
+@app.route("/ownerNotification/<string:CID>")
+def get_user_noti(CID):
+    try:
+        ownerNotif = db.child(CID).get()
+        print('this is ownerNotif', ownerNotif)
+        ownerNotifDict = {}    
+
+        for notif in ownerNotif.each():
+            print(type(notif.key()))
+            print("___________") 
+            print("key:",notif.key())
+            print("value:",notif.val())
+            ownerNotifDict[notif.key()] = notif.val()
+
+        print("Job dict:",ownerNotifDict)
+        # return userDict 
+        return json.dumps(ownerNotifDict) #return all user data
     
     except Exception as e:
-        print("OMG")
         print(e)
 
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while finding the jobs. " + str(e)
+                "message": "An error occurred while getting notification. " + str(e)
             }
         ), 500
 
-# @app.route("/ownerNotification/<string:CID>", methods = ["POST"])
-# def post_noti(CID):
-#     try:
-#         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
-#         data = json.loads(data)
-#         print(data)
-#         data["posted_timestamp"] = str(datetime.now())
-#         db.child(CID).push(data)
 
+# @app.route("/ownerNotification/")
+# def get_all():
+#     try:
+#         jobApp = db.child("jobApp").get()
+#         print('this is jobApp', jobApp)
+#         jobAppDict = {}    
+
+#         for app in jobApp.each():
+#             print(type(app.key()))
+#             print("___________") 
+#             print("key:",app.key())
+#             print("value:",app.val())
+#             jobAppDict[app.key()] = app.val()
+
+#         print("Job dict:",jobAppDict)
+#         # return userDict 
+#         # return json.dumps(jobAppDict) #return all user data
+
+        
 #         return jsonify(
 #             {
 #                 "code": 201,
-#                 "data": data
+#                 "data": json.dumps(jobAppDict)
 #             }
 #             ), 201
-
+    
 #     except Exception as e:
+#         print("OMG")
 #         print(e)
 
 #         return jsonify(
 #             {
 #                 "code": 500,
-#                 "message": "An error occurred while posting the user's notification. " + str(e)
+#                 "message": "An error occurred while finding the jobs. " + str(e)
 #             }
 #         ), 500
 
 
-if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')
+@app.route("/ownerNotified/<string:CID>", methods = ["POST"])
+def post_noti(CID):
+    try:
+        data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+        data = json.loads(data)
+        data["CID"] = CID
+        # data.pop("data")
+        print("DATA",data)
+        data["posted_timestamp"] = str(datetime.now())
+        db.child(CID).push(data)
+
+        return jsonify(
+            {
+                "code": 201,
+                "data": data
+            }
+            ), 201
+
+    except Exception as e:
+        print("NOO")
+        print(e)
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating the job. " + str(e)
+            }
+        ), 500
+    
+    
+
+if __name__ == "__main__":
     app.run(port = 5010,debug = True)

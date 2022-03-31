@@ -41,7 +41,9 @@ def receiveOwnerNotification():
 
 def callback(channel, method, properties, body): # required signature for the callback; no return
     print("\nReceived a notification by " + __file__)
+
     processNotification(body)
+ 
     # processNotification(json.loads(body))
 
     print() # print a new line feed
