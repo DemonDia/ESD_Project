@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import json
 import pyrebase as pb
+import os, sys
 from invokes import invoke_http
 from flask_cors import CORS,cross_origin
 app = Flask(__name__)
@@ -21,6 +22,22 @@ UserNotiURL = "http://127.0.0.1:5011/userNotification/"
 def owner_get_applications(CID):
     try:
         applications = invoke_http(ApplicationSMS+"/company/"+CID,method = "GET")
+        return applications
+
+    except Exception as e:
+        # return "NOT OK"
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while obtaining the application. " + str(e)
+            }
+        ), 500
+
+@app.route("/get_app/<string:AID>") # process you auto fill company ID
+def owner_get_app(AID):
+    try:
+        applications = invoke_http(ApplicationSMS+"/aid/"+AID,method = "GET")
         return applications
 
     except Exception as e:
@@ -63,7 +80,7 @@ def owner_process_application(AID):
         else:
             # record the activity log anyway
             message = json.dumps(applications)
-            # notifySeeker(data)
+            notifySeeker(data)
             notifySeeker(AID,data)
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="updateApp.info", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -119,4 +136,6 @@ def notifySeeker(AID,data):
             }), 200
 
 if __name__ == "__main__":
-    app.run(port = 5006,debug = True)
+    print("This is flask " + os.path.basename(__file__) +
+          " applying for a job...")
+    app.run(host="0.0.0.0", port=5006, debug=True)

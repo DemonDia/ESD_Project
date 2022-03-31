@@ -2,6 +2,7 @@
 from flask import Flask, request, jsonify
 import json
 from flask_cors import CORS
+from datetime import datetime
 import pyrebase as pb
 app = Flask(__name__)
 CORS(app)
@@ -34,6 +35,7 @@ def create_application(JID):
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
         data["JID"] = JID
+        data["applied_timestamp"] = str(datetime.now())
         # print(data)
 
         db.child("applications").push(data)
@@ -128,7 +130,6 @@ def get_application_by_AID(AID):
     try:
         applications = db.child("applications/"+AID).get()
         applicationsDict = {}        
-                
     
         for application in applications.each():
             print(type(application.key()))

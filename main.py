@@ -53,10 +53,28 @@ def apply():
 def view():
     return render_template("View_Job.php")
 
+<<<<<<< Updated upstream
+=======
+@app.route("/owner_status")
+def accrej():
+    return render_template("AccRej.php")
+
+@app.route("/view_apps")
+def view_apps():
+    return render_template("View_Apps.php")
+
+>>>>>>> Stashed changes
 @app.route("/job/<JID>")
 def job(JID):
     return render_template("One_Job.php",JID=JID)
 
+<<<<<<< Updated upstream
+=======
+@app.route("/authenticate")
+def authenticate():
+    return render_template("authenticate.php")
+
+>>>>>>> Stashed changes
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
           " applying for a job...")

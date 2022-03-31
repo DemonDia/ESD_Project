@@ -51,7 +51,7 @@ Company Name
         <div class="card-body">
             <h5 class="card-title">View Applications</h5>
             <p class="card-text">View the applications you have have recieved and update their status</p>
-            <a href="/view" class="btn btn-primary">View applications</a>
+            <a href="/view_apps" class="btn btn-primary">View applications</a>
         </div>
         </div>
     </div>

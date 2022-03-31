@@ -78,8 +78,9 @@ def apply_job():
                     }
                 ), 500
             else:
+                
                 # notify owner
-                notifyOwner(data)
+                # notifyOwner(data)
 
                 # send application success message to activity_log queue
                 application_result['type'] = 'applyjob'
@@ -106,31 +107,31 @@ def apply_job():
             }
         ), 500
 
-def notifyOwner(data):
-    notiresult = invoke_http(OwnerNotiURL+data["CID"],method ="POST",json =data)
-    notiresult['type'] = 'ownerNoti'
-    message = json.dumps(notiresult)
-    if notiresult["code"] not in range(200, 300):
+# def notifyOwner(data):
+#     notiresult = invoke_http(OwnerNotiURL+data["CID"],method ="POST",json =data)
+#     notiresult['type'] = 'ownerNoti'
+#     message = json.dumps(notiresult)
+#     if notiresult["code"] not in range(200, 300):
 
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.error", 
-        # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+#         # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.error", 
+#         # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
-        # return error
-        return jsonify(
-            {
-                "code": 500,
-                "data": message
-            }), 500
-    else:
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.info", 
-        # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+#         # return error
+#         return jsonify(
+#             {
+#                 "code": 500,
+#                 "data": message
+#             }), 500
+#     else:
+#         # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.info", 
+#         # body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
-        # return error
-        return jsonify(
-            {
-                "code": 200,
-                "data": message
-            }), 200
+#         # return error
+#         return jsonify(
+#             {
+#                 "code": 200,
+#                 "data": message
+#             }), 200
 
 @app.route("/view_job/<JID>", methods = ["GET"])
 def view_job(JID):
