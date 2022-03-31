@@ -1,15 +1,18 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-import os
+import os,sys
+
+sys.path.append("..")
 from os import environ
 from invokes import invoke_http
 import requests
 
 
 #to remove if we dont use rabbit amqp
-import direct_amqp_setup
-import topic_amqp_setup
+from AMQP import direct_amqp_setup,topic_amqp_setup
+# import AMQP.topic_amqp_setup
+
 import pika
 import json
 

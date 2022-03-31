@@ -1,43 +1,28 @@
 from flask import Flask, request, jsonify
 import json
 import pyrebase as pb
-<<<<<<< HEAD:ComplexMicroservices/AccRejCMS.py
-<<<<<<< Updated upstream:AccRejCMS.py
-=======
-import os
+import os,sys
 from os import environ
->>>>>>> Stashed changes:ComplexMicroservices/AccRejCMS.py
-=======
-import os, sys
->>>>>>> main:AccRejCMS.py
 from invokes import invoke_http
 from flask_cors import CORS,cross_origin
 app = Flask(__name__)
 CORS(app)
-
-import direct_amqp_setup
-import topic_amqp_setup
 import pika
+import os,sys
+
+sys.path.append("..")
+from AMQP import direct_amqp_setup, topic_amqp_setup
 
 # app.config['CORS_HEADERS'] = 'Content-Type'
 
-<<<<<<< Updated upstream:AccRejCMS.py
-ApplicationSMS = "http://127.0.0.1:5003/applications"
-OwnerStatusSMS = "http://127.0.0.1:5004/status/"
-<<<<<<< HEAD:ComplexMicroservices/AccRejCMS.py
-=======
 # ApplicationSMS = "http://127.0.0.1:5003/applications"
 # OwnerStatusSMS = "http://127.0.0.1:5004/status/"
 # UserNotiURL ="http://127.0.0.1:5011/status/"
->>>>>>> Stashed changes:ComplexMicroservices/AccRejCMS.py
+
 
 ApplicationSMS = environ.get("ApplicationSMS") or "http://localhost:5003/applications"
 OwnerStatusSMS = environ.get("OwnerStatusSMS") or "http://localhost:5004/status/"
 UserNotiURL = environ.get("UserNotiURL") or "http://localhost:5011/applications"
-=======
-UserNotiURL = "http://127.0.0.1:5011/userNotification/"
-
->>>>>>> main:AccRejCMS.py
 
 
 @app.route("/get_applications/<string:CID>") # process you auto fill company ID
