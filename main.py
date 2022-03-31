@@ -63,6 +63,9 @@ def accrej():
 def view_apps():
     return render_template("View_Apps.php")
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 @app.route("/job/<JID>")
 def job(JID):
@@ -74,6 +77,9 @@ def job(JID):
 def authenticate():
     return render_template("authenticate.php")
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
