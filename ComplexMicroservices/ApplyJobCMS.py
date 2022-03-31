@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-import os, sys
+import os
+from os import environ
 from invokes import invoke_http
 import requests
 
@@ -17,9 +18,21 @@ app = Flask(__name__)
 CORS(app)
 
 
+<<<<<<< Updated upstream:ApplyJobCMS.py
 JobsURL = "http://127.0.0.1:5001/jobs"
 ApplicationURL = "http://127.0.0.1:5003/applications/"
 OwnerNotiURL = "http://127.0.0.1:5010/ownerNotified/"
+=======
+# JobsURL = "http://127.0.0.1:5001/jobs"
+# ApplicationURL = "http://127.0.0.1:5003/applications/"
+# OwnerNotiURL = "http://127.0.0.1:5010/ownerNotification/"
+
+JobsURL = environ.get("JobsURL") or "http://localhost:5001/jobs"
+ApplicationURL = environ.get("ApplicationURL") or "http://localhost:5003/applications/"
+OwnerNotiURL = environ.get("OwnerNotiURL") or "http://localhost:5010/ownerNotification/"
+
+
+>>>>>>> Stashed changes:ComplexMicroservices/ApplyJobCMS.py
 # check if job is there
 
 

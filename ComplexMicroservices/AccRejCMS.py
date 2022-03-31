@@ -1,6 +1,11 @@
 from flask import Flask, request, jsonify
 import json
 import pyrebase as pb
+<<<<<<< Updated upstream:AccRejCMS.py
+=======
+import os
+from os import environ
+>>>>>>> Stashed changes:ComplexMicroservices/AccRejCMS.py
 from invokes import invoke_http
 from flask_cors import CORS,cross_origin
 app = Flask(__name__)
@@ -8,9 +13,18 @@ CORS(app)
 
 # app.config['CORS_HEADERS'] = 'Content-Type'
 
+<<<<<<< Updated upstream:AccRejCMS.py
 ApplicationSMS = "http://127.0.0.1:5003/applications"
 OwnerStatusSMS = "http://127.0.0.1:5004/status/"
+=======
+# ApplicationSMS = "http://127.0.0.1:5003/applications"
+# OwnerStatusSMS = "http://127.0.0.1:5004/status/"
+# UserNotiURL ="http://127.0.0.1:5011/status/"
+>>>>>>> Stashed changes:ComplexMicroservices/AccRejCMS.py
 
+ApplicationSMS = environ.get("ApplicationSMS") or "http://localhost:5003/applications"
+OwnerStatusSMS = environ.get("OwnerStatusSMS") or "http://localhost:5004/status/"
+UserNotiURL = environ.get("UserNotiURL") or "http://localhost:5011/applications"
 
 
 @app.route("/get_applications/<string:CID>") # process you auto fill company ID
