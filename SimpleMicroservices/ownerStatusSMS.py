@@ -21,14 +21,21 @@ firebaseConfig = {
 
 firebase = pb.initialize_app(firebaseConfig)
 db = firebase.database() #user realtime db
+
 @app.route("/status/<string:AID>",methods = ["PUT"]) # create_app
 def owner_process_application(AID):
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data) #gets
-        db.child("applications/"+AID).update({"owner_status":data["owner_status"]})
-        return data["owner_status"]
+        db.child("applications/"+AID).update({"app_status":data["app_status"]})
+        # return data["owner_status"]
         # return decision
+
+        return jsonify({
+            "code": 201,
+            "data:": data["app_status"]
+        }), 201
+
     except Exception as e:
         print(e)
 
@@ -38,9 +45,6 @@ def owner_process_application(AID):
                 "message": "An error occurred while creating the job. " + str(e)
             }
         ), 500
-
-
-
 
 if __name__ == "__main__":
     app.run(port = 5004,debug = True)

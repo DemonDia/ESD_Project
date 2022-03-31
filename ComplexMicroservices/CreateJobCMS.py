@@ -8,7 +8,8 @@ import os
 from os import environ
 
 #to remove if we dont use rabbit amqp
-import amqp_setup
+import direct_amqp_setup
+import topic_amqp_setup
 import pika
 from flask_cors import CORS
 
@@ -18,8 +19,8 @@ import requests
 
 
 #to remove if we dont use rabbit amqp
-#import amqp_setup
-#import pika
+# import amqp_setup
+# import pika
 #import json
 
 
@@ -34,11 +35,10 @@ JobsURL = environ.get("JobsURL") or "http://localhost:5001/jobs"
 JobsURL = environ.get("activity_log_URL") or "http://localhost:5010/activities"
 @app.route("/create_job", methods = ["POST"])
 def create_job():
-    if request.is_json:
+    if request:
         try:
             data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
-            data = json.loads(data)
-            print(data)
+            data = json.loads(request.data)
 
             # Send the job info
             job_result = invoke_http(JobsURL+"/create",method = "POST",json = data)
@@ -53,29 +53,31 @@ def create_job():
 
             code = job_result["code"]
             if code not in range(200, 300):
-                message = json.dumps(job_result)
-                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.error", 
+                # message['type']= "createjob"
+                message = json.dumps(job_result["data"])
+                topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="createjob.error", 
                 body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
+            print("code",code)
+            print("job result",job_result)
+
+            if code not in range(200, 300):
+                #message['type']= "createjob"
+                #message = json.dumps(job_result)
+                #amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.error", 
+                #body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
                 # return error
-                return {
-                    "code": 500,
-                    "data": {"job_result": job_result},
-                    "message": "Job creation failure sent for error handling."
-                }
+                return job_result
+
             else:
                 # Record new job
                 # record the activity log anyway
-                message = json.dumps(job_result)
-                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="createjob.info", 
+                # message['type']= "createjob"
+                message = json.dumps(job_result["data"])
+                topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="createjob.info", 
                 body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
-                return jsonify(
-                    {
-                        "code": 201,
-                        "result": job_result
-                    }
-                    ), 201
+                return job_result
 
         except Exception as e:
             print(e)
@@ -92,6 +94,8 @@ def create_job():
             "data": str(request.get_data())
         }
         ), 400
+
+
       
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":

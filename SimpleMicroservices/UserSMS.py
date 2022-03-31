@@ -82,13 +82,27 @@ def findByEmail(email):
         if(bool(userDict["users"])): #yes theres an existing user
             return json.dumps(userDict)
         else:
-            return "404"  #empty user valu
+
+        # print(e)
+
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred while finding user. "
+                }
+            ), 500
     # print(userDict.values())
     # print(type(user))
     #     # pass
     except Exception as e:
-        print(e)
-        return "NOT OK"
+        # print(e)
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while finding user. " + str(e)
+            }
+        ), 500
 
 @app.route("/user/add_skill/<string:email>",methods = ["POST"])
 def addSkill(email):
@@ -118,7 +132,12 @@ def addSkill(email):
             # add skill
             return "OK"
         else:
-            return "404" 
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred while adding skill. "
+                }
+            ), 500
     except Exception as e:
         # print(e)
 
@@ -156,7 +175,12 @@ def addWork(email):
             # add skill
             return "OK"
         else:
-            return "404" 
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred while adding work experience. "
+                }
+            ), 500
     except Exception as e:
         # print(e)
 
@@ -197,7 +221,12 @@ def addEducation(email):
             # add skill
             return "OK"
         else:
-            return "404" 
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred while adding education. " 
+                }
+            ), 500
     # print(userDict.values())
     # print(type(user))
     #     # pass
@@ -234,8 +263,12 @@ def register():
             db.child("users").push(data)
             return "OK"
         else:
-            print("GG")
-            return "NOT OK"
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred while registering. "
+                }
+            ), 500
         
     except Exception as e:
         return jsonify(

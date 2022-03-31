@@ -2,7 +2,10 @@
 from flask import Flask, request, jsonify
 import json
 from flask_cors import CORS
+from datetime import datetime
 import pyrebase as pb
+from datetime import datetime
+
 app = Flask(__name__)
 CORS(app)
 # sqlalchemy
@@ -33,7 +36,9 @@ def create_application(JID):
 
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
+        data["posted_timestamp"] = str(datetime.now()) 
         data["JID"] = JID
+        data["applied_timestamp"] = str(datetime.now())
         # print(data)
 
         db.child("applications").push(data)
@@ -41,7 +46,7 @@ def create_application(JID):
         return jsonify(
                 {
                     "code": 201,
-                    "data": json.dumps(data)
+                    "data":  json.dumps(data)
                 }
                 ), 201
     except Exception as e:
@@ -68,12 +73,22 @@ def get_all():
             print("value:",application.val())
             applicationsDict[application.key()] = application.val()
         # return userDict
-        return json.dumps(applicationsDict) #return all user data
+        # return json.dumps(applicationsDict) #return all user data
+        return jsonify(
+            {
+                "code": 201,
+                "data":  json.dumps(applicationsDict)
+            }
+            ), 201
+
     except Exception as e:
+        print(e)
+        # return "NOT OK"
+
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while gettng applications. " + str(e)
+                "message": "An error occurred while applying for job. " + str(e)
             }
         ), 500
 
@@ -92,22 +107,31 @@ def get_application_by_JID(JID):
             applicationsDict[application.key()] = application.val()
         # print("Job dict:",applicationsDict)
         # return userDict
-        return json.dumps(applicationsDict) #return all user data
+        # return json.dumps(applicationsDict) #return all user data
+
+        return jsonify(
+            {
+                "code": 201,
+                "data":  json.dumps(applicationsDict)
+            }
+            ), 201
+
     except Exception as e:
+        print(e)
+        # return "NOT OK"
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while getting applications. " + str(e)
+                "message": "An error occurred while obtaining applications. " + str(e)
             }
         ), 500
 
 
-@app.route("/applications/job/aid/<string:AID>") # get applications based on AID
+@app.route("/applications/aid/<string:AID>") # get applications based on AID
 def get_application_by_AID(AID):
     try:
         applications = db.child("applications/"+AID).get()
         applicationsDict = {}        
-                
     
         for application in applications.each():
             print(type(application.key()))
@@ -117,12 +141,21 @@ def get_application_by_AID(AID):
             applicationsDict[application.key()] = application.val()
         # print("Job dict:",applicationsDict)
         # return userDict
-        return json.dumps(applicationsDict) #return all user data
+        # return json.dumps(applicationsDict) #return all user data
+
+        return jsonify({
+                "code": 201,
+                "data":  json.dumps(applicationsDict)
+            })
+
+
     except Exception as e:
+        print(e)
+        # return "NOT OK"
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while getting applications." + str(e)
+                "message": "An error occurred while obtaining application. " + str(e)
             }
         ), 500
 
@@ -142,14 +175,21 @@ def get_all_applications_of_a_company(CID):
             applicationsDict[application.key()] = application.val()
         # print("Job dict:",applicationsDict)
         # return userDict
-        return json.dumps(applicationsDict) #return all user data
+        # return json.dumps(applicationsDict) #return all user data
+
+        return jsonify(
+            {
+                "code": 201,
+                "data":  json.dumps(applicationsDict)
+            }
+            ), 201
     except Exception as e:
         # print(e)
 
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while obtaining applications." + str(e)
+                "message": "An error occurred while obtaining applications. " + str(e)
             }
         ), 500
 
@@ -168,7 +208,16 @@ def get_all_applications_of_a_user(UID):
             applicationsDict[application.key()] = application.val()
         # print("Job dict:",applicationsDict)
         # return userDict
-        return json.dumps(applicationsDict) #return all user data
+        # return json.dumps(applicationsDict) #return all user data
+
+
+        return jsonify(
+            {
+                "code": 201,
+                "data": json.dumps(applicationsDict)
+            }
+            ), 201
+            
     except Exception as e:
         # print(e)
 

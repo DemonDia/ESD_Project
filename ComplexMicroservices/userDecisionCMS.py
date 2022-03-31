@@ -8,6 +8,11 @@ from os import environ
 app = Flask(__name__)
 CORS(app)
 
+import direct_amqp_setup
+import topic_amqp_setup
+
+import pika
+
 # app.config['CORS_HEADERS'] = 'Content-Type'
 # ApplicationSMS = "http://127.0.0.1:5003/applications"
 # JobSMS = "http://127.0.0.1:5001/"
@@ -26,20 +31,42 @@ def processApplication(AID):
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data) #gets
         print(data)
+        given_application = invoke_http(ApplicationSMS+"/aid/"+AID,method = "GET")
+        JID = json.loads(given_application["data"])["JID"]
         user_status = invoke_http(UserStatusSMS+AID,json = data,method = "PUT") #returns boolean
         # print("user_status:"+str(user_status))
-        if user_status == True:
-            print("AID:"+AID)
-            application = invoke_http(ApplicationSMS+"/job/aid/"+AID,method = "GET")
-            JID  = application["JID"]
-            # return application
-            # JID = application["JID"]
-            # print(application)
-            vacancy = updateVacancy(JID)
-            return vacancy
+        print("user_status",user_status)
+
+
+        result = processAMQP(user_status,AID,JID)
+        print(result)
+        if result['code'] not in range(200, 300):
+            # print (result)
+            return result
 
         else:
-            return str(user_status) #returns false
+            if user_status['data'] == True:
+
+                print("AID:"+AID)
+                application = invoke_http(ApplicationSMS+"/job/aid/"+AID,method = "GET")
+                print("application:",application)
+                # result = processAMQP(application,AID,JID) #send msg to RabbitMQ
+
+                 #failed to process application
+                if result['code'] not in range(200, 300):      
+                    return result
+
+                #success, proceed to update vacancy
+                else:                           
+                    # JID  = application["JID"]
+                    # return application
+                    # JID = application["JID"]
+                    # print(application)
+                    vacancy = updateVacancy(JID)
+                    return vacancy
+            else:
+                return user_status['accepted'] #returns false
+
     except Exception as e:
         print(e)
 
@@ -73,6 +100,7 @@ def owner_get_applications(UID):
     try:
         applications = invoke_http(ApplicationSMS+"/user/"+UID,method = "GET")
         return applications
+    
     except Exception as e:
         print(e)
 
@@ -82,6 +110,50 @@ def owner_get_applications(UID):
                 "message": "An error occurred while creating the job. " + str(e)
             }
         ), 500
+
+def processAMQP(data,AID,JID):
+    if data['code'] not in range(200, 300):
+        data['type'] = 'processApp'
+        # message = json.dumps(data)
+        print("msg",message)
+        topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="processApp.error", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+        # return error
+        return {
+            "code": 500,
+            "result": jsonify(data),
+            "message": "process application failure sent for error handling."
+        }
+
+    else:
+        get_application = invoke_http(ApplicationSMS+"/aid/"+AID,method = "GET")
+        application_cid = json.loads(get_application["data"])["CID"]
+        print("output",data)
+        data["accepted"] = data["data"]
+        # data.pop("data")
+        data["AID"] = AID
+        data["JID"] = JID
+        
+        # get_application = json.loads(get_application)
+        # print("app:",get_application["CID"])
+        print('here', get_application)
+        message = json.dumps(get_application['data'])
+        direct_amqp_setup.channel.basic_publish(exchange=direct_amqp_setup.exchangename, routing_key="ownerNotification", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        
+        # notiresult = invoke_http(OwnerNotificationSMS+application_cid,method ="POST",json =data)
+
+        # record the activity log anyway
+        # data.pop('data')
+        message = json.dumps(data)
+        topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="processApp.info", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+        return {
+            "code": 201,
+            "result": jsonify(data),
+        }
 
 
 if __name__ == "__main__":

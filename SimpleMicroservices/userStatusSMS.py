@@ -30,7 +30,13 @@ def processApplication(AID):
         print(data)
         db.child("applications/"+AID).update({"accepted":data["accepted"]})
         # print(data["accepted"])
-        return str(data["accepted"])
+        # return str(data["accepted"])
+
+        return jsonify({
+            "code": 201,
+            "data": str(data["accepted"])
+        }), 201
+
         # return decision
     except Exception as e:
         print(e)
