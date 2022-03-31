@@ -79,6 +79,7 @@ def apply_job():
                     }
                 ), 500
             else:
+
             #     # notify owner
                 notifyOwner(data)
 
@@ -105,6 +106,7 @@ def apply_job():
                 "message": "An error occurred while applying for job. " + str(e)
             }
         ), 500
+
 
 def notifyOwner(data):
     # New: AMQP broker to send message to owner notification
@@ -136,7 +138,6 @@ def notifyOwner(data):
     #             "code": 200,
     #             "data": message
     #         }), 200
-
 @app.route("/view_job/<JID>", methods = ["GET"])
 def view_job(JID):
     if request:

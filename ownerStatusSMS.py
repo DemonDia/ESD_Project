@@ -21,6 +21,7 @@ firebaseConfig = {
 
 firebase = pb.initialize_app(firebaseConfig)
 db = firebase.database() #user realtime db
+
 @app.route("/status/<string:AID>",methods = ["PUT"]) # create_app
 def owner_process_application(AID):
     try:
@@ -44,9 +45,6 @@ def owner_process_application(AID):
                 "message": "An error occurred while creating the job. " + str(e)
             }
         ), 500
-
-
-
 
 if __name__ == "__main__":
     app.run(port = 5004,debug = True)
