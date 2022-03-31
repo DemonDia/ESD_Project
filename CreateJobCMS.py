@@ -5,6 +5,7 @@ import pyrebase as pb
 from invokes import invoke_http
 from flask_cors import CORS, cross_origin
 import os, sys
+from os import environ
 import requests
 
 #to remove if we dont use rabbit amqp
@@ -29,8 +30,14 @@ app = Flask(__name__)
 CORS(app)
 
 
-JobsURL = "http://127.0.0.1:5001/jobs"
+# jobSMS = "http://127.0.0.1:5001/jobs"
 # activity_log_URL = "http://127.0.0.1:5010/activities"
+
+jobSMS = environ.get('jobSMS') or "http://localhost:5001/jobs" 
+# applicatioNSMS = environ.get('applicatioNSMS') or "http://localhost:5003/applications/" 
+# ownerNotifiationSMS = environ.get('ownerNotifiationSMS') or "http://localhost:5010/ownerNotification/" 
+
+
 
 @app.route("/create_job", methods = ["POST"])
 def create_job():

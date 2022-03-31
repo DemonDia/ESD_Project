@@ -172,11 +172,6 @@ onload="showOneJob({{JID}})";
         </div>
     </div>
 </div>
-
-<button type="button" class="btn btn-success btn-lg">Apply</button>
-{% endblock %}
-
-{% block popup %} 
 {% endblock %}
 
 {% block script %}
@@ -239,12 +234,13 @@ onload="showOneJob({{JID}})";
         var skills = document.getElementById("skills").value;
         var education = document.getElementById("education").value;
         var nationality = document.getElementById("nationality").value;
+        var job_title = document.getElementById("job_title").value;
         
         console.log(first);
         console.log(email);
 
         var applyjobcms = "http://192.168.0.125:5008/apply_job"
-        var params = '{'+'"JID":"'+{{JID}}+'","first":"'+first+'","last":"'+last+'","dob":"'+dob+'","phone":"'+phone+'","email":"'+email+'","experience":"'+experience+'","skills":"'+skills+'","education":"'+education+'","nationality":"'+nationality+'"}';
+        var params = '{'+'"JID":"'+{{JID}}+'","job_title":"'+job_title'","first":"'+first+'","last":"'+last+'","dob":"'+dob+'","phone":"'+phone+'","email":"'+email+'","experience":"'+experience+'","skills":"'+skills+'","education":"'+education+'","nationality":"'+nationality+'"}';
         console.log(params);
         request.open('POST',applyjobcms, true);
 

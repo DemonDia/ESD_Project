@@ -2,6 +2,7 @@
 from flask import Flask, request, jsonify
 import json
 from flask_cors import CORS
+from datetime import datetime
 import pyrebase as pb
 from datetime import datetime
 
@@ -37,6 +38,7 @@ def create_application(JID):
         data = json.loads(data)
         data["posted_timestamp"] = str(datetime.now()) 
         data["JID"] = JID
+        data["applied_timestamp"] = str(datetime.now())
         # print(data)
 
         db.child("applications").push(data)
@@ -130,7 +132,6 @@ def get_application_by_AID(AID):
     try:
         applications = db.child("applications/"+AID).get()
         applicationsDict = {}        
-                
     
         for application in applications.each():
             print(type(application.key()))

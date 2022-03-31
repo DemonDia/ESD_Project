@@ -57,17 +57,18 @@ def view():
 def accrej():
     return render_template("AccRej.php")
 
+@app.route("/view_apps")
+def view_apps():
+    return render_template("View_Apps.php")
+
 @app.route("/job/<JID>")
 def job(JID):
     return render_template("One_Job.php",JID=JID)
 
+
 @app.route("/authenticate")
 def authenticate():
     return render_template("authenticate.php")
-
-@app.route("/applications")
-def applications():
-    return render_template("applications.php")
 
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +

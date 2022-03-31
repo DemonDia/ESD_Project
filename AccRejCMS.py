@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 import json
 import pyrebase as pb
+import os, sys
+from os import environ
 from invokes import invoke_http
 from flask_cors import CORS,cross_origin
 app = Flask(__name__)
@@ -12,16 +14,34 @@ import pika
 
 # app.config['CORS_HEADERS'] = 'Content-Type'
 
-ApplicationSMS = "http://127.0.0.1:5003/applications"
-OwnerStatusSMS = "http://127.0.0.1:5004/status/"
-UserNotiURL = "http://127.0.0.1:5011/userNotification/"
+# applicationSMS = "http://127.0.0.1:5003/applications"
+# ownerStatusSMS = "http://127.0.0.1:5004/status/"
+# userNotificationSMS = "http://127.0.0.1:5011/userNotification/"
 
-
+applicationSMS = environ.get('applicationSMS') or "http://localhost:5003/applications" 
+ownerStatusSMS = environ.get('ownerStatusSMS') or "http://localhost:5004/status/" 
+userNotificationSMS = environ.get('userNotificationSMS') or "http://localhost:5011/userNotification/" 
 
 @app.route("/get_applications/<string:CID>") # process you auto fill company ID
 def owner_get_applications(CID):
     try:
-        applications = invoke_http(ApplicationSMS+"/company/"+CID,method = "GET")
+        applications = invoke_http(applicationSMS+"/company/"+CID,method = "GET")
+        return applications
+
+    except Exception as e:
+        # return "NOT OK"
+
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while obtaining the application. " + str(e)
+            }
+        ), 500
+
+@app.route("/get_app/<string:AID>") # process you auto fill company ID
+def owner_get_app(AID):
+    try:
+        applications = invoke_http(applicationSMS+"/aid/"+AID,method = "GET")
         return applications
 
     except Exception as e:
@@ -65,7 +85,7 @@ def owner_process_application(AID):
         else:
             # record the activity log anyway
             message = json.dumps(applications)
-            # notifySeeker(data)
+            notifySeeker(data)
             notifySeeker(AID,data)
             topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="updateApp.info", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -85,8 +105,8 @@ def owner_process_application(AID):
 # def send_to_broker(): #for the broker
 #     pass
 def notifySeeker(AID,data):
-    print(ApplicationSMS+"/aid/"+AID)
-    get_application = invoke_http(ApplicationSMS+"/aid/"+AID,method = "GET")
+    print(applicationSMS+"/aid/"+AID)
+    get_application = invoke_http(applicationSMS+"/aid/"+AID,method = "GET")
     get_application = json.loads(get_application["data"])
     print(get_application)
 
@@ -126,4 +146,6 @@ def notifySeeker(AID,data):
     #         }), 200
 
 if __name__ == "__main__":
-    app.run(port = 5006,debug = True)
+    print("This is flask " + os.path.basename(__file__) +
+          " applying for a job...")
+    app.run(host="0.0.0.0", port=5006, debug=True)
