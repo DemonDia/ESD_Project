@@ -6,7 +6,9 @@ from flask_cors import CORS,cross_origin
 app = Flask(__name__)
 CORS(app)
 
-import amqp_setup
+import direct_amqp_setup
+import topic_amqp_setup
+
 import pika
 
 # app.config['CORS_HEADERS'] = 'Content-Type'
@@ -26,7 +28,9 @@ def processApplication(AID):
         # print("user_status:"+str(user_status))
         print("user_status",user_status)
 
+
         result = processAMQP(user_status,AID,JID)
+        print(result)
         if result['code'] not in range(200, 300):
             # print (result)
             return result
@@ -87,6 +91,7 @@ def owner_get_applications(UID):
     try:
         applications = invoke_http(ApplicationSMS+"/user/"+UID,method = "GET")
         return applications
+    
     except Exception as e:
         print(e)
 
@@ -102,7 +107,7 @@ def processAMQP(data,AID,JID):
         data['type'] = 'processApp'
         # message = json.dumps(data)
         print("msg",message)
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="processApp.error", 
+        topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="processApp.error", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
         # return error
@@ -123,13 +128,17 @@ def processAMQP(data,AID,JID):
         
         # get_application = json.loads(get_application)
         # print("app:",get_application["CID"])
-        notiresult = invoke_http(OwnerNotificationSMS+application_cid,method ="POST",json =data)
+        print('here', get_application)
+        message = json.dumps(get_application['data'])
+        direct_amqp_setup.channel.basic_publish(exchange=direct_amqp_setup.exchangename, routing_key="ownerNotification", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        
+        # notiresult = invoke_http(OwnerNotificationSMS+application_cid,method ="POST",json =data)
 
         # record the activity log anyway
         # data.pop('data')
-        data['type'] = 'processApp'
         message = json.dumps(data)
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="processApp.info", 
+        topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="processApp.info", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
         return {

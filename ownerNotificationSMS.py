@@ -30,43 +30,71 @@ db = firebase.database() #user realtime db
 #    "JID": "-MyVtBZxF7DzNc969y7_", 
 #    "UID": "666666"
 # }
-
-@app.route("/ownerNotification")
-def get_all():
+@app.route("/ownerNotification/<string:CID>")
+def get_user_noti(CID):
     try:
-        jobApp = db.child("jobApp").get()
-        print('this is jobApp', jobApp)
-        jobAppDict = {}    
+        ownerNotif = db.child(CID).get()
+        print('this is ownerNotif', ownerNotif)
+        ownerNotifDict = {}    
 
-        for app in jobApp.each():
-            print(type(app.key()))
+        for notif in ownerNotif.each():
+            print(type(notif.key()))
             print("___________") 
-            print("key:",app.key())
-            print("value:",app.val())
-            jobAppDict[app.key()] = app.val()
+            print("key:",notif.key())
+            print("value:",notif.val())
+            ownerNotifDict[notif.key()] = notif.val()
 
-        print("Job dict:",jobAppDict)
+        print("Job dict:",ownerNotifDict)
         # return userDict 
-        # return json.dumps(jobAppDict) #return all user data
-
-        
-        return jsonify(
-            {
-                "code": 201,
-                "data": json.dumps(jobAppDict)
-            }
-            ), 201
+        return json.dumps(ownerNotifDict) #return all user data
     
     except Exception as e:
-        print("OMG")
         print(e)
 
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while finding the jobs. " + str(e)
+                "message": "An error occurred while getting notification. " + str(e)
             }
         ), 500
+
+
+# @app.route("/ownerNotification/")
+# def get_all():
+#     try:
+#         jobApp = db.child("jobApp").get()
+#         print('this is jobApp', jobApp)
+#         jobAppDict = {}    
+
+#         for app in jobApp.each():
+#             print(type(app.key()))
+#             print("___________") 
+#             print("key:",app.key())
+#             print("value:",app.val())
+#             jobAppDict[app.key()] = app.val()
+
+#         print("Job dict:",jobAppDict)
+#         # return userDict 
+#         # return json.dumps(jobAppDict) #return all user data
+
+        
+#         return jsonify(
+#             {
+#                 "code": 201,
+#                 "data": json.dumps(jobAppDict)
+#             }
+#             ), 201
+    
+#     except Exception as e:
+#         print("OMG")
+#         print(e)
+
+#         return jsonify(
+#             {
+#                 "code": 500,
+#                 "message": "An error occurred while finding the jobs. " + str(e)
+#             }
+#         ), 500
 
 
 @app.route("/ownerNotified/<string:CID>", methods = ["POST"])

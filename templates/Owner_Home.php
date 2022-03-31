@@ -20,7 +20,7 @@ Company Name
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="/view">
+    <a class="nav-link" aria-current="page" href="/owner_status">
         View applications
     </a>
 </li>

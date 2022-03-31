@@ -43,10 +43,16 @@ def get_all():
 
         # return userDict
         # return json.dumps(jobsDict) #return all user data
+        # return jsonify(
+        #             {
+        #                 "code": 201,
+        #                 "data": json.dumps(jobsDict)
+        #             }
+        #             ), 201
         return jsonify(
                     {
-                    "code": 201,
-                    "data": json.dumps(jobsDict)
+                        "code": 201,
+                        "data": json.dumps(jobsDict)
                     }
                 ), 201
     
@@ -112,12 +118,19 @@ def post_job():
         data["posted_timestamp"] = str(datetime.now())
         db.child("jobs").push(data)
 
+        # return jsonify(
+        #     {
+        #         "code": 201,
+        #         "data": json.dumps(data)
+        #     }
+        #     ), 201
         return jsonify(
             {
                 "code": 201,
-                "data": json.dumps(data)
+                "data": data
             }
             ), 201
+        return data
 
     except Exception as e:
         # print(e)

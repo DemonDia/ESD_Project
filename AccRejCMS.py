@@ -7,7 +7,8 @@ from flask_cors import CORS,cross_origin
 app = Flask(__name__)
 CORS(app)
 
-import amqp_setup
+import direct_amqp_setup
+import topic_amqp_setup
 import pika
 
 # app.config['CORS_HEADERS'] = 'Content-Type'
@@ -61,13 +62,14 @@ def owner_process_application(AID):
         data = json.loads(data) #gets
         print(data)
         applications = invoke_http(OwnerStatusSMS+AID,method = "PUT",json = data)
+        print(applications)
         # print(applications['code'])
         # return jsonify(applications)
 
 
         if applications['code'] not in range(200, 300):
             message = json.dumps(applications)
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="updateApp.error", 
+            topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="updateApp.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
             # return error
@@ -82,7 +84,7 @@ def owner_process_application(AID):
             message = json.dumps(applications)
             notifySeeker(data)
             notifySeeker(AID,data)
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="updateApp.info", 
+            topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="updateApp.info", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
             return jsonify(applications)
@@ -109,31 +111,36 @@ def notifySeeker(AID,data):
     data["JID"] = get_application["JID"]
     data["UID"] = get_application["UID"]
 
+    # New: AMQP broker send message to user notification
+    message = json.dumps(get_application)
+    direct_amqp_setup.channel.basic_publish(exchange=direct_amqp_setup.exchangename, routing_key="userNotification", 
+    body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
     # get_application = json.loads(get_application)
     # print("app:",get_application["CID"])
-    notiresult = invoke_http(UserNotiURL+get_application["CID"],method ="POST",json =data)
-    notiresult['type'] = 'ownerNoti'
-    message = json.dumps(notiresult)
-    if notiresult["code"] not in range(200, 300):
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.error", 
-        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+    # notiresult = invoke_http(UserNotiURL+get_application["CID"],method ="POST",json =data)
+    # notiresult['type'] = 'ownerNoti'
+    # message = json.dumps(notiresult)
+    # if notiresult["code"] not in range(200, 300):
+    #     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.error", 
+    #     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
-        # return error
-        return jsonify(
-            {
-                "code": 500,
-                "data": message
-            }), 500
-    else:
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.info", 
-        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+    #     # return error
+    #     return jsonify(
+    #         {
+    #             "code": 500,
+    #             "data": message
+    #         }), 500
+    # else:
+    #     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="ownerNoti.info", 
+    #     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
-        # return error
-        return jsonify(
-            {
-                "code": 200,
-                "data": message
-            }), 200
+    #     # return error
+    #     return jsonify(
+    #         {
+    #             "code": 200,
+    #             "data": message
+    #         }), 200
 
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +

@@ -4,6 +4,8 @@ import json
 from flask_cors import CORS
 from datetime import datetime
 import pyrebase as pb
+from datetime import datetime
+
 app = Flask(__name__)
 CORS(app)
 # sqlalchemy
@@ -34,6 +36,7 @@ def create_application(JID):
 
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
+        data["posted_timestamp"] = str(datetime.now()) 
         data["JID"] = JID
         data["applied_timestamp"] = str(datetime.now())
         # print(data)
@@ -43,7 +46,7 @@ def create_application(JID):
         return jsonify(
                 {
                     "code": 201,
-                    "data": json.dumps(data)
+                    "data":  json.dumps(data)
                 }
                 ), 201
     except Exception as e:
@@ -71,11 +74,10 @@ def get_all():
             applicationsDict[application.key()] = application.val()
         # return userDict
         # return json.dumps(applicationsDict) #return all user data
-
         return jsonify(
             {
                 "code": 201,
-                "data": json.dumps(applicationsDict)
+                "data":  json.dumps(applicationsDict)
             }
             ), 201
 
@@ -110,7 +112,7 @@ def get_application_by_JID(JID):
         return jsonify(
             {
                 "code": 201,
-                "data": json.dumps(applicationsDict)
+                "data":  json.dumps(applicationsDict)
             }
             ), 201
 
@@ -141,12 +143,11 @@ def get_application_by_AID(AID):
         # return userDict
         # return json.dumps(applicationsDict) #return all user data
 
-        return jsonify(
-            {
+        return jsonify({
                 "code": 201,
-                "data": json.dumps(applicationsDict)
-            }
-            ), 201
+                "data":  json.dumps(applicationsDict)
+            })
+
 
     except Exception as e:
         print(e)
@@ -179,7 +180,7 @@ def get_all_applications_of_a_company(CID):
         return jsonify(
             {
                 "code": 201,
-                "data": json.dumps(applicationsDict)
+                "data":  json.dumps(applicationsDict)
             }
             ), 201
     except Exception as e:
@@ -208,6 +209,8 @@ def get_all_applications_of_a_user(UID):
         # print("Job dict:",applicationsDict)
         # return userDict
         # return json.dumps(applicationsDict) #return all user data
+
+
         return jsonify(
             {
                 "code": 201,

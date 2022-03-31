@@ -59,32 +59,66 @@ def get_all():
             }
         ), 500
 
-
-@app.route("/userNotification/<string:CID>", methods = ["POST"])
-def post_noti(CID):
+@app.route("/userNotification/<string:UID>")
+def get_user_noti(UID):
     try:
-        data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
-        data = json.loads(data)
-        print(data)
-        data["posted_timestamp"] = str(datetime.now())
-        db.child("jobApp").push(data)
+        jobApp = db.child(UID).get()
+        print('this is jobApp', jobApp)
+        jobAppDict = {}    
+
+        for app in jobApp.each():
+            print(type(app.key()))
+            print("___________") 
+            print("key:",app.key())
+            print("value:",app.val())
+            jobAppDict[app.key()] = app.val()
+
+        print("Job dict:",jobAppDict)
+        # return userDict 
+        # return json.dumps(jobAppDict) #return all user data
 
         return jsonify(
             {
                 "code": 201,
-                "data": data
+                "data":  json.dumps(jobAppDict)
             }
             ), 201
-
+    
     except Exception as e:
         print(e)
 
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while posting the user's notification. " + str(e)
+                "message": "An error occurred while getting notification. " + str(e)
             }
         ), 500
+
+# @app.route("/userNotification/<string:UID>", methods = ["POST"])
+# def post_noti(UID):
+#     try:
+#         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+#         data = json.loads(data)
+#         print(data)
+#         data["posted_timestamp"] = str(datetime.now())
+#         db.child(UID).push(data)
+
+#         return jsonify(
+#             {
+#                 "code": 201,
+#                 "data": data
+#             }
+#             ), 201
+
+#     except Exception as e:
+#         print(e)
+
+#         return jsonify(
+#             {
+#                 "code": 500,
+#                 "message": "An error occurred while posting the user's notification. " + str(e)
+#             }
+#         ), 500
     
     
 
