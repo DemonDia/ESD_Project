@@ -23,6 +23,8 @@ services:
     restart: always
     environment:
       PYTHONUNBUFFERED: 1
+    ports:
+      - "5001:5001"
 
   ownernotification_sms:
     build:
@@ -119,9 +121,9 @@ services:
       - usernotification_sms
     environment:
       PYTHONUNBUFFERED: 1
-      application_sms : http://ApplicationSMS:5003/applications
-      ownerstatus_sms : http://ownerStatusSMS:5004/status/
-      usernotification_sms : http://userNotification:5011/applications
+      application_sms : http://application_sms:5003/applications
+      ownerstatus_sms : http://ownerstatus_sms:5004/status/
+      usernotification_sms : http://usernotification_sms:5011/applications
 
 
 
@@ -142,8 +144,8 @@ services:
     environment:
       PYTHONUNBUFFERED: 1
       job_sms: http://jobSMS:5001/jobs
-      application_sms: http://ApplicationSMS:5003/applications
-      ownernotification_sms: http://ownerNotificationSMS:5010/ownerNotification/
+      application_sms: http://application_sms:5003/applications
+      ownernotification_sms: http://ownernotification_sms:5010/ownerNotification/
 
 
 
@@ -181,10 +183,10 @@ services:
       - userstatus_sms
     environment:
       PYTHONUNBUFFERED: 1
-      application_sms: http://ApplicationSMS:5003/applications
-      job_sms: http://jobSMS:5001/jobs
-      userstatus_sms:  http://userStatusSMS:5002/applications/
-      ownernotification_sms: http://ownerNotificationSMS:5010/ownerNotification/
+      application_sms: http://application_sms:5003/applications
+      job_sms: http://job_sms:5001/jobs
+      userstatus_sms:  http://userstatus_sms:5002/applications/
+      ownernotification_sms: http://ownernotification_sms:5010/ownerNotification/
       
 
 
