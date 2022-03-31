@@ -47,6 +47,7 @@ def callback(channel, method, properties, body): # required signature for the ca
 def processNotification(data):
     # print(data['app_status'])
     print(data)
+
     UID = data["UID"]
     data["posted_timestamp"] = str(datetime.now()) 
     db.child(UID).push(data)
