@@ -9,11 +9,6 @@ app = Flask(__name__)
 CORS(app)
 
 # app.config['CORS_HEADERS'] = 'Content-Type'
-<<<<<<< Updated upstream:userDecisionCMS.py
-ApplicationSMS = "http://127.0.0.1:5003/applications"
-JobSMS = "http://127.0.0.1:5001/"
-UserStatusSMS = "http://127.0.0.1:5002/applications/"
-=======
 # ApplicationSMS = "http://127.0.0.1:5003/applications"
 # JobSMS = "http://127.0.0.1:5001/"
 # UserStatusSMS = "http://127.0.0.1:5002/applications/"
@@ -25,7 +20,6 @@ JobSMS = environ.get("JobSMS") or "http://localhost:5001/"
 UserStatusSMS = environ.get("UserStatusSMS") or "http://localhost:5002/applications/"
 OwnerNotificationSMS = environ.get("OwnerNotificationSMS") or "http://localhost:5010/ownerNotified/"
 
->>>>>>> Stashed changes:ComplexMicroservices/userDecisionCMS.py
 @app.route("/process_application/<string:AID>",methods = ["PUT"])
 def processApplication(AID):
     try:

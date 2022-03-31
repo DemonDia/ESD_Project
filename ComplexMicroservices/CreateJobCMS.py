@@ -28,16 +28,10 @@ app = Flask(__name__)
 CORS(app)
 
 
-<<<<<<< Updated upstream:CreateJobCMS.py
-JobsURL = "http://127.0.0.1:5001/jobs"
-activity_log_URL = "http://127.0.0.1:5010/activities"
-
-=======
 # JobsURL = "http://127.0.0.1:5001/jobs"
 # activity_log_URL = "http://127.0.0.1:5010/activities"
 JobsURL = environ.get("JobsURL") or "http://localhost:5001/jobs"
 JobsURL = environ.get("activity_log_URL") or "http://localhost:5010/activities"
->>>>>>> Stashed changes:ComplexMicroservices/CreateJobCMS.py
 @app.route("/create_job", methods = ["POST"])
 def create_job():
     if request.is_json:
