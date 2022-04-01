@@ -23,9 +23,9 @@ CORS(app)
 # applicatioNSMS = "http://127.0.0.1:5003/applications/"
 # ownerNotifiationSMS = "http://127.0.0.1:5010/ownerNotification/"
 # check if job is there
-jobSMS = environ.get('jobSMS') or "http://localhost:5001/jobs" 
-applicatioNSMS = environ.get('applicatioNSMS') or "http://localhost:5003/applications/" 
-ownerNotifiationSMS = environ.get('ownerNotifiationSMS') or "http://localhost:5010/ownerNotification/" 
+jobSMS = environ.get('job_sms') or "http://localhost:5001/jobs" 
+applicationSMS = environ.get('application_sms') or "http://localhost:5003/applications/" 
+ownerNotificationSMS = environ.get('ownernotification_sms') or "http://localhost:5010/ownerNotification/" 
 
 #  flow: 
 # 1. user send job search information {job search} to job SMS
@@ -38,10 +38,10 @@ def apply_job():
         data = json.loads(data)
         print("this is data",data)
         print("this is jobs url")
-        print(JobsURL+"/"+data["JID"])
+        print(jobSMS+"/"+data["JID"])
 
         # get jobs with the JID
-        result = invoke_http(JobsURL+"/"+data["JID"],method ="GET")
+        result = invoke_http(jobSMS+"/"+data["JID"],method ="GET")
 
         code = result["code"]
         if code not in range (200, 300):
@@ -60,7 +60,7 @@ def apply_job():
                 }
             ), 500
         else:
-            application_result = invoke_http(ApplicationURL+data["JID"],method ="POST",json=data)
+            application_result = invoke_http(applicationSMS+data["JID"],method ="POST",json=data)
             print(application_result)
             code = application_result['code']
 
@@ -151,7 +151,7 @@ def view_job(JID):
             # print("clean data",data)
 
             # Send the job info
-            job_result = invoke_http(JobsURL+"/"+JID,method = "GET")
+            job_result = invoke_http(jobSMS+"/"+JID,method = "GET")
 
             print("result",job_result)
 

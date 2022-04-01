@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import json
 
-import os, sys
+import os
 from os import environ
 import pyrebase as pb
 from invokes import invoke_http
@@ -21,10 +21,10 @@ import pika
 # OwnerNotificationSMS = "http://127.0.0.1:5010/ownerNotified/"
 
 
-applicationSMS = environ.get('applicationSMS') or "http://localhost:5003/applications" 
-jobSMS = environ.get('jobSMS') or "http://localhost:5001/" 
-userStatusSMS = environ.get('userStatusSMS') or "http://localhost:5002/applications/" 
-ownerNotificationSMS = environ.get('ownerNotificationSMS') or "http://localhost:5010/ownerNotified/" 
+applicationSMS = environ.get('application_sms') or "http://localhost:5003/applications" 
+jobSMS = environ.get('job_sms') or "http://localhost:5001/" 
+userStatusSMS = environ.get('userstatus_sms') or "http://localhost:5002/applications/" 
+ownerNotificationSMS = environ.get('ownernotification_sms') or "http://localhost:5010/ownerNotified/" 
 
 
 
@@ -34,9 +34,9 @@ def processApplication(AID):
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data) #gets
         print(data)
-        given_application = invoke_http(ApplicationSMS+"/aid/"+AID,method = "GET")
+        given_application = invoke_http(applicationSMS+"/aid/"+AID,method = "GET")
         JID = json.loads(given_application["data"])["JID"]
-        user_status = invoke_http(UserStatusSMS+AID,json = data,method = "PUT") #returns boolean
+        user_status = invoke_http(userStatusSMS+AID,json = data,method = "PUT") #returns boolean
         # print("user_status:"+str(user_status))
         print("user_status",user_status)
 
@@ -51,7 +51,7 @@ def processApplication(AID):
             if user_status['data'] == True:
 
                 print("AID:"+AID)
-                application = invoke_http(ApplicationSMS+"/job/aid/"+AID,method = "GET")
+                application = invoke_http(applicationSMS+"/job/aid/"+AID,method = "GET")
                 print("application:",application)
                 # result = processAMQP(application,AID,JID) #send msg to RabbitMQ
 
@@ -83,10 +83,10 @@ def processApplication(AID):
 def updateVacancy(JID):
     print("JID:"+JID)
     try:
-        print(JobSMS+"update_vacancy/"+JID)
+        print(jobSMS+"update_vacancy/"+JID)
         # print(data)
         
-        vacancies = invoke_http(JobSMS+"update_vacancy/"+JID,method = "PUT")
+        vacancies = invoke_http(jobSMS+"update_vacancy/"+JID,method = "PUT")
         return str(vacancies)
     except Exception as e:
         print(e)
@@ -101,7 +101,7 @@ def updateVacancy(JID):
 @app.route("/get_applications/<string:UID>") # process you auto fill company ID
 def owner_get_applications(UID):
     try:
-        applications = invoke_http(ApplicationSMS+"/user/"+UID,method = "GET")
+        applications = invoke_http(applicationSMS+"/user/"+UID,method = "GET")
         return applications
     
     except Exception as e:
@@ -130,7 +130,7 @@ def processAMQP(data,AID,JID):
         }
 
     else:
-        get_application = invoke_http(ApplicationSMS+"/aid/"+AID,method = "GET")
+        get_application = invoke_http(applicationSMS+"/aid/"+AID,method = "GET")
         application_cid = json.loads(get_application["data"])["CID"]
         print("output",data)
         data["accepted"] = data["data"]
@@ -160,4 +160,4 @@ def processAMQP(data,AID,JID):
 
 
 if __name__ == "__main__":
-    app.run(port = 5005,debug = True)
+    app.run(host = "0.0.0.0", port = 5005,debug = True)

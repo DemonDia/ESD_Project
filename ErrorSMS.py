@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # The above shebang (#!) operator tells Unix-like environments
 # to run this file as a python3 script
-import os, sys
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pyrebase as pb
@@ -9,8 +9,6 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-import json
-import os
 
 import topic_amqp_setup
 

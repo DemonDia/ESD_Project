@@ -33,7 +33,7 @@ CORS(app)
 # jobSMS = "http://127.0.0.1:5001/jobs"
 # activity_log_URL = "http://127.0.0.1:5010/activities"
 
-jobSMS = environ.get('jobSMS') or "http://localhost:5001/jobs" 
+jobSMS = environ.get('job_sms') or "http://localhost:5001/jobs" 
 # applicatioNSMS = environ.get('applicatioNSMS') or "http://localhost:5003/applications/" 
 # ownerNotifiationSMS = environ.get('ownerNotifiationSMS') or "http://localhost:5010/ownerNotification/" 
 
@@ -45,11 +45,8 @@ def create_job():
         try:
             data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
             data = json.loads(request.data)
-
             # Send the job info
-            job_result = invoke_http(JobsURL+"/create",method = "POST",json = data)
-
-            # print(job_result)
+            job_result = invoke_http(jobSMS+"/create",method = "POST",json = data)
 
             # record new job
             # record the activity log
