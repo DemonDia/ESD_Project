@@ -18,9 +18,9 @@ import pika
 # ownerStatusSMS = "http://127.0.0.1:5004/status/"
 # userNotificationSMS = "http://127.0.0.1:5011/userNotification/"
 
-applicationSMS = environ.get('applicationSMS') or "http://localhost:5003/applications" 
-ownerStatusSMS = environ.get('ownerStatusSMS') or "http://localhost:5004/status/" 
-userNotificationSMS = environ.get('userNotificationSMS') or "http://localhost:5011/userNotification/" 
+applicationSMS = environ.get('application_sms') or "http://localhost:5003/applications" 
+ownerStatusSMS = environ.get('ownerstatus_sms') or "http://localhost:5004/status/" 
+userNotificationSMS = environ.get('usernotification_sms') or "http://localhost:5011/userNotification/" 
 
 @app.route("/get_applications/<string:CID>") # process you auto fill company ID
 def owner_get_applications(CID):
@@ -64,7 +64,7 @@ def owner_process_application(AID):
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data) #gets
         print(data)
-        applications = invoke_http(OwnerStatusSMS+AID,method = "PUT",json = data)
+        applications = invoke_http(ownerStatusSMS+AID,method = "PUT",json = data)
         print(applications)
         # print(applications['code'])
         # return jsonify(applications)
@@ -85,7 +85,7 @@ def owner_process_application(AID):
         else:
             # record the activity log anyway
             message = json.dumps(applications)
-            notifySeeker(data)
+            # notifySeeker(data)
             notifySeeker(AID,data)
             topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="updateApp.info", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 

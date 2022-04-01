@@ -5,15 +5,6 @@ volumes:
 
 services:
 
-  # error_sms:
-  #   build:
-  #     context: ./
-  #     dockerfile: errorSMS.Dockerfile
-  #   image: kallenl/job_sms:esd
-  #   restart: always
-  #   environment:
-  #     PYTHONUNBUFFERED: 1
-
 
   job_sms:
     build:
@@ -34,6 +25,8 @@ services:
     restart: always
     environment:
       PYTHONUNBUFFERED: 1
+    ports:
+      - "5010:5010"
 
   ownerstatus_sms:
     build:
@@ -43,7 +36,8 @@ services:
     restart: always
     environment:
       PYTHONUNBUFFERED: 1
-
+    ports:
+      - "5004:5004"
 
   ###################################
   # ActivitySMS
@@ -71,6 +65,8 @@ services:
     restart: always
     environment:
       PYTHONUNBUFFERED: 1
+    ports:
+      - "5003:5003"
 
 
   usernotification_sms:
@@ -81,6 +77,8 @@ services:
     restart: always
     environment:
       PYTHONUNBUFFERED: 1
+    ports: 
+      - "5011:5011"
 
 
   user_sms:
@@ -91,6 +89,8 @@ services:
     restart: always
     environment:
       PYTHONUNBUFFERED: 1
+    ports: 
+      - "5007:5007"
 
   userstatus_sms:
     build:
@@ -100,6 +100,8 @@ services:
     restart: always
     environment:
       PYTHONUNBUFFERED: 1
+    ports: 
+      - "5002:5002"
 
 
 
@@ -124,6 +126,8 @@ services:
       application_sms : http://application_sms:5003/applications
       ownerstatus_sms : http://ownerstatus_sms:5004/status/
       usernotification_sms : http://usernotification_sms:5011/applications
+    ports: 
+      - "5006:5006"
 
 
 
@@ -143,9 +147,11 @@ services:
       - ownernotification_sms
     environment:
       PYTHONUNBUFFERED: 1
-      job_sms: http://jobSMS:5001/jobs
-      application_sms: http://application_sms:5003/applications
+      job_sms: http://job_sms:5001/jobs
+      application_sms: http://application_sms:5003/applications/
       ownernotification_sms: http://ownernotification_sms:5010/ownerNotification/
+    ports: 
+      - "5008:5008"
 
 
 
@@ -161,7 +167,9 @@ services:
       - job_sms
     environment:
       PYTHONUNBUFFERED: 1
-      jobSMS: http://jobSMS:5001/jobs
+      job_sms: http://job_sms:5001/jobs
+    ports: 
+      - "5009:5009"
 
 
 # ApplicationSMS = environ.get("ApplicationSMS") or "http://localhost:5003/applications"
@@ -187,6 +195,8 @@ services:
       job_sms: http://job_sms:5001/jobs
       userstatus_sms:  http://userstatus_sms:5002/applications/
       ownernotification_sms: http://ownernotification_sms:5010/ownerNotification/
+    ports:
+      - "5005:5005"
       
 
 
@@ -203,22 +213,6 @@ services:
       - "15672:15672"
     volumes: 
       - rabbitmq_data:/var/lib/rabbitmq
-      
-  #################################################
-  # Activity Log: The Activity Log microservice
-  #################################################
-  # activity_sms:
-  #   build:
-  #     context: ./
-  #     dockerfile: activitySMS.Dockerfile
-  #   image: kallenl/activitySMS:esd
-  #   restart: always
-  #   depends_on:
-  #     - rabbitmq
-  #   environment:
-  #     rabbit_host: rabbitmq
-  #     rabbit_port: 5672
-  #     PYTHONUNBUFFERED: 1
 
   ###################################
   # Error: The Error microservice
