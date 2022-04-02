@@ -55,6 +55,7 @@ def owner_get_app(AID):
         ), 500
 
 @app.route("/process_application/<string:AID>",methods = ["PUT"]) # process you auto fill company ID
+@cross_origin()
 def owner_process_application(AID):
     try:
         # get 

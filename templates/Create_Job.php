@@ -36,7 +36,7 @@ Company Name
 <div style= "max-height: 500px;"class="overflow-auto mb-4" id="company_jobs"></div>
 
 <div id="bt-center">
-    <button type="button" class="btn btn-secondary btn-block" data-toggle="modal" onclick="showAllJobs('Finance Company')">
+    <button type="button" class="btn btn-secondary btn-block" data-toggle="modal" onclick="showAllJobs('Kitagawa Cosplay Pte Ltd')">
     See Jobs
     </button>
 </div>

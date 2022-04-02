@@ -28,13 +28,13 @@ def processApplication(AID):
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data) #gets
         print(data)
-        db.child("applications/"+AID).update({"accepted":data["accepted"]})
+        db.child("applications/"+AID).update({"user_dec":data["user_dec"]})
         # print(data["accepted"])
         # return str(data["accepted"])
 
         return jsonify({
             "code": 201,
-            "data": str(data["accepted"])
+            "data": str(data["user_dec"])
         }), 201
 
         # return decision
