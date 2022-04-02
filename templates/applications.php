@@ -131,7 +131,7 @@ onload="showAllJobs()"
     function showAllJobs() {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://192.168.0.125:5005/get_applications/'+'johnsim@gmail.com', true);
+        request.open('GET', 'http://localhost:5005/get_applications/'+'johnsim@gmail.com', true);
         
         request.onload = function() {  
 
@@ -180,7 +180,7 @@ onload="showAllJobs()"
         console.log(jid);
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://192.168.0.125:5005/view_job/'+jid, true);
+        request.open('GET', 'http://localhost:5005/view_job/'+jid, true);
 
         request.onload = function() {  
 
@@ -225,7 +225,7 @@ onload="showAllJobs()"
 
     function Accept(AID) {
         var request = new XMLHttpRequest();
-        request.open('PUT', 'http://192.168.0.125:5005/process_application/'+AID, true);
+        request.open('PUT', 'http://localhost:5005/process_application/'+AID, true);
 
         request.onload = function() {
             var json_obj = JSON.parse(request.responseText);
@@ -246,7 +246,7 @@ onload="showAllJobs()"
 
     function Reject(AID) {
         var request = new XMLHttpRequest();
-        request.open('PUT', 'http://192.168.0.125:5005/process_application/'+AID, true);
+        request.open('PUT', 'http://localhost:5005/process_application/'+AID, true);
 
         request.onload = function() {
             var json_obj = JSON.parse(request.responseText);

@@ -127,7 +127,7 @@ onload="showAllJobs()"
     function showAllJobs() {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://192.168.0.125:5006/get_applications/'+'Finance Company', true);
+        request.open('GET', 'http://localhost:5006/get_applications/'+'Finance Company', true);
         
         request.onload = function() {  
 
@@ -173,7 +173,7 @@ onload="showAllJobs()"
     function showDetails(AID) {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://192.168.0.125:5006/get_app/'+AID, true);
+        request.open('GET', 'http://localhost:5006/get_app/'+AID, true);
 
         request.onload = function() {  
 
@@ -214,7 +214,7 @@ onload="showAllJobs()"
 
     function Accept(AID) {
         var request = new XMLHttpRequest();
-        request.open('PUT', 'http://192.168.0.125:5006/process_application/'+AID, true);
+        request.open('PUT', 'http://localhost:5006/process_application/'+AID, true);
 
         request.onload = function() {
             var json_obj = JSON.parse(request.responseText);
@@ -235,7 +235,7 @@ onload="showAllJobs()"
 
     function Reject(AID) {
         var request = new XMLHttpRequest();
-        request.open('PUT', 'http://192.168.0.125:5006/process_application/'+AID, true);
+        request.open('PUT', 'http://localhost:5006/process_application/'+AID, true);
 
         request.onload = function() {
             var json_obj = JSON.parse(request.responseText);

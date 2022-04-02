@@ -159,7 +159,7 @@ Company Name
     function showAllJobs(CompanyName) {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://127.0.0.1:5001/jobs/company/'+CompanyName, true);
+        request.open('GET', 'http://localhost:5001/jobs/company/'+CompanyName, true);
         
         request.onload = function() {  
             console.log(request.responseText);
@@ -206,7 +206,7 @@ Company Name
         console.log(job_title);
         console.log(employment_type);
 
-        var createJobCMS = "http://192.168.0.125:5009/create_job"
+        var createJobCMS = "http://localhost:5009/create_job"
         var params = '{'+'"job_title":"'+job_title+'","company_name":"'+company_name+'","employment_type":"'+employment_type+'","industry":"'+industry+'","job_description":"'+job_description+'","salary":"'+salary+'","location":"'+location+'","contact_email":"'+contact_email+'","contact_person":"'+contact_person+'","vacancy":"'+vacancy+'"}';
         console.log(params);
         request.open('POST',createJobCMS, true);

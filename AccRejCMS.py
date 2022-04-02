@@ -25,7 +25,7 @@ userNotificationSMS = environ.get('usernotification_sms') or "http://localhost:5
 @app.route("/get_applications/<string:CompanyName>") # process you auto fill company ID
 def owner_get_applications(CompanyName):
     try:
-        applications = invoke_http(ApplicationSMS+"/company/"+CompanyName,method = "GET")
+        applications = invoke_http(applicationSMS+"/company/"+CompanyName,method = "GET")
         return applications
 
     except Exception as e:
@@ -62,7 +62,7 @@ def owner_process_application(AID):
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data) #gets
         print("this is data",data)
-        applications = invoke_http(OwnerStatusSMS+AID,method = "PUT",json = data)
+        applications = invoke_http(ownerStatusSMS+AID,method = "PUT",json = data)
         print(applications)
         # print(applications['code'])
         # return jsonify(applications)

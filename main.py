@@ -70,4 +70,4 @@ def authenticate():
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
           " applying for a job...")
-    app.run(host="0.0.0.0", port=5010, debug=True)
+    app.run(host="0.0.0.0", port=5020, debug=True)

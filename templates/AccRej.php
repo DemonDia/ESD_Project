@@ -58,7 +58,7 @@ onload="showAllJobs()"
     function showAllApps(CID) {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://127.0.0.1:5003/applications/company/'+CID, true);
+        request.open('GET', 'http://localhost:5003/applications/company/'+CID, true);
         
         request.onload = function() {  
 
@@ -74,7 +74,7 @@ onload="showAllJobs()"
                 var vacancy = jobs[job].vacancy;
                 //var date = datetime.substring(0,10); - want to show only date
 
-                temp = '<tr><th scope="row"><a href="http://127.0.0.1:5010/job/'+"'"+job+"'"+'" class="link-primary">'+job_title+'</th><td>'+company+'</td><td>'+employment_type+'</td><td>'+datetime+'</td><td>'+vacancy+'</td></tr>';
+                temp = '<tr><th scope="row"><a href="http://localhost:5020/job/'+"'"+job+"'"+'" class="link-primary">'+job_title+'</th><td>'+company+'</td><td>'+employment_type+'</td><td>'+datetime+'</td><td>'+vacancy+'</td></tr>';
                 job_list += temp;
             }
             job_list += '</tbody></table>'

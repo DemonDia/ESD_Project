@@ -182,7 +182,7 @@ onload="showOneJob({{JID}})";
         console.log(JID);
 
         var request = new XMLHttpRequest();
-        request.open('GET', "http://192.168.0.125:5008/view_job/"+JID, true);
+        request.open('GET', "http://localhost:5008/view_job/"+JID, true);
         request.onload = function() {  
 
             var json_obj = JSON.parse(request.responseText);
@@ -239,7 +239,7 @@ onload="showOneJob({{JID}})";
         console.log(job_title);
         console.log(email_app);
 
-        var applyjobcms = "http://192.168.0.125:5008/apply_job"
+        var applyjobcms = "http://localhost:5008/apply_job"
         var params = '{"JID":"'+{{JID}}+'","job_title":"'+job_title+'","company":"'+company+'","first":"'+first+'","last":"'+last+'","dob":"'+dob+'","phone":"'+phone+'","email":"'+email_app+'","experience":"'+experience+'","skills":"'+skills+'","education":"'+education+'","nationality":"'+nationality+'"}';
         console.log(params);
         request.open('POST',applyjobcms, true);
