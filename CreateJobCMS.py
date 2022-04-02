@@ -44,6 +44,7 @@ def create_job():
     if request:
         try:
             data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+            print(data)
             data = json.loads(request.data)
             # Send the job info
             job_result = invoke_http(jobSMS+"/create",method = "POST",json = data)
