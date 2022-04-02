@@ -1,0 +1,232 @@
+version: "3.8"
+
+volumes:
+  rabbitmq_data:
+
+services:
+
+
+  job_sms:
+    build:
+      context: ./
+      dockerfile: jobSMS.Dockerfile
+    image: kallenl/job_sms:esd
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5001:5001"
+
+  ownernotification_sms:
+    build:
+      context: ./
+      dockerfile: ownerNotificationSMS.Dockerfile
+    image: kallenl/ownernotification_sms:esd
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5010:5010"
+
+  ownerstatus_sms:
+    build:
+      context: ./
+      dockerfile: ownerStatusSMS.Dockerfile
+    image: kallenl/ownerstatus_sms:esd
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5004:5004"
+
+  ###################################
+  # ActivitySMS
+  ###################################
+
+  activity_sms:
+    build:
+      context: ./
+      dockerfile: activitySMS.Dockerfile
+    image: kallenl/activity_sms:esd
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1
+ 
+
+   ###################################
+  # ApplicationSMS
+  ###################################
+
+  application_sms:
+    build:
+      context: ./
+      dockerfile: applicationSMS.Dockerfile
+    image: kallenl/application_sms:esd
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5003:5003"
+
+
+  usernotification_sms:
+    build:
+      context: ./
+      dockerfile: userNotificationSMS.Dockerfile
+    image: kallenl/usernotification_sms:esd
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1
+    ports: 
+      - "5011:5011"
+
+
+  user_sms:
+    build:
+      context: ./
+      dockerfile: userSMS.Dockerfile
+    image: kallenl/user_sms:esd
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1
+    ports: 
+      - "5007:5007"
+
+  userstatus_sms:
+    build:
+      context: ./
+      dockerfile: userStatusSMS.Dockerfile
+    image: kallenl/userstatus_sms:esd
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1
+    ports: 
+      - "5002:5002"
+
+
+
+
+  ###################################
+  # AccRejCMS
+  ###################################
+
+
+  accrej_cms:
+    build:
+      context: ./
+      dockerfile: accRejCMS.Dockerfile
+    image: kallenl/accrej_cms:esd
+    restart: always
+    depends_on:
+      - application_sms
+      - ownerstatus_sms
+      - usernotification_sms
+    environment:
+      PYTHONUNBUFFERED: 1
+      application_sms : http://application_sms:5003/applications
+      ownerstatus_sms : http://ownerstatus_sms:5004/status/
+      usernotification_sms : http://usernotification_sms:5011/applications
+    ports: 
+      - "5006:5006"
+
+
+
+# JobsURL = environ.get("JobsURL") or "http://localhost:5001/jobs"
+# ApplicationURL = environ.get("ApplicationURL") or "http://localhost:5003/applications/"
+# OwnerNotiURL = environ.get("OwnerNotiURL") or "http://localhost:5010/ownerNotification/"
+
+  applyjob_cms:
+    build:
+      context: ./
+      dockerfile: applyJobCMS.Dockerfile
+    image: kallenl/applyjob_cms:esd
+    restart: always
+    depends_on:
+      - job_sms
+      - application_sms
+      - ownernotification_sms
+    environment:
+      PYTHONUNBUFFERED: 1
+      job_sms: http://job_sms:5001/jobs
+      application_sms: http://application_sms:5003/applications/
+      ownernotification_sms: http://ownernotification_sms:5010/ownerNotification/
+    ports: 
+      - "5008:5008"
+
+
+
+
+
+  createjob_cms:
+    build:
+      context: ./
+      dockerfile: createJobCMS.Dockerfile
+    image: kallenl/createjob_cms:esd
+    restart: always
+    depends_on:
+      - job_sms
+    environment:
+      PYTHONUNBUFFERED: 1
+      job_sms: http://job_sms:5001/jobs
+    ports: 
+      - "5009:5009"
+
+
+# ApplicationSMS = environ.get("ApplicationSMS") or "http://localhost:5003/applications"
+# JobSMS = environ.get("JobSMS") or "http://localhost:5001/"
+# UserStatusSMS = environ.get("UserStatusSMS") or "http://localhost:5002/applications/"
+# OwnerNotificationSMS = environ.get("OwnerNotificationSMS") or "http://localhost:5010/ownerNotified/"
+
+
+  userdecision_cms:
+    build:
+      context: ./
+      dockerfile: userDecisionCMS.Dockerfile
+    image: kallenl/userdecision_cms:esd
+    restart: always
+    depends_on:
+      - job_sms
+      - application_sms
+      - ownernotification_sms
+      - userstatus_sms
+    environment:
+      PYTHONUNBUFFERED: 1
+      application_sms: http://application_sms:5003/applications
+      job_sms: http://job_sms:5001/jobs
+      userstatus_sms:  http://userstatus_sms:5002/applications/
+      ownernotification_sms: http://ownernotification_sms:5010/ownerNotification/
+    ports:
+      - "5005:5005"
+      
+
+
+
+  ####################################
+  # RabbitMQ: The messaging broker   
+  ####################################
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: esd-rabbit
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes: 
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  ###################################
+  # Error: The Error microservice
+  ###################################
+  error_sms:
+    build:
+      context: ./
+      dockerfile: errorSMS.Dockerfile
+    image: kallenl/error_sms:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
+

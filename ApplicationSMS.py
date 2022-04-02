@@ -231,4 +231,4 @@ def get_all_applications_of_a_user(user_email):
 
 
 if __name__ == "__main__":
-    app.run(port = 5003,debug = True)
+    app.run(host="0.0.0.0",port = 5003,debug = True)
