@@ -69,21 +69,26 @@ def get_all():
 @app.route("/jobs/company/<string:CompanyName>") # get all jobs for a company
 def get_company_jobs(CompanyName):
     try:
-        print(CompanyName)
-        jobs = db.child("jobs").get()
+        jobs = db.child("jobs").order_by_child("company_name").equal_to(CompanyName).get()
         jobsDict = {} 
         
         for job in jobs.each():
-            value = job.val()["company_name"]
-            if value == CompanyName:
-                print("___________") 
-                print("key:",job.key())
-                print("value:",job.val())
-                jobsDict[job.key()] = job.val()
-
-        print(jobsDict) 
+            # print(value)
+            # if value == CompanyName:
+                # print(job.val())
+            print("___________") 
+            print("key:",job.key())
+            print("value:",job.val())
+            jobsDict[job.key()] = job.val()
+            print(len(jobsDict))
+        
+        # if len(jobsDict)>1:
+        #     print("im running")
+        # print(jobsDict)
+        # return "yes"
+ 
         if(len(jobsDict)>0): #yes theres an existing jobs for this company
-
+            print("im run")
             result = json.dumps(jobsDict)
             return jsonify(
                 {
@@ -101,6 +106,8 @@ def get_company_jobs(CompanyName):
         ), 400
 
     except Exception as e:
+        # print("this iss error",e)
+        # return "no"
         # return "NOT OK"
         return jsonify(
             {

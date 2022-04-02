@@ -160,10 +160,10 @@ def get_application_by_AID(AID):
         ), 500
 
 
-@app.route("/applications/company/<string:CID>") # get all applications to certain company
-def get_all_applications_of_a_company(CID):
+@app.route("/applications/company/<string:CompanyName>") # get all applications to certain company
+def get_all_applications_of_a_company(CompanyName):
     try:
-        applications = db.child("applications").order_by_child("CID").equal_to(CID).get()
+        applications = db.child("applications").order_by_child("company_name").equal_to(CompanyName).get()
         applicationsDict = {}        
                 
     
@@ -193,10 +193,11 @@ def get_all_applications_of_a_company(CID):
             }
         ), 500
 
-@app.route("/applications/user/<string:UID>") # get jobs user applied to
-def get_all_applications_of_a_user(UID):
+@app.route("/applications/user/<string:user_email>") # get jobs user applied to
+def get_all_applications_of_a_user(user_email):
     try:
-        applications = db.child("applications").order_by_child("UID").equal_to(UID).get()
+        applications = db.child("applications").order_by_child("email").equal_to(user_email).get()
+        print(applications)
         applicationsDict = {}        
                 
     

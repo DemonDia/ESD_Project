@@ -1,11 +1,11 @@
 {% extends "base.php" %}
 
 {% block title %}
-User site
+Owner site
 {% endblock %}
 
 {% block details %}
-User Name
+Company Name
 {% endblock %}
 
 {% block body %}
@@ -127,7 +127,7 @@ onload="showAllJobs()"
     function showAllJobs() {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://192.168.0.125:5006/get_applications/'+'-MyzlQ5HQWK6hvpKTyaX', true);
+        request.open('GET', 'http://localhost:5006/get_applications/'+'Finance Company', true);
         
         request.onload = function() {  
 
@@ -141,14 +141,22 @@ onload="showAllJobs()"
                 var datetime = jobs[job].applied_timestamp;
                 var owner_status = jobs[job].app_status;
                 console.log(owner_status);
+                if (owner_status === false) {
+                    owner_status = 'Rejected';}
                 if (owner_status == null) {
                     owner_status = '';}
                 if (owner_status == true) {
                     owner_status = 'Accepted';}
+                
                     
                 var user_dec = jobs[job].user_dec;
+                if (user_dec === false) {
+                    user_dec = 'Rejected';}
                 if (user_dec == null) {
                     user_dec = '';}
+                if (user_dec == true) {
+                    user_dec = 'Accepted';}
+                
                 //var date = datetime.substring(0,10); - want to show only date
 
                 temp = '<tr><th scope="row">'+name+'</th><td>'+job_title+'</td><td>'+datetime+'</td><td>'+owner_status+'</td><td>'+user_dec+'</td><td><a href="" onclick="showDetails('+"'"+job+"'"+')" class="link-primary" data-toggle="modal" data-target="#AccRej">View Details</td></tr>';
@@ -165,7 +173,7 @@ onload="showAllJobs()"
     function showDetails(AID) {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://192.168.0.125:5006/get_app/'+AID, true);
+        request.open('GET', 'http://localhost:5006/get_app/'+AID, true);
 
         request.onload = function() {  
 
@@ -206,7 +214,7 @@ onload="showAllJobs()"
 
     function Accept(AID) {
         var request = new XMLHttpRequest();
-        request.open('PUT', 'http://192.168.0.125:5006/process_application/'+AID, true);
+        request.open('PUT', 'http://localhost:5006/process_application/'+AID, true);
 
         request.onload = function() {
             var json_obj = JSON.parse(request.responseText);
@@ -222,6 +230,27 @@ onload="showAllJobs()"
         };
 
         request.send('{"app_status":true}');
+
+    }
+
+    function Reject(AID) {
+        var request = new XMLHttpRequest();
+        request.open('PUT', 'http://localhost:5006/process_application/'+AID, true);
+
+        request.onload = function() {
+            var json_obj = JSON.parse(request.responseText);
+            console.log("this is json_obj",json_obj)
+
+            if (json_obj.code >= 200 & json_obj.code < 400) {
+                alert('Your status has been updated!');
+                showAllJobs();
+            } 
+            else {
+                alert('Oops! Something went wrong...');
+            }
+        };
+
+        request.send('{"app_status":false}');
 
     }
 
