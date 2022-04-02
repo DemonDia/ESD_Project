@@ -141,7 +141,7 @@ def notifyOwner(data):
     #             "code": 200,
     #             "data": message
     #         }), 200
-@app.route("/view_job/<JID>", methods = ["GET"])
+@app.route("/view_job/<string:JID>", methods = ["GET"])
 def view_job(JID):
     if request:
         try:
@@ -198,7 +198,7 @@ def view_job(JID):
             return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while creating the job. " + str(e)
+                "message": "An error occurred while finding the jobs. " + str(e)
             }
             ), 500
         

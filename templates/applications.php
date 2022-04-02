@@ -147,11 +147,11 @@ onload="showAllJobs()"
                 var jid = jobs[job].JID;
                 console.log("this",jid);
                 console.log(owner_status);
-                if (owner_status === false) {
+                if ((owner_status === false)||(owner_status ==='false')) {
                     owner_status = 'Rejected';}
                 else if (owner_status == null) {
                     owner_status = '';}
-                else if (owner_status == true) {
+                else if ((owner_status === true)||(owner_status === "true")) {
                     owner_status = 'Accepted';}
                 
                     
@@ -229,10 +229,11 @@ onload="showAllJobs()"
         request.open('PUT', 'http://localhost:5005/process_application/'+AID, true);
 
         request.onload = function() {
-            var json_obj = JSON.parse(request.responseText);
-            console.log("this is json_obj",json_obj)
+            console.log("acc_request",request)
+            // var json_obj = JSON.parse(request.responseText);
+            // console.log("this is json_obj",json_obj)
 
-            if (json_obj.code >= 200 & json_obj.code < 400) {
+            if (request.status >= 200 & request.status < 400) {
                 alert('Your status has been updated!');
                 showAllJobs();
             } 
@@ -247,13 +248,14 @@ onload="showAllJobs()"
 
     function Reject(AID) {
         var request = new XMLHttpRequest();
-        request.open('PUT', 'http://localhost:5005/process_application/'+AID, true);
+        request.open('PUT', 'http://localhost:5005/process_application/'+AID, false);
 
         request.onload = function() {
-            var json_obj = JSON.parse(request.responseText);
-            console.log("this is json_obj",json_obj)
+            console.log("textt",request)
+            // var json_obj = JSON.parse(request.responseText);
+            // console.log("this is json_obj",json_obj)
 
-            if (json_obj.code >= 200 & json_obj.code < 400) {
+            if (request.status >= 200 & request.status < 400) {
                 alert('Your status has been updated!');
                 showAllJobs();
             } 

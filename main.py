@@ -7,6 +7,7 @@ from flask_cors import CORS, cross_origin
 import os, sys
 import requests
 
+
 #to remove if we dont use rabbit amqp
 # import amqp_setup
 # import pika
@@ -14,8 +15,11 @@ import requests
 
 app = Flask(__name__)
 CORS(app)
+# CORS(app,resources={r'/*':{'origins':'*'}})
+
 
 @app.route("/")
+
 def choose_role():
     return render_template("Role.php")
 

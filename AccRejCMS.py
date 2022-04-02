@@ -55,6 +55,7 @@ def owner_get_app(AID):
         ), 500
 
 @app.route("/process_application/<string:AID>",methods = ["PUT"]) # process you auto fill company ID
+@cross_origin()
 def owner_process_application(AID):
     try:
         # get 
@@ -107,7 +108,7 @@ def notifySeeker(AID,data):
     get_application = json.loads(get_application["data"])
     print(get_application)
 
-    data["company_name"] = get_application["company_name"]
+    data["company"] = get_application["company"]
     data["JID"] = get_application["JID"]
 
     # New: AMQP broker send message to user notification

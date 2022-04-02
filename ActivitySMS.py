@@ -52,7 +52,7 @@ def callback(channel, method, properties, body): # required signature for the ca
 
 
 def processLog(data):
-    data = json.loads(data)
+    # data = json.loads(data)
     print("Recording a log:")
     data["posted_timestamp"] = str(datetime.now()) 
     db.child("activities").push(data)

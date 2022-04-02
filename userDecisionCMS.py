@@ -24,7 +24,7 @@ import pika
 
 
 applicationSMS = environ.get('application_sms') or "http://localhost:5003/applications" 
-jobSMS = environ.get('job_sms') or "http://localhost:5001/" 
+jobSMS = environ.get('job_sms') or "http://localhost:5001" 
 userStatusSMS = environ.get('userstatus_sms') or "http://localhost:5002/applications/" 
 ownerNotificationSMS = environ.get('ownernotification_sms') or "http://localhost:5010/ownerNotified/" 
 
@@ -35,9 +35,11 @@ def processApplication(AID):
     try:
         print(request)
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+        print("data",data)
         data = json.loads(data) #gets
-        print(data)
+        
         given_application = invoke_http(applicationSMS+"/aid/"+AID,method = "GET")
+        print("given_application",given_application)
         JID = json.loads(given_application["data"])["JID"]
         user_status = invoke_http(userStatusSMS+AID,json = data,method = "PUT") #returns boolean
         # print("user_status:"+str(user_status))
@@ -133,7 +135,6 @@ def processAMQP(data,AID,JID):
 
     else:
         get_application = invoke_http(applicationSMS+"/aid/"+AID,method = "GET")
-        application_name = json.loads(get_application["data"])["company_name"]
         print("output",data)
         data["accepted"] = data["data"]
         # data.pop("data")

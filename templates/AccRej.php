@@ -9,7 +9,7 @@ User Name
 {% endblock %}
 
 {% block body %}
-onload="showAllJobs()"
+onload="showAllApps('Kitagawa Cosplay Pte Ltd')"
 {% endblock %}
 
 {% block navbar_links %}
