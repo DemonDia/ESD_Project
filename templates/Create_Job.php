@@ -67,7 +67,7 @@ Company Name
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="job_title">Job Title</label>
-                            <input type="text" class="form-control" id="job_title" placeholder="Type here...">
+                            <input type="text" class="form-control" id="job_title" placeholder="Type here..." required>
                         </div>
                     </div>
 
@@ -75,21 +75,21 @@ Company Name
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="company_name" class="form-label">Company</label>
-                            <input type="text" class="form-control" id="company_name" placeholder="Type here...">
+                            <input type="text" class="form-control" id="company_name" placeholder="Type here..." required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="employment_type" class="form-label">Employment Type</label>
-                            <input type="text" class="form-control" id="employment_type" placeholder="Full-time/Contract/Internship">
+                            <input type="text" class="form-control" id="employment_type" placeholder="Full-time/Contract/Internship" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="industry" class="form-label">Industry</label>
-                            <input type="text" class="form-control" id="industry" placeholder="">
+                            <input type="text" class="form-control" id="industry" placeholder="" required>
                         </div>
                     </div>
 
@@ -97,7 +97,7 @@ Company Name
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="job_description" class="form-label">Job Description</label>
-                            <textarea class="form-control" id="job_description" rows="3"></textarea>
+                            <textarea class="form-control" id="job_description" rows="3" required></textarea>
                         </div>
                     </div>
 
@@ -105,35 +105,35 @@ Company Name
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="salary" class="form-label">Salary</label>
-                            <input type="number" class="form-control" id="salary">
+                            <input type="number" class="form-control" id="salary" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="location" class="form-label">Location</label>
-                            <input type="text" class="form-control" id="location" placeholder="">
+                            <input type="text" class="form-control" id="location" placeholder="" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="person" class="form-label">Contact Person</label>
-                            <input type="text" class="form-control" id="person" placeholder="">
+                            <input type="text" class="form-control" id="person" placeholder="" required>
                         </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="email" class="form-label">Contact Email</label>
-                            <input type="text" class="form-control" id="email" placeholder="">
+                            <input type="text" class="form-control" id="email" placeholder="" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="vacancy" class="form-label">Vacancy</label>
-                            <input type="number" class="form-control" id="vacancy">
+                            <input type="number" class="form-control" id="vacancy" required>
                         </div>
                     </div>
 

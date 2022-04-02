@@ -101,7 +101,7 @@ onload="showOneJob({{JID}})";
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="first">First Name</label>
-                            <input type="text" class="form-control" id="first" placeholder="Type here...">
+                            <input type="text" class="form-control" id="first" placeholder="Type here..." required>
                         </div>
                     </div>
 
@@ -109,35 +109,35 @@ onload="showOneJob({{JID}})";
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="company_name" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="last" placeholder="Type here...">
+                            <input type="text" class="form-control" id="last" placeholder="Type here..." required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="employment_type" class="form-label">Nationality</label>
-                            <input type="text" class="form-control" id="nationality">
+                            <input type="text" class="form-control" id="nationality" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="industry" class="form-label">Date of Birth</label>
-                            <input type="date" class="form-control" id="dob">
+                            <input type="date" class="form-control" id="dob" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="location" class="form-label">Phone</label>
-                            <input type="number" class="form-control" id="phone" placeholder="">
+                            <input type="number" class="form-control" id="phone" placeholder="" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="location" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email_app">
+                            <input type="email" class="form-control" id="email_app" required>
                         </div>
                     </div>
 
@@ -145,21 +145,21 @@ onload="showOneJob({{JID}})";
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="job_description" class="form-label">Work Experience</label>
-                            <textarea class="form-control" id="experience" rows="3"></textarea>
+                            <textarea class="form-control" id="experience" rows="3" required></textarea>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="job_description" class="form-label">Skills</label>
-                            <textarea class="form-control" id="skills" rows="3"></textarea>
+                            <textarea class="form-control" id="skills" rows="3" required></textarea>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="job_description" class="form-label">Educational Background</label>
-                            <textarea class="form-control" id="education" rows="3"></textarea>
+                            <textarea class="form-control" id="education" rows="3" required></textarea>
                         </div>
                     </div>
 
