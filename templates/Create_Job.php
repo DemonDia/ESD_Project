@@ -36,7 +36,7 @@ Company Name
 <div style= "max-height: 500px;"class="overflow-auto mb-4" id="company_jobs"></div>
 
 <div id="bt-center">
-    <button type="button" class="btn btn-secondary btn-block" data-toggle="modal" onclick="showAllJobs('Google')">
+    <button type="button" class="btn btn-secondary btn-block" data-toggle="modal" onclick="showAllJobs('Finance Company')">
     See Jobs
     </button>
 </div>
@@ -165,7 +165,6 @@ Company Name
             console.log(request.responseText);
 
             var json_obj = JSON.parse(request.responseText);
-            console.log()
             var jobs = JSON.parse(json_obj.data);
             console.log(jobs);
             var job_list ='<table class="table"><thead><tr><th scope="col">Job Title</th><th scope="col">Employment Type</th><th scope="col">Datetime Posted</th><th scope="col">Vacancy</th></tr></thead><tbody>';
@@ -218,7 +217,7 @@ Company Name
 
             if (json_obj.code >= 200 & json_obj.code < 400) {
                 alert('Your job has been added!');
-                showAllJobs("Google");
+                showAllJobs('Finance Company');
             } 
             else {
                 alert('Oops! Something went wrong...');

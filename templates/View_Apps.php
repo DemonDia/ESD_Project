@@ -127,7 +127,7 @@ onload="showAllJobs()"
     function showAllJobs() {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://192.168.0.125:5006/get_applications/'+'-MyzlQ5HQWK6hvpKTyaX', true);
+        request.open('GET', 'http://192.168.0.125:5006/get_applications/'+'Finance Company', true);
         
         request.onload = function() {  
 
@@ -141,20 +141,22 @@ onload="showAllJobs()"
                 var datetime = jobs[job].applied_timestamp;
                 var owner_status = jobs[job].app_status;
                 console.log(owner_status);
+                if (owner_status === false) {
+                    owner_status = 'Rejected';}
                 if (owner_status == null) {
                     owner_status = '';}
                 if (owner_status == true) {
                     owner_status = 'Accepted';}
-                if (owner_status == false) {
-                    owner_status = 'Rejected';}
+                
                     
                 var user_dec = jobs[job].user_dec;
+                if (user_dec === false) {
+                    user_dec = 'Rejected';}
                 if (user_dec == null) {
                     user_dec = '';}
                 if (user_dec == true) {
                     user_dec = 'Accepted';}
-                if (user_dec == false) {
-                    user_dec = 'Rejected';}
+                
                 //var date = datetime.substring(0,10); - want to show only date
 
                 temp = '<tr><th scope="row">'+name+'</th><td>'+job_title+'</td><td>'+datetime+'</td><td>'+owner_status+'</td><td>'+user_dec+'</td><td><a href="" onclick="showDetails('+"'"+job+"'"+')" class="link-primary" data-toggle="modal" data-target="#AccRej">View Details</td></tr>';

@@ -100,7 +100,7 @@ onload="showOneJob({{JID}})";
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="job_title">First Name</label>
+                            <label for="first">First Name</label>
                             <input type="text" class="form-control" id="first" placeholder="Type here...">
                         </div>
                     </div>
@@ -137,7 +137,7 @@ onload="showOneJob({{JID}})";
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="location" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email">
+                            <input type="email" class="form-control" id="email_app">
                         </div>
                     </div>
 
@@ -164,7 +164,7 @@ onload="showOneJob({{JID}})";
                     </div>
 
                     <div class="modal-footer">
-                        <button id="closemodal" type="submit" class="btn btn-primary" data-dismiss="modal" onclick="addApp()">Send Application</button>
+                        <div id="applybutton"></div>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     </div>
                 </form>
@@ -179,14 +179,14 @@ onload="showOneJob({{JID}})";
 <script>
 
     function showOneJob(JID) {
+        console.log(JID);
 
         var request = new XMLHttpRequest();
-        request.open('GET', "http://127.0.0.1:5008/view_job/"+JID, true);
+        request.open('GET', "http://192.168.0.125:5008/view_job/"+JID, true);
         request.onload = function() {  
 
             var json_obj = JSON.parse(request.responseText);
             console.log(json_obj);
-            // var jobs = json.loads(json.obj);
             var jobs = JSON.parse(json_obj.result);
 
             console.log(jobs);
@@ -203,7 +203,6 @@ onload="showOneJob({{JID}})";
             var job_description = jobs.job_description;
             var industry = jobs.industry;
 
-            //var date = datetime.substring(0,10); - want to show only date
             document.getElementById("job_title").innerHTML=job_title;
             document.getElementById("company").innerHTML=company;
             document.getElementById("email").innerHTML=email;
@@ -215,13 +214,14 @@ onload="showOneJob({{JID}})";
             document.getElementById("salary").innerHTML=salary;
             document.getElementById("vacancy").innerHTML=vacancy;
             document.getElementById("date").innerHTML=date;
+            document.getElementById("applybutton").innerHTML='<button id="closemodal" type="submit" class="btn btn-primary" data-dismiss="modal" onclick="addApp(\''+job_title+'\',\''+company+'\')">Send Application</button>';
+
         };           
         
         request.send();
-        //console.log('OPENED', request.readyState); // readyState will be 1
-      }
+    }
 
-      function addApp(){
+    function addApp(job_title,company){
 
         var request = new XMLHttpRequest();
 
@@ -229,18 +229,18 @@ onload="showOneJob({{JID}})";
         var last = document.getElementById("last").value;
         var dob = document.getElementById("dob").value;
         var phone = document.getElementById("phone").value;
-        var email = document.getElementById("email").value;
+        var email_app = document.getElementById("email_app").value;
         var experience = document.getElementById("experience").value;
         var skills = document.getElementById("skills").value;
         var education = document.getElementById("education").value;
         var nationality = document.getElementById("nationality").value;
-        var job_title = document.getElementById("job_title").value;
         
-        console.log(first);
-        console.log(email);
+        console.log(company);
+        console.log(job_title);
+        console.log(email_app);
 
         var applyjobcms = "http://192.168.0.125:5008/apply_job"
-        var params = '{'+'"JID":"'+{{JID}}+'","job_title":"'+job_title'","first":"'+first+'","last":"'+last+'","dob":"'+dob+'","phone":"'+phone+'","email":"'+email+'","experience":"'+experience+'","skills":"'+skills+'","education":"'+education+'","nationality":"'+nationality+'"}';
+        var params = '{"JID":"'+{{JID}}+'","job_title":"'+job_title+'","company":"'+company+'","first":"'+first+'","last":"'+last+'","dob":"'+dob+'","phone":"'+phone+'","email":"'+email_app+'","experience":"'+experience+'","skills":"'+skills+'","education":"'+education+'","nationality":"'+nationality+'"}';
         console.log(params);
         request.open('POST',applyjobcms, true);
 
@@ -256,7 +256,7 @@ onload="showOneJob({{JID}})";
             }
         };
         request.send(params);
-   }
+    }
   
 
 </script>

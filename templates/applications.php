@@ -64,46 +64,50 @@ onload="showAllJobs()"
                 <table class="table">
                     <thead></thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">Name</th>
-                            <td id="name"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Job Title</th>
-                            <td id="job_title"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Date Applied</th>
-                            <td id="date"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Nationality</th>
-                            <td id="nationality"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Date of Birth</th>
-                            <td id="dob"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Phone</th>
-                            <td id="phone"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Email</th>
-                            <td id="email"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Work Experience</th>
-                            <td id="experience"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Skills</th>
-                            <td id="skills"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Educational Background</th>
-                            <td id="education"></td>
-                        </tr>
+                    <tr>
+                    <th scope="row">Job Title</th>
+                    <td id="job_title"></td>
+                    </tr>
+                    <tr>
+                    <th scope="row">Company</th>
+                    <td id="company"></td>
+                    </tr>
+                    <tr>
+                    <th scope="row">Industry</th>
+                    <td id="industry"></td>
+                    </tr>
+                    <tr>
+                    <th scope="row">Date Posted</th>
+                    <td id="date"></td>
+                    </tr>
+                    <tr>
+                    <th scope="row">Employment Type</th>
+                    <td id="type"></td>
+                    </tr>
+                    <tr>
+                    <th scope="row">Job Description</th>
+                    <td id="job_description"></td>
+                    </tr>
+                    <tr>
+                    <th scope="row">Location</th>
+                    <td id="location"></td>
+                    </tr>
+                    <tr>
+                    <th scope="row">Salary</th>
+                    <td id="salary"></td>
+                    </tr>
+                    <tr>
+                    <th scope="row">Vacancy</th>
+                    <td id="vacancy"></td>
+                    </tr>
+                    <tr>
+                    <th scope="row">Contact Person</th>
+                    <td id="person"></td>
+                    </tr>
+                    <tr>
+                    <th scope="row">Contact Email</th>
+                    <td id="email"></td>
+                    </tr>
                     </tbody>
                 </table>
 
@@ -127,7 +131,7 @@ onload="showAllJobs()"
     function showAllJobs() {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://192.168.0.125:5006/get_applications/'+'-MyzlQ5HQWK6hvpKTyaX', true);
+        request.open('GET', 'http://192.168.0.125:5005/get_applications/'+'johnsim@gmail.com', true);
         
         request.onload = function() {  
 
@@ -140,24 +144,28 @@ onload="showAllJobs()"
                 var name = jobs[job].first + " " + jobs[job].last;
                 var datetime = jobs[job].applied_timestamp;
                 var owner_status = jobs[job].app_status;
+                var jid = jobs[job].JID;
+                console.log("this",jid);
                 console.log(owner_status);
-                if (owner_status == null) {
-                    owner_status = '';}
-                if (owner_status == true) {
-                    owner_status = 'Accepted';}
-                if (owner_status == false) {
+                if (owner_status === false) {
                     owner_status = 'Rejected';}
+                else if (owner_status == null) {
+                    owner_status = '';}
+                else if (owner_status == true) {
+                    owner_status = 'Accepted';}
+                
                     
                 var user_dec = jobs[job].user_dec;
-                if (user_dec == null) {
-                    user_dec = '';}
-                if (user_dec == true) {
-                    user_dec = 'Accepted';}
-                if (user_dec == false) {
+                if (user_dec === false) {
                     user_dec = 'Rejected';}
+                else if (user_dec == null) {
+                    user_dec = '';}
+                else if (user_dec == true) {
+                    user_dec = 'Accepted';}
+                
                 //var date = datetime.substring(0,10); - want to show only date
 
-                temp = '<tr><th scope="row">'+name+'</th><td>'+job_title+'</td><td>'+datetime+'</td><td>'+owner_status+'</td><td>'+user_dec+'</td><td><a href="" onclick="showDetails('+"'"+job+"'"+')" class="link-primary" data-toggle="modal" data-target="#AccRej">View Details</td></tr>';
+                temp = '<tr><th scope="row">'+name+'</th><td>'+job_title+'</td><td>'+datetime+'</td><td>'+owner_status+'</td><td>'+user_dec+'</td><td><a href="" onclick="showDetails(\''+jid+'\',\''+job+'\')" class="link-primary" data-toggle="modal" data-target="#AccRej">View Details</td></tr>';
                 job_list += temp;
             }
             job_list += '</tbody></table>'
@@ -168,42 +176,47 @@ onload="showAllJobs()"
         //console.log('OPENED', request.readyState); // readyState will be 1
     }
 
-    function showDetails(AID) {
+    function showDetails(jid,aid) {
+        console.log(jid);
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://192.168.0.125:5006/get_app/'+AID, true);
+        request.open('GET', 'http://192.168.0.125:5005/view_job/'+jid, true);
 
         request.onload = function() {  
 
             var json_obj = JSON.parse(request.responseText);
-            var jobs = JSON.parse(json_obj.data);
-            // var job_list ='<table class="table"><thead><tr><th scope="col">Name</th><th scope="col">Job Title</th><th scope="col">Datetime Applied</th><th scope="col">Owner Status</th><th scope="col">Applicant Decision</th><th scope="col">Details</th></tr></thead><tbody id="myTable">';
-            
+            console.log(json_obj);
+            var jobs = JSON.parse(json_obj.result);
+
+            console.log(jobs);
+
             var job_title = jobs.job_title;
-            var email = jobs.email;
-            var dob = jobs.dob;
-            var name = jobs.first + " " + jobs.last;
-            var date = jobs.applied_timestamp;
-            var phone = jobs.phone;
-            var nationality = jobs.nationality;
-            var experience = jobs.experience;
-            var skills = jobs.skills;
-            var education = jobs.education;
+            var email = jobs.contact_email;
+            var person = jobs.contact_person;
+            var company = jobs.company_name;
+            var type = jobs.employment_type;
+            var date = jobs.posted_timestamp;
+            var vacancy = jobs.vacancy;
+            var location = jobs.location;
+            var salary = jobs.salary;
+            var job_description = jobs.job_description;
+            var industry = jobs.industry;
 
             //var date = datetime.substring(0,10); - want to show only date
             document.getElementById("job_title").innerHTML=job_title;
-            document.getElementById("name").innerHTML=name;
+            document.getElementById("company").innerHTML=company;
             document.getElementById("email").innerHTML=email;
-            document.getElementById("phone").innerHTML=phone;
-            document.getElementById("dob").innerHTML=dob;
-            document.getElementById("experience").innerHTML=experience;
-            document.getElementById("skills").innerHTML=skills;
-            document.getElementById("education").innerHTML=education;
-            document.getElementById("nationality").innerHTML=nationality;
+            document.getElementById("person").innerHTML=person;
+            document.getElementById("type").innerHTML=type;
+            document.getElementById("industry").innerHTML=industry;
+            document.getElementById("job_description").innerHTML=job_description;
+            document.getElementById("location").innerHTML=location;
+            document.getElementById("salary").innerHTML=salary;
+            document.getElementById("vacancy").innerHTML=vacancy;
             document.getElementById("date").innerHTML=date;
 
-            document.getElementById("acceptButton").innerHTML='<button id="accept" type="button" class="btn btn-success" data-dismiss="modal" onclick="Accept('+'\''+AID+'\''+')">Accept</button>';
-            document.getElementById("rejectButton").innerHTML='<button id="reject" type="button" class="btn btn-danger" data-dismiss="modal" onclick="Reject('+'\''+AID+'\''+')">Reject</button>';            
+            document.getElementById("acceptButton").innerHTML='<button id="accept" type="button" class="btn btn-success" data-dismiss="modal" onclick="Accept('+'\''+aid+'\''+')">Accept</button>';
+            document.getElementById("rejectButton").innerHTML='<button id="reject" type="button" class="btn btn-danger" data-dismiss="modal" onclick="Reject('+'\''+aid+'\''+')">Reject</button>';            
         };           
 
         request.send();
@@ -212,7 +225,7 @@ onload="showAllJobs()"
 
     function Accept(AID) {
         var request = new XMLHttpRequest();
-        request.open('PUT', 'http://192.168.0.125:5006/process_application/'+AID, true);
+        request.open('PUT', 'http://192.168.0.125:5005/process_application/'+AID, true);
 
         request.onload = function() {
             var json_obj = JSON.parse(request.responseText);
@@ -227,13 +240,13 @@ onload="showAllJobs()"
             }
         };
 
-        request.send('{"app_status":true}');
+        request.send('{"user_dec":true}');
 
     }
 
     function Reject(AID) {
         var request = new XMLHttpRequest();
-        request.open('PUT', 'http://192.168.0.125:5006/process_application/'+AID, true);
+        request.open('PUT', 'http://192.168.0.125:5005/process_application/'+AID, true);
 
         request.onload = function() {
             var json_obj = JSON.parse(request.responseText);
@@ -248,7 +261,7 @@ onload="showAllJobs()"
             }
         };
 
-        request.send('{"app_status":false}');
+        request.send('{"user_dec":false}');
 
     }
 

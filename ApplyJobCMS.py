@@ -35,10 +35,10 @@ def apply_job():
         data = json.loads(data)
         print("this is data",data)
         print("this is jobs url")
-        print(JobsURL+"/"+data["JID"])
+        print(JobsURL+"/"+data['JID'])
 
         # get jobs with the JID
-        result = invoke_http(JobsURL+"/"+data["JID"],method ="GET")
+        result = invoke_http(JobsURL+"/"+data['JID'],method ="GET")
 
         code = result["code"]
         if code not in range (200, 300):
@@ -57,7 +57,7 @@ def apply_job():
                 }
             ), 500
         else:
-            application_result = invoke_http(ApplicationURL+data["JID"],method ="POST",json=data)
+            application_result = invoke_http(ApplicationURL+data['JID'],method ="POST",json=data)
             print(application_result)
             code = application_result['code']
 
