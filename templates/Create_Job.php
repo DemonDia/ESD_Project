@@ -162,13 +162,16 @@ Company Name
         request.open('GET', 'http://127.0.0.1:5001/jobs/company/'+CompanyName, true);
         
         request.onload = function() {  
+            console.log(request.responseText);
 
             var json_obj = JSON.parse(request.responseText);
+            console.log()
             var jobs = JSON.parse(json_obj.data);
             console.log(jobs);
             var job_list ='<table class="table"><thead><tr><th scope="col">Job Title</th><th scope="col">Employment Type</th><th scope="col">Datetime Posted</th><th scope="col">Vacancy</th></tr></thead><tbody>';
 
             for (var job in jobs) {
+                // if (jobs[job].company_name == CompanyName) {
                 var job_title = jobs[job].job_title;
                 var employment_type = jobs[job].employment_type;
                 var datetime = jobs[job].posted_timestamp;
@@ -176,6 +179,7 @@ Company Name
 
                 temp = '<tr><th scope="row">'+job_title+'</th><td>'+employment_type+'</td><td>'+datetime+'</td><td>'+vacancy+'</td></tr>';
                 job_list += temp;
+                // };
             }
             job_list += '</tbody></table>'
             document.getElementById("company_jobs").innerHTML=job_list;
@@ -214,7 +218,7 @@ Company Name
 
             if (json_obj.code >= 200 & json_obj.code < 400) {
                 alert('Your job has been added!');
-                location.reload();
+                showAllJobs("Google");
             } 
             else {
                 alert('Oops! Something went wrong...');
