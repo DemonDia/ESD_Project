@@ -177,7 +177,8 @@ onload="showAllJobs()"
     }
 
     function showDetails(jid,aid) {
-        console.log(jid);
+        console.log("jid",jid);
+        console.log("aid",aid)
 
         var request = new XMLHttpRequest();
         request.open('GET', 'http://localhost:5005/view_job/'+jid, true);
