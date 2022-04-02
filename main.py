@@ -7,13 +7,6 @@ from flask_cors import CORS, cross_origin
 import os, sys
 import requests
 
-from flask_cors import CORS
-
-import os, sys
-from invokes import invoke_http
-import requests
-
-
 #to remove if we dont use rabbit amqp
 # import amqp_setup
 # import pika
@@ -21,6 +14,7 @@ import requests
 
 app = Flask(__name__)
 CORS(app)
+
 @app.route("/")
 def choose_role():
     return render_template("Role.php")
@@ -65,6 +59,9 @@ def view_apps():
 def job(JID):
     return render_template("One_Job.php",JID=JID)
 
+@app.route("/applications")
+def applications():
+    return render_template("applications.php")
 
 @app.route("/authenticate")
 def authenticate():

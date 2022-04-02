@@ -22,10 +22,10 @@ applicationSMS = environ.get('application_sms') or "http://localhost:5003/applic
 ownerStatusSMS = environ.get('ownerstatus_sms') or "http://localhost:5004/status/" 
 userNotificationSMS = environ.get('usernotification_sms') or "http://localhost:5011/userNotification/" 
 
-@app.route("/get_applications/<string:CID>") # process you auto fill company ID
-def owner_get_applications(CID):
+@app.route("/get_applications/<string:CompanyName>") # process you auto fill company ID
+def owner_get_applications(CompanyName):
     try:
-        applications = invoke_http(applicationSMS+"/company/"+CID,method = "GET")
+        applications = invoke_http(ApplicationSMS+"/company/"+CompanyName,method = "GET")
         return applications
 
     except Exception as e:
@@ -54,8 +54,6 @@ def owner_get_app(AID):
             }
         ), 500
 
-
-
 @app.route("/process_application/<string:AID>",methods = ["PUT"]) # process you auto fill company ID
 def owner_process_application(AID):
     try:
@@ -63,8 +61,8 @@ def owner_process_application(AID):
         
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data) #gets
-        print(data)
-        applications = invoke_http(ownerStatusSMS+AID,method = "PUT",json = data)
+        print("this is data",data)
+        applications = invoke_http(OwnerStatusSMS+AID,method = "PUT",json = data)
         print(applications)
         # print(applications['code'])
         # return jsonify(applications)
@@ -85,7 +83,6 @@ def owner_process_application(AID):
         else:
             # record the activity log anyway
             message = json.dumps(applications)
-            # notifySeeker(data)
             notifySeeker(AID,data)
             topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="updateApp.info", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -110,9 +107,8 @@ def notifySeeker(AID,data):
     get_application = json.loads(get_application["data"])
     print(get_application)
 
-    data["CID"] = get_application["CID"]
+    data["company_name"] = get_application["company_name"]
     data["JID"] = get_application["JID"]
-    data["UID"] = get_application["UID"]
 
     # New: AMQP broker send message to user notification
     message = json.dumps(get_application)
