@@ -108,7 +108,7 @@ def notifySeeker(AID,data):
     get_application = json.loads(get_application["data"])
     print(get_application)
 
-    data["company_name"] = get_application["company_name"]
+    data["company"] = get_application["company"]
     data["JID"] = get_application["JID"]
 
     # New: AMQP broker send message to user notification

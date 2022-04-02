@@ -42,7 +42,7 @@ def owner_process_application(AID):
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while creating the job. " + str(e)
+                "message": "An error occurred while processing the job. " + str(e)
             }
         ), 500
 

@@ -229,10 +229,11 @@ onload="showAllJobs()"
         request.open('PUT', 'http://localhost:5005/process_application/'+AID, true);
 
         request.onload = function() {
+            console.log("acc_request",request)
             // var json_obj = JSON.parse(request.responseText);
             // console.log("this is json_obj",json_obj)
 
-            if (request.code >= 200 & request.code < 400) {
+            if (request.status >= 200 & request.status < 400) {
                 alert('Your status has been updated!');
                 showAllJobs();
             } 
@@ -247,7 +248,7 @@ onload="showAllJobs()"
 
     function Reject(AID) {
         var request = new XMLHttpRequest();
-        request.open('PUT', 'http://localhost:5005/process_application/'+AID, true);
+        request.open('PUT', 'http://localhost:5005/process_application/'+AID, false);
 
         request.onload = function() {
             console.log("textt",request)
