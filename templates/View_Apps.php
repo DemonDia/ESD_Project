@@ -127,7 +127,7 @@ onload="showAllJobs()"
     function showAllJobs() {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://192.168.0.125:5006/get_applications/'+'-MyzlQ5HQWK6hvpKTyaX', true);
+        request.open('GET', 'http://192.168.0.125:5006/get_applications/-MyzlQ5HQWK6hvpKTyaX', true);
         
         request.onload = function() {  
 
