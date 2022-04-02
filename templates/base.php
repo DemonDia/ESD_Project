@@ -1,12 +1,11 @@
-
-<!doctype html>
-<html lang="en">
-<head>
 <?php
 header("Access-Control-Allow-Origin: *");
 header('Access-Control-Allow-Headers: *'); 
 
 ?>
+<!doctype html>
+<html lang="en">
+<head>
     <title>{% block title %}{% endblock %}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
