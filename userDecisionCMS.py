@@ -174,7 +174,7 @@ def view_job(JID):
 
             # Send the job info
             print(jobSMS+"/jobs"+JID)
-            job_result = invoke_http(jobSMS+"/"+JID,method = "GET")
+            job_result = invoke_http(jobSMS+"/jobs/"+JID,method = "GET")
 
             print("result",job_result)
 
