@@ -127,7 +127,7 @@ onload="showAllJobs()"
     function showAllJobs() {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://localhost:5006/get_applications/'+'Finance Company', true);
+        request.open('GET', 'http://localhost:5006/get_applications/'+'Kitagawa Cosplay Pte Ltd', true);
         
         request.onload = function() {  
 
@@ -142,19 +142,20 @@ onload="showAllJobs()"
                 var owner_status = jobs[job].app_status;
                 console.log(owner_status);
                 if (owner_status === false) {
-                    owner_status = 'Rejected';}
-                if (owner_status == null) {
+                    owner_status = 'Rejected';
+                    console.log(owner_status);}
+                else if (owner_status == null) {
                     owner_status = '';}
-                if (owner_status == true) {
-                    owner_status = 'Accepted';}
+                else {
+                    owner_status = 'Accepted';};
                 
                     
                 var user_dec = jobs[job].user_dec;
                 if (user_dec === false) {
                     user_dec = 'Rejected';}
-                if (user_dec == null) {
+                else if (user_dec == null) {
                     user_dec = '';}
-                if (user_dec == true) {
+                else {
                     user_dec = 'Accepted';}
                 
                 //var date = datetime.substring(0,10); - want to show only date

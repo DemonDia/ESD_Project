@@ -234,28 +234,41 @@ onload="showOneJob({{JID}})";
         var skills = document.getElementById("skills").value;
         var education = document.getElementById("education").value;
         var nationality = document.getElementById("nationality").value;
-        
-        console.log(company);
-        console.log(job_title);
-        console.log(email_app);
 
-        var applyjobcms = "http://localhost:5008/apply_job"
-        var params = '{"JID":"'+{{JID}}+'","job_title":"'+job_title+'","company":"'+company+'","first":"'+first+'","last":"'+last+'","dob":"'+dob+'","phone":"'+phone+'","email":"'+email_app+'","experience":"'+experience+'","skills":"'+skills+'","education":"'+education+'","nationality":"'+nationality+'"}';
-        console.log(params);
-        request.open('POST',applyjobcms, true);
-
-        request.onload = function() {  
-            var json_obj = JSON.parse(request.responseText);
-            console.log("this is json_obj",json_obj)
-
-            if (json_obj.code >= 200 & json_obj.code < 400) {
-                alert('Your application has been made!');
-            } 
-            else {
-                alert('Oops! Something went wrong...');
-            }
+        var values = [first, last, dob, phone, email_app, experience, skills, education, nationality];
+        var missing = 0;
+        for (let index = 0; index < values.length; index++) {
+            if (!values[index]) {
+                missing++;
+            };
         };
-        request.send(params);
+
+        if (missing) {
+            alert('Please fill in the '+missing+' missing values');
+        }
+        else {
+            console.log(company);
+            console.log(job_title);
+            console.log(email_app);
+
+            var applyjobcms = "http://localhost:5008/apply_job"
+            var params = '{"JID":"'+{{JID}}+'","job_title":"'+job_title+'","company":"'+company+'","first":"'+first+'","last":"'+last+'","dob":"'+dob+'","phone":"'+phone+'","email":"'+email_app+'","experience":"'+experience+'","skills":"'+skills+'","education":"'+education+'","nationality":"'+nationality+'"}';
+            console.log(params);
+            request.open('POST',applyjobcms, true);
+
+            request.onload = function() {  
+                var json_obj = JSON.parse(request.responseText);
+                console.log("this is json_obj",json_obj)
+
+                if (json_obj.code >= 200 & json_obj.code < 400) {
+                    alert('Your application has been made!');
+                } 
+                else {
+                    alert('Oops! Something went wrong...');
+                }
+            };
+            request.send(params);
+        };
     }
   
 

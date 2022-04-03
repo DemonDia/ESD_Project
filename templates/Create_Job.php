@@ -197,33 +197,49 @@ Company Name
         var employment_type = document.getElementById("employment_type").value;
         var industry = document.getElementById("industry").value;
         var job_description = document.getElementById("job_description").value;
-        var salary = document.getElementById("salary").value;
+        var salary = Number(document.getElementById("salary").value);
         var location = document.getElementById("location").value;
         var contact_email = document.getElementById("email").value;
         var contact_person = document.getElementById("person").value;
-        var vacancy = document.getElementById("vacancy").value;
-         
-        console.log(job_title);
-        console.log(employment_type);
+        var vacancy = Number(document.getElementById("vacancy").value);
 
-        var createJobCMS = "http://localhost:5009/create_job"
-        var params = '{'+'"job_title":"'+job_title+'","company_name":"'+company_name+'","employment_type":"'+employment_type+'","industry":"'+industry+'","job_description":"'+job_description+'","salary":"'+salary+'","location":"'+location+'","contact_email":"'+contact_email+'","contact_person":"'+contact_person+'","vacancy":"'+vacancy+'"}';
-        console.log(params);
-        request.open('POST',createJobCMS, true);
+        console.log(typeof vacancy);
 
-        request.onload = function() {  
-            var json_obj = JSON.parse(request.responseText);
-            console.log("this is json_obj",json_obj)
-
-            if (json_obj.code >= 200 & json_obj.code < 400) {
-                alert('Your job has been added!');
-                showAllJobs('Finance Company');
-            } 
-            else {
-                alert('Oops! Something went wrong...');
-            }
+        var values = [job_title, company_name, employment_type, industry, job_description, salary, location, contact_email, contact_person, vacancy];
+        var missing = 0;
+        for (let index = 0; index < values.length; index++) {
+            if (!values[index]) {
+                missing++;
+            };
         };
-        request.send(params);
+
+        if (missing) {
+            alert('Please fill in the '+missing+' missing values');
+        }
+        else {
+        
+            console.log(job_title);
+            console.log(employment_type);
+
+            var createJobCMS = "http://localhost:5009/create_job"
+            var params = '{'+'"job_title":"'+job_title+'","company_name":"'+company_name+'","employment_type":"'+employment_type+'","industry":"'+industry+'","job_description":"'+job_description+'","salary":'+salary+',"location":"'+location+'","contact_email":"'+contact_email+'","contact_person":"'+contact_person+'","vacancy":'+vacancy+'}';
+            console.log(params);
+            request.open('POST',createJobCMS, true);
+
+            request.onload = function() {  
+                var json_obj = JSON.parse(request.responseText);
+                console.log("this is json_obj",json_obj)
+
+                if (json_obj.code >= 200 & json_obj.code < 400) {
+                    alert('Your job has been added!');
+                    showAllJobs('Kitagawa Cosplay Pte Ltd');
+                } 
+                else {
+                    alert('Oops! Something went wrong...');
+                }
+            };
+            request.send(params);
+        };
     }
     
 </script>

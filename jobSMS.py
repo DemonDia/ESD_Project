@@ -80,7 +80,6 @@ def get_company_jobs(CompanyName):
             print("key:",job.key())
             print("value:",job.val())
             jobsDict[job.key()] = job.val()
-            print(len(jobsDict))
         
         # if len(jobsDict)>1:
         #     print("im running")
@@ -88,7 +87,6 @@ def get_company_jobs(CompanyName):
         # return "yes"
  
         if(len(jobsDict)>0): #yes theres an existing jobs for this company
-            print("im run")
             result = json.dumps(jobsDict)
             return jsonify(
                 {
@@ -121,8 +119,9 @@ def post_job():
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
-        print(type(data))
         data["posted_timestamp"] = str(datetime.now())
+        # change_type_vacancy = data["vacancy"]
+        # data["vacancy"] = int(change_type_vacancy)
         db.child("jobs").push(data)
 
         # return jsonify(
@@ -137,7 +136,7 @@ def post_job():
                 "data": data
             }
             ), 201
-        return data
+        # return data
 
     except Exception as e:
         # print(e)
@@ -193,19 +192,21 @@ def update_vacancy(JID):
         getGivenJob = db.child('jobs/'+JID).get()
         givenJobDict = {}        
                 
-    
         for field in getGivenJob.each():
-            print(type(field.key()))
-            print("___________") 
-            print("key:",field.key())
-            print("value:",field.val())
+            # print(type(field.key()))
+            # print("___________") 
+            # print("key:",field.key())
+            # print("value:",field.val())
             givenJobDict[field.key()] = field.val()
         print(givenJobDict)
+        
         vacancy = givenJobDict["vacancy"]
+        print("this is vacnacy",vacancy)
         # return vacanciesDict
 
-        if(vacancy > 0):
-            updated_v = vacancy-1
+        if(int(vacancy) > 0):
+            print("THIS IS INT",type(int(vacancy)))
+            updated_v = int(vacancy)-1
             db.child("jobs/"+JID).update({"vacancy":updated_v})
             return str(updated_v)
         else:

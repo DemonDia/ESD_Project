@@ -33,7 +33,6 @@ ownerNotificationSMS = environ.get('ownernotification_sms') or "http://localhost
 # @cross_origin()
 def processApplication(AID):
     try:
-        print(request)
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         print("data",data)
         data = json.loads(data) #gets
@@ -41,39 +40,43 @@ def processApplication(AID):
         given_application = invoke_http(applicationSMS+"/aid/"+AID,method = "GET")
         print("given_application",given_application)
         JID = json.loads(given_application["data"])["JID"]
+        print(JID)
         user_status = invoke_http(userStatusSMS+AID,json = data,method = "PUT") #returns boolean
-        # print("user_status:"+str(user_status))
-        print("user_status",user_status)
-
-
         result = processAMQP(user_status,AID,JID)
         print(result)
-        if result['code'] not in range(200, 300):
-            # print (result)
-            return result
 
-        else:
-            if user_status['data'] == True:
+        if user_status['code'] in range(200,300):
+            print("user_status",user_status)
+            updateVacancy(JID)
+            return jsonify({
+            "code": 201,
+            "data": str(data["user_dec"])
+            }), 201 
+        
+        # result = processAMQP(user_status,AID,JID)
+        # print(result)
+        # if result['code'] not in range(200, 300):
+        #     # print (result)
+        #     return result
+        # else:
+        #     return "SUCCESS!"
+        #     if user_status['data'] == True:
 
-                print("AID:"+AID)
-                application = invoke_http(applicationSMS+"/job/aid/"+AID,method = "GET")
-                print("application:",application)
-                # result = processAMQP(application,AID,JID) #send msg to RabbitMQ
+        #         print("AID:",AID)
+        #         application = invoke_http(applicationSMS+"/aid/"+AID,method = "GET")
+        #         print("application:",application)
+        #         # result = processAMQP(application,AID,JID) #send msg to RabbitMQ
 
-                 #failed to process application
-                if result['code'] not in range(200, 300):      
-                    return result
+        #          #failed to process application
+        #         # if result['code'] not in range(200, 300):      
+        #         #     return result
 
-                #success, proceed to update vacancy
-                else:                           
-                    # JID  = application["JID"]
-                    # return application
-                    # JID = application["JID"]
-                    # print(application)
-                    vacancy = updateVacancy(JID)
-                    return vacancy
-            else:
-                return user_status['accepted'] #returns false
+        #         # #success, proceed to update vacancy
+        #         # else:                           
+        #         #     vacancy = updateVacancy(JID)
+        #         #     return vacancy
+        #     else:
+        #         return user_status['accepted'] #returns false
 
     except Exception as e:
         print(e)
@@ -86,12 +89,11 @@ def processApplication(AID):
         ), 500
 
 def updateVacancy(JID):
-    print("JID:"+JID)
     try:
-        print(jobSMS+"update_vacancy/"+JID)
+        print(jobSMS+"/update_vacancy/"+JID)
         # print(data)
         
-        vacancies = invoke_http(jobSMS+"update_vacancy/"+JID,method = "PUT")
+        vacancies = invoke_http(jobSMS+"/update_vacancy/"+JID,method = "PUT")
         return str(vacancies)
     except Exception as e:
         print(e)
@@ -171,7 +173,7 @@ def view_job(JID):
             # print("clean data",data)
 
             # Send the job info
-            job_result = invoke_http(jobSMS+"/"+JID,method = "GET")
+            job_result = invoke_http(jobSMS+"/jobs/"+JID,method = "GET")
 
             print("result",job_result)
 
