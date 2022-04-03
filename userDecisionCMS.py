@@ -164,7 +164,7 @@ def processAMQP(data,AID,JID):
             "result": jsonify(data),
         }
 
-@app.route("/view_job/<JID>", methods = ["GET"])
+@app.route("/view_job/<string:JID>", methods = ["GET"])
 def view_job(JID):
     if request:
         try:
