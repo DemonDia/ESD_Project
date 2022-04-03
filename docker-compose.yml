@@ -230,3 +230,35 @@ services:
       rabbit_port: 5672
       PYTHONUNBUFFERED: 1
 
+  #################################################
+  # userNoti AMQP
+  #################################################
+  usernoti_amqp:
+    build:
+      context: ./
+      dockerfile: userNoti_AMQP.Dockerfile
+    image: <dockerid>/usernoti_amqp:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
+
+  #################################################
+  # userNoti AMQP
+  #################################################
+  ownernoti_amqp:
+    build:
+      context: ./
+      dockerfile: ownerNoti_AMQP.Dockerfile
+    image: <dockerid>/ownernoti_amqp:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
+
