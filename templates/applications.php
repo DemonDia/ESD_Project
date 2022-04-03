@@ -1,21 +1,21 @@
 {% extends "base.php" %}
 
 {% block title %}
-User site
+John Sim | StartWork
 {% endblock %}
 
 {% block details %}
-Company Name
+<h4>John Sim</h4>
 {% endblock %}
 
 {% block body %}
-onload="showAllJobs()"
+onload="showAllJobs('johnsim@gmail.com')"
 {% endblock %}
 
 {% block navbar_links %}
 <li class="nav-item">
     <a class="nav-link active" aria-current="page" href="/user">
-        Home Dashboard
+        User Dashboard
     </a>
 </li>
 <li class="nav-item">
@@ -32,7 +32,7 @@ onload="showAllJobs()"
 
 
 {% block content %}
-<h1 class="h2 mt-3 mb-4">All Jobs</h1>
+<h1 class="h2 mt-3 mb-4">All Applications for John Sim</h1>
 
 <div class="container">
   <div class="row">
@@ -112,11 +112,11 @@ onload="showAllJobs()"
                 </table>
 
                 <div class="modal-footer">
-                    <div id="buttons">
-                        <div id="acceptButton"></div>
-                        <div id="rejectButton"></div>
+                    <div id="buttons" class="row"> 
+                        <div class="col" id="acceptButton"></div>
+                        <div class="col" id="rejectButton"></div>
                     </div>
-                    <button id="closemodal" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="closemodal" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="Clear()">Cancel</button>
                 </div>
 
             </div>
@@ -130,10 +130,10 @@ onload="showAllJobs()"
 
 <script>
     
-    function showAllJobs() {
+    function showAllJobs(email) {
 
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://localhost:5005/get_applications/'+'johnsim@gmail.com', true);
+        request.open('GET', 'http://localhost:5005/get_applications/'+email, true);
         
         request.onload = function() {  
 
@@ -164,13 +164,10 @@ onload="showAllJobs()"
                     user_dec = '';}
                 else if (user_dec == true) {
                     user_dec = 'Accepted';}
-
-                var app_status = jobs[job].app_status;
-                var user_status = jobs[job].user_dec;
                 
                 //var date = datetime.substring(0,10); - want to show only date
 
-                temp = '<tr><th scope="row">'+name+'</th><td>'+job_title+'</td><td>'+datetime+'</td><td>'+owner_status+'</td><td>'+user_dec+'</td><td><a href="" onclick="showDetails(\''+jid+'\',\''+job+'\','+app_status+','+user_status+')" class="link-primary" data-toggle="modal" data-target="#AccRej">View Details</td></tr>';
+                temp = '<tr><th scope="row">'+name+'</th><td>'+job_title+'</td><td>'+datetime+'</td><td>'+owner_status+'</td><td>'+user_dec+'</td><td><a href="" onclick="showDetails(\''+jid+'\',\''+job+'\',\''+owner_status+'\',\''+user_dec+'\')" class="link-primary" data-toggle="modal" data-target="#AccRej">View Details</td></tr>';
                 job_list += temp;
             }
             job_list += '</tbody></table>'
@@ -223,18 +220,36 @@ onload="showAllJobs()"
             document.getElementById("date").innerHTML=date;
 
             
-            if (user_dec) {
+            if (user_dec === 'Accepted') {
+                console.log("this is user accepted",user_dec);
                 document.getElementById("buttons").innerHTML='<p class="text-success">Thank you for accepting the offer! Your hiring manager will contact you shortly.</p>';     
             }
-            else if (app_status) {
+            else if (user_dec === 'Rejected') {
+                console.log("this is user rejected",user_dec);
+                document.getElementById("buttons").innerHTML='<p class="text-danger">You have rejected the offer. We will inform the hiring manager.</p>';     
+            }
+            else if (app_status === '') {
+                console.log("this is owner not process",app_status);
+                document.getElementById("buttons").innerHTML='<p class="text-warning">Your application is pending review by the hiring manager.</p>';          
+            }
+            else if (app_status === 'Accepted') {
+                console.log("this is owner accept",app_status);
                 document.getElementById("acceptButton").innerHTML='<button id="accept" type="button" class="btn btn-success" data-dismiss="modal" onclick="Accept('+'\''+aid+'\''+')">Accept</button>';
                 document.getElementById("rejectButton").innerHTML='<button id="reject" type="button" class="btn btn-danger" data-dismiss="modal" onclick="Reject('+'\''+aid+'\''+')">Reject</button>';      
+            }
+            else if (app_status === 'Rejected') {
+                console.log("this is owner reject",app_status);
+                document.getElementById("buttons").innerHTML='<p class="text-danger">Your application has been rejected. We thank you for your effort!</p>';          
             };
                   
         };           
 
         request.send();
         //console.log('OPENED', request.readyState); // readyState will be 1
+    }
+
+    function Clear() {
+        document.getElementById("buttons").innerHTML='<div class="col" id="acceptButton"></div><div class="col" id="rejectButton"></div>';
     }
 
     function Accept(AID) {
@@ -248,7 +263,7 @@ onload="showAllJobs()"
 
             if (request.status >= 200 & request.status < 400) {
                 alert('Your status has been updated!');
-                showAllJobs();
+                showAllJobs('johnsim@gmail.com');
             } 
             else {
                 alert('Oops! Something went wrong...');
@@ -270,7 +285,7 @@ onload="showAllJobs()"
 
             if (request.status >= 200 & request.status < 400) {
                 alert('Your status has been updated!');
-                showAllJobs();
+                showAllJobs('johnsim@gmail.com');
             } 
             else {
                 alert('Oops! Something went wrong...');

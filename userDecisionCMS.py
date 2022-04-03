@@ -18,7 +18,6 @@ import pika
 # app.config['CORS_HEADERS'] = 'Content-Type'
 
 # ApplicationSMS = "http://127.0.0.1:5003/applications"
-# JobSMS = "http://127.0.0.1:5001/"
 # UserStatusSMS = "http://127.0.0.1:5002/applications/"
 # OwnerNotificationSMS = "http://127.0.0.1:5010/ownerNotified/"
 
@@ -174,7 +173,7 @@ def view_job(JID):
 
             # Send the job info
             print(jobSMS+"/jobs"+JID)
-            job_result = invoke_http(jobSMS+"/jobs/"+JID,method = "GET")
+            job_result = invoke_http(jobSMS+"/"+JID,method = "GET")
 
             print("result",job_result)
 

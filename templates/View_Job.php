@@ -1,11 +1,11 @@
 {% extends "base.php" %}
 
 {% block title %}
-User site
+John Sim | StartWork
 {% endblock %}
 
 {% block details %}
-User Name
+<h4>John Sim</h4>
 {% endblock %}
 
 {% block body %}
@@ -15,7 +15,7 @@ onload="showAllJobs()"
 {% block navbar_links %}
 <li class="nav-item">
     <a class="nav-link active" aria-current="page" href="/user">
-        Home Dashboard
+        User Dashboard
     </a>
 </li>
 <li class="nav-item">
@@ -36,12 +36,7 @@ onload="showAllJobs()"
 
 <div class="container">
   <div class="row">
-    <div class="col-md">
-        <input class="form-control" id="myInput" type="text" placeholder="Search..">    
-    </div>
-    <div class="col-sm">
-        <!-- filter table somehow based on values, dynamic -->
-    </div>
+    <input class="form-control" id="myInput" type="text" placeholder="Search.."> 
   </div>
 </div>
 <br>

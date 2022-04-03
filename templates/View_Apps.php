@@ -1,7 +1,7 @@
 {% extends "base.php" %}
 
 {% block title %}
-Kitagawa Cosplay Pte Ltd
+Kitagawa Cosplay Pte Ltd | StartWork
 {% endblock %}
 
 {% block details %}
