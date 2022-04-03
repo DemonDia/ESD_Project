@@ -192,7 +192,7 @@ services:
     environment:
       PYTHONUNBUFFERED: 1
       application_sms: http://application_sms:5003/applications
-      job_sms: http://job_sms:5001/jobs
+      job_sms: http://job_sms:5001
       userstatus_sms:  http://userstatus_sms:5002/applications/
       ownernotification_sms: http://ownernotification_sms:5010/ownerNotification/
     ports:
