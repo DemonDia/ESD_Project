@@ -46,7 +46,9 @@ def processApplication(AID):
 
         if user_status['code'] in range(200,300):
             print("user_status",user_status)
-            updateVacancy(JID)
+            if data['user_dec'] == True:            
+                updateVacancy(JID)
+            
             return jsonify({
             "code": 201,
             "data": str(data["user_dec"])
@@ -173,7 +175,7 @@ def view_job(JID):
 
             # Send the job info
             print(jobSMS+"/jobs"+JID)
-            job_result = invoke_http(jobSMS+"/"+JID,method = "GET")
+            job_result = invoke_http(jobSMS+"/jobs/"+JID,method = "GET")
 
             print("result",job_result)
 
