@@ -58,14 +58,15 @@ def processNotification(data):
         data2 = json.loads(data)
         print(data2)
         print(type(data2))
-        CID = data2['CID']
+        company = data2['company']
         data2["posted_timestamp"] = str(datetime.now()) 
-        db.child(CID).push(data2)
+        db.child(company).push(data2)
     else:
     # print(data['CID'])
-        CID = data['CID']
+        print('this is the owner, ', data)
+        company = data['company']
         data["posted_timestamp"] = str(datetime.now()) 
-        db.child(CID).push(data)
+        db.child(company).push(data)
 
     # for key in data:
     #     if key == 'data':

@@ -48,9 +48,19 @@ def processNotification(data):
     # print(data['app_status'])
     print(data)
 
-    UID = data["UID"]
-    data["posted_timestamp"] = str(datetime.now()) 
-    db.child(UID).push(data)
+    if type(data) == str:
+        data2 = json.loads(data)
+        print(data2)
+        print(type(data2))
+        fullname = data2['first'] + data2['last']
+        data2["posted_timestamp"] = str(datetime.now()) 
+        db.child(fullname).push(data2)
+    else:
+    # print(data['CID'])
+        print('this is the user, ', data)
+        fullname = data['first'] + data['last']
+        data["posted_timestamp"] = str(datetime.now()) 
+        db.child(fullname).push(data)
 
 if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')
     print("\nThis is " + os.path.basename(__file__), end='')

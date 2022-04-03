@@ -97,34 +97,34 @@ def get_user_noti(CID):
 #         ), 500
 
 
-@app.route("/ownerNotified/<string:CID>", methods = ["POST"])
-def post_noti(CID):
-    try:
-        data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
-        data = json.loads(data)
-        data["CID"] = CID
-        # data.pop("data")
-        print("DATA",data)
-        data["posted_timestamp"] = str(datetime.now())
-        db.child(CID).push(data)
+# @app.route("/ownerNotified/<string:company_name>", methods = ["POST"])
+# def post_noti(company_name):
+#     try:
+#         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
+#         data = json.loads(data)
+#         data["company_name"] = company_name
+#         # data.pop("data")
+#         print("DATA",data)
+#         data["posted_timestamp"] = str(datetime.now())
+#         db.child(company_name).push(data)
 
-        return jsonify(
-            {
-                "code": 201,
-                "data": data
-            }
-            ), 201
+#         return jsonify(
+#             {
+#                 "code": 201,
+#                 "data": data
+#             }
+#             ), 201
 
-    except Exception as e:
-        print("NOO")
-        print(e)
+#     except Exception as e:
+#         print("NOO")
+#         print(e)
 
-        return jsonify(
-            {
-                "code": 500,
-                "message": "An error occurred while creating the job. " + str(e)
-            }
-        ), 500
+#         return jsonify(
+#             {
+#                 "code": 500,
+#                 "message": "An error occurred while creating the job. " + str(e)
+#             }
+#         ), 500
     
     
 

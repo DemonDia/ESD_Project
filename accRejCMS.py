@@ -106,11 +106,7 @@ def notifySeeker(AID,data):
     print(applicationSMS+"/aid/"+AID)
     get_application = invoke_http(applicationSMS+"/aid/"+AID,method = "GET")
     get_application = json.loads(get_application["data"])
-    print(get_application)
-
-    data["company"] = get_application["company"]
-    data["JID"] = get_application["JID"]
-    data["AID"] = AID
+    print('this is notification to user about owner decision', get_application)
 
     # New: AMQP broker send message to user notification
     message = json.dumps(get_application)
