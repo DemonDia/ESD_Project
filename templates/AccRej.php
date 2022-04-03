@@ -67,11 +67,13 @@ onload="showAllApps('Kitagawa Cosplay Pte Ltd')"
             var job_list ='<table class="table"><thead><tr><th scope="col">Job Title</th><th scope="col">Company</th><th scope="col">Employment Type</th><th scope="col">Datetime Posted</th><th scope="col">Vacancy</th></tr></thead><tbody id="myTable">';
 
             for (var job in jobs) {
+                // job is the application ID
                 var job_title = jobs[job].job_title;
                 var company = jobs[job].company_name;
                 var employment_type = jobs[job].employment_type;
                 var datetime = jobs[job].posted_timestamp;
                 var vacancy = jobs[job].vacancy;
+                console.log("job",job)
                 //var date = datetime.substring(0,10); - want to show only date
 
                 temp = '<tr><th scope="row"><a href="http://localhost:5020/job/'+"'"+job+"'"+'" class="link-primary">'+job_title+'</th><td>'+company+'</td><td>'+employment_type+'</td><td>'+datetime+'</td><td>'+vacancy+'</td></tr>';

@@ -184,6 +184,7 @@ onload="showAllJobs()"
         request.open('GET', 'http://localhost:5005/view_job/'+jid, true);
 
         request.onload = function() {  
+            console.log(request)
 
             var json_obj = JSON.parse(request.responseText);
             console.log(json_obj);
