@@ -42,6 +42,10 @@ header('Access-Control-Allow-Headers: *');
                             </li>
                             <br>
                             {% block navbar_links %}{% endblock %}
+                            <!-- user sign in -->
+                            <li class="nav-item center"><div class="g-signin2 nav-link" data-onsuccess="onSignIn" id = "g-in"></div></li>
+                            <li class="nav-item center"><a class="nav-link" href="/" onclick="signOut();" id = "g-out">Sign out</a></li>
+                            <!-- user sign out -->
                         </ul>
                     </div>
                 </nav>
@@ -54,6 +58,49 @@ header('Access-Control-Allow-Headers: *');
     </div>
 
     {% block script %} {% endblock %}
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="209394015065-vhh82r5n3fe3bg2g6mcbfjuf0939puok.apps.googleusercontent.com">
+
+    <script>
+
+        if (document.getElementById("g-in").hidden == false) {
+            document.getElementById("g-out").hidden = true;
+        }
+
+        function onSignIn(googleUser) {
+
+            document.getElementById("g-in").hidden=true;
+            document.getElementById("g-out").hidden=false;
+
+            var profile = googleUser.getBasicProfile();
+            // console.log('Name: ' + profile.getName());
+
+            var email = profile.getEmail();
+            console.log('Email: ' + email); // This is null if the 'email' scope is not present.
+
+            if (email.includes("@gmail.com")) {
+                // console.log('seeker');
+                if(window.location.href != "http://localhost:5020/user" && window.location.href != "http://localhost:5020/applications" && window.location.href != "http://localhost:5020/view" && !window.location.href.includes("http://localhost:5020/job/")) {
+                    window.location.replace("http://localhost:5020/user");
+                }
+            }
+            
+            else {
+                // console.log('owner');
+                if(window.location.href != "http://localhost:5020/owner" && window.location.href != "http://localhost:5020/view_apps" && window.location.href != "http://localhost:5020/create") {
+                    window.location.replace("http://localhost:5020/owner");
+                }
+            }
+        }
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+            console.log('User signed out.');
+            });
+        }
+    </script>
+
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
