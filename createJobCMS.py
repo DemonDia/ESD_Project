@@ -58,6 +58,8 @@ def create_job():
             code = job_result["code"]
             if code not in range(200, 300):
                 # message['type']= "createjob"
+                dict1 = {"message": "Creation of job failure"}
+                job_result['data'].update(dict1)
                 message = json.dumps(job_result["data"])
                 topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="createjob.error", 
                 body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -77,6 +79,9 @@ def create_job():
                 # Record new job
                 # record the activity log anyway
                 # message['type']= "createjob"
+                dict2 = {"message": "job created successfully"}
+                job_result['data'].update(dict2)
+                print('this one after adding ', job_result)
                 message = json.dumps(job_result["data"])
                 topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="createjob.info", 
                 body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -85,12 +90,15 @@ def create_job():
 
         except Exception as e:
             print(e)
-            return jsonify(
-            {
+
+            message = json.dumps({
                 "code": 500,
                 "message": "An error occurred while creating the job. " + str(e)
-            }
-            ), 500
+                })
+            topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="createjob.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+            return json.loads(message)
         
     return jsonify(
         {

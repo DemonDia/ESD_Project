@@ -6,6 +6,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pyrebase as pb
 import json
+from datetime import datetime
+
 app = Flask(__name__)
 CORS(app)
 
@@ -46,6 +48,7 @@ def processError(errorMsg):
     print("Printing the error message:")
     try:
         error = json.loads(errorMsg)
+        error["posted_timestamp"] = str(datetime.now()) 
         db.child("errors").push(error)
         print("--JSON:", error)
     except Exception as e:
