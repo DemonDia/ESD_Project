@@ -54,8 +54,19 @@ def callback(channel, method, properties, body): # required signature for the ca
 def processLog(data):
     # data = json.loads(data)
     print("Recording a log:")
-    data["posted_timestamp"] = str(datetime.now()) 
-    db.child("activities").push(data)
+
+    if type(data) == str:
+        data2 = json.loads(data)
+        print(data2)
+        print(type(data2))
+        data2["posted_timestamp"] = str(datetime.now()) 
+        db.child("activities").push(data2)
+    else:
+        data["posted_timestamp"] = str(datetime.now()) 
+        db.child("activities").push(data)
+
+    # data["posted_timestamp"] = str(datetime.now()) 
+    # db.child("activities").push(data)
 
 
 if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')

@@ -83,7 +83,11 @@ def apply_job():
                 notifyOwner(data)
 
                 # send application success message to activity_log queue
-                message = json.dumps(application_result["data"])
+                msg = application_result['data'][:-1]
+                msg += ", \"message\" : \"Apply for job success\"}"
+                print('trying ', msg)
+                message = json.dumps(msg)
+                # message = json.dumps(application_result["data"])
                 print(message)
 
                 topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="applyjob.info", 
@@ -99,12 +103,15 @@ def apply_job():
     except Exception as e:
         print(e)
         # return "NOT OK"
-        return jsonify(
+        message = json.dumps(
             {
                 "code": 500,
                 "message": "An error occurred while applying for job. " + str(e)
-            }
-        ), 500
+            })
+
+        topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="applyjob.error", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        return json.loads(message)
 
 
 def notifyOwner(data):
