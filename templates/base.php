@@ -24,10 +24,10 @@ header('Access-Control-Allow-Headers: *');
         </button>
     </header>
 
-    <div class="container-fluid" id="app">
+    <div class="container-fluid h-100 d-inline-block" id="app">
         <div class="row">
             <div class="col">
-                <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <nav id="sidebarMenu" class="col-md-3 col-lg-12 d-md-block bg-light h-100 d-inline-block sidebar collapse">
                     <div class="position-sticky pt-3">
                         <ul class="nav flex-column md-3">
                             <div class="logo-image center">
@@ -75,10 +75,10 @@ header('Access-Control-Allow-Headers: *');
             var profile = googleUser.getBasicProfile();
             // console.log('Name: ' + profile.getName());
 
-            var email = profile.getEmail();
-            console.log('Email: ' + email); // This is null if the 'email' scope is not present.
+            var Loginemail = profile.getEmail();
+            console.log('Email: ' + Loginemail); // This is null if the 'email' scope is not present.
 
-            if (email.includes("@gmail.com")) {
+            if (Loginemail.includes("@gmail.com")) {
                 // console.log('seeker');
                 if(window.location.href != "http://localhost:5020/user" && window.location.href != "http://localhost:5020/applications" && window.location.href != "http://localhost:5020/view" && !window.location.href.includes("http://localhost:5020/job/")) {
                     window.location.replace("http://localhost:5020/user");
