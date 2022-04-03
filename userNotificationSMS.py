@@ -59,10 +59,10 @@ def get_all():
             }
         ), 500
 
-@app.route("/userNotification/<string:user_email>")
-def get_user_noti(user_email):
+@app.route("/userNotification/<string:fullname>")
+def get_user_noti(fullname):
     try:
-        jobApp = db.child(user_email).get()
+        jobApp = db.child(fullname).get()
         print('this is jobApp', jobApp)
         jobAppDict = {}    
 
