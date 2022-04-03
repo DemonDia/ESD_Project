@@ -35,14 +35,9 @@ onload="showAllJobs('johnsim@gmail.com')"
 <h1 class="h2 mt-3 mb-4">All Applications for John Sim</h1>
 
 <div class="container">
-  <div class="row">
-    <div class="col-md">
+    <div class="row">
         <input class="form-control" id="myInput" type="text" placeholder="Search..">    
     </div>
-    <div class="col-sm">
-        <!-- filter table somehow based on values, dynamic -->
-    </div>
-  </div>
 </div>
 <br>
 <div class="overflow-auto mb-4" id="all_jobs"></div>
