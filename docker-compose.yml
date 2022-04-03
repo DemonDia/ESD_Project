@@ -85,16 +85,6 @@ services:
       - "5011:5011"
 
 
-  user_sms:
-    build:
-      context: ./
-      dockerfile: userSMS.Dockerfile
-    image: puturdockerid/user_sms:esd
-    restart: always
-    environment:
-      PYTHONUNBUFFERED: 1
-    ports: 
-      - "5007:5007"
 
   userstatus_sms:
     build:
@@ -175,11 +165,6 @@ services:
     ports: 
       - "5009:5009"
 
-
-# ApplicationSMS = environ.get("ApplicationSMS") or "http://localhost:5003/applications"
-# JobSMS = environ.get("JobSMS") or "http://localhost:5001/"
-# UserStatusSMS = environ.get("UserStatusSMS") or "http://localhost:5002/applications/"
-# OwnerNotificationSMS = environ.get("OwnerNotificationSMS") or "http://localhost:5010/ownerNotified/"
 
 
   userdecision_cms:
