@@ -112,8 +112,10 @@ onload="showAllJobs()"
                 </table>
 
                 <div class="modal-footer">
-                    <div id="acceptButton"></div>
-                    <div id="rejectButton"></div>
+                    <div id="buttons">
+                        <div id="acceptButton"></div>
+                        <div id="rejectButton"></div>
+                    </div>
                     <button id="closemodal" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
 
@@ -162,10 +164,13 @@ onload="showAllJobs()"
                     user_dec = '';}
                 else if (user_dec == true) {
                     user_dec = 'Accepted';}
+
+                var app_status = jobs[job].app_status;
+                var user_status = jobs[job].user_dec;
                 
                 //var date = datetime.substring(0,10); - want to show only date
 
-                temp = '<tr><th scope="row">'+name+'</th><td>'+job_title+'</td><td>'+datetime+'</td><td>'+owner_status+'</td><td>'+user_dec+'</td><td><a href="" onclick="showDetails(\''+jid+'\',\''+job+'\')" class="link-primary" data-toggle="modal" data-target="#AccRej">View Details</td></tr>';
+                temp = '<tr><th scope="row">'+name+'</th><td>'+job_title+'</td><td>'+datetime+'</td><td>'+owner_status+'</td><td>'+user_dec+'</td><td><a href="" onclick="showDetails(\''+jid+'\',\''+job+'\','+app_status+','+user_status+')" class="link-primary" data-toggle="modal" data-target="#AccRej">View Details</td></tr>';
                 job_list += temp;
             }
             job_list += '</tbody></table>'
@@ -176,7 +181,7 @@ onload="showAllJobs()"
         //console.log('OPENED', request.readyState); // readyState will be 1
     }
 
-    function showDetails(jid,aid) {
+    function showDetails(jid,aid,app_status,user_dec) {
         console.log("jid",jid);
         console.log("aid",aid)
 
@@ -190,7 +195,7 @@ onload="showAllJobs()"
             console.log(json_obj);
             var jobs = JSON.parse(json_obj.result);
 
-            console.log(jobs);
+            console.log(user_dec);
 
             var job_title = jobs.job_title;
             var email = jobs.contact_email;
@@ -217,8 +222,15 @@ onload="showAllJobs()"
             document.getElementById("vacancy").innerHTML=vacancy;
             document.getElementById("date").innerHTML=date;
 
-            document.getElementById("acceptButton").innerHTML='<button id="accept" type="button" class="btn btn-success" data-dismiss="modal" onclick="Accept('+'\''+aid+'\''+')">Accept</button>';
-            document.getElementById("rejectButton").innerHTML='<button id="reject" type="button" class="btn btn-danger" data-dismiss="modal" onclick="Reject('+'\''+aid+'\''+')">Reject</button>';            
+            
+            if (user_dec) {
+                document.getElementById("buttons").innerHTML='<p class="text-success">Thank you for accepting the offer! Your hiring manager will contact you shortly.</p>';     
+            }
+            else if (app_status) {
+                document.getElementById("acceptButton").innerHTML='<button id="accept" type="button" class="btn btn-success" data-dismiss="modal" onclick="Accept('+'\''+aid+'\''+')">Accept</button>';
+                document.getElementById("rejectButton").innerHTML='<button id="reject" type="button" class="btn btn-danger" data-dismiss="modal" onclick="Reject('+'\''+aid+'\''+')">Reject</button>';      
+            };
+                  
         };           
 
         request.send();

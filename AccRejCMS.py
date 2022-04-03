@@ -110,6 +110,7 @@ def notifySeeker(AID,data):
 
     data["company"] = get_application["company"]
     data["JID"] = get_application["JID"]
+    data["AID"] = AID
 
     # New: AMQP broker send message to user notification
     message = json.dumps(get_application)

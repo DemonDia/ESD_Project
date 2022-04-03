@@ -11,7 +11,7 @@ Choose role
 {% block navbar_links %}
 <li class="nav-item">
     <a class="nav-link active" aria-current="page" href="/">
-        Home Dashboard
+        Home
     </a>
 </li>
 {% endblock %}
