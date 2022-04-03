@@ -1,11 +1,11 @@
 {% extends "base.php" %}
 
 {% block title %}
-Owner site
+Kitagawa Cosplay Pte Ltd
 {% endblock %}
 
 {% block details %}
-Company Name
+<h4>Kitagawa Cosplay Pte Ltd</h4>
 {% endblock %}
 
 {% block body %}
@@ -14,7 +14,7 @@ Company Name
 {% block navbar_links %}
 <li class="nav-item">
     <a class="nav-link active" aria-current="page" href="/owner">
-        Home Dashboard
+        Owner Dashboard
     </a>
 </li>
 <li class="nav-item">
@@ -23,7 +23,7 @@ Company Name
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="/owner_status">
+    <a class="nav-link" aria-current="page" href="/view_apps">
         View applications
     </a>
 </li>
@@ -31,8 +31,12 @@ Company Name
 
 
 {% block content %}
-<h1 class="h2 mt-3 mb-4">All Jobs</h1>
-
+<h1 class="h2 mt-3 mb-4">Jobs from Kitagawa Cosplay Pte Ltd</h1>
+<div class="container">
+    <div class="row">
+      <input class="form-control" id="myInput" type="text" placeholder="Search..">        
+    </div>
+</div>
 <div style= "max-height: 500px;"class="overflow-auto mb-4" id="company_jobs"></div>
 
 <div id="bt-center">
@@ -167,7 +171,7 @@ Company Name
             var json_obj = JSON.parse(request.responseText);
             var jobs = JSON.parse(json_obj.data);
             console.log(jobs);
-            var job_list ='<table class="table"><thead><tr><th scope="col">Job Title</th><th scope="col">Employment Type</th><th scope="col">Datetime Posted</th><th scope="col">Vacancy</th></tr></thead><tbody>';
+            var job_list ='<table class="table"><thead><tr><th scope="col">Job Title</th><th scope="col">Employment Type</th><th scope="col">Datetime Posted</th><th scope="col">Vacancy</th></tr></thead><tbody id="myTable">';
 
             for (var job in jobs) {
                 // if (jobs[job].company_name == CompanyName) {
@@ -241,6 +245,16 @@ Company Name
             request.send(params);
         };
     }
+
+    $(document).ready(function(){
+        $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
     
 </script>
  

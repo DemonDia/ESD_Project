@@ -1,17 +1,17 @@
 {% extends "base.php" %}
 
 {% block title %}
-Owner site
+Kitagawa Cosplay Pte Ltd
 {% endblock %}
 
 {% block details %}
-Company Name
+<h4>Kitagawa Cosplay Pte Ltd</h4>
 {% endblock %}
 
 {% block navbar_links %}
 <li class="nav-item">
     <a class="nav-link active" aria-current="page" href="/owner">
-        Home Dashboard
+        Owner Dashboard
     </a>
 </li>
 <li class="nav-item">
@@ -20,7 +20,7 @@ Company Name
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="/owner_status">
+    <a class="nav-link" aria-current="page" href="/view_apps">
         View applications
     </a>
 </li>

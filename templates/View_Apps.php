@@ -1,11 +1,11 @@
 {% extends "base.php" %}
 
 {% block title %}
-Owner site
+Kitagawa Cosplay Pte Ltd
 {% endblock %}
 
 {% block details %}
-Company Name
+<h4>Kitagawa Cosplay Pte Ltd</h4>
 {% endblock %}
 
 {% block body %}
@@ -14,17 +14,17 @@ onload="showAllJobs()"
 
 {% block navbar_links %}
 <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="/user">
-        Home Dashboard
+    <a class="nav-link active" aria-current="page" href="/owner">
+        Owner Dashboard
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="/view">
-        Apply for a Job
+    <a class="nav-link" aria-current="page" href="/create">
+        Create a Job
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="/applications">
+    <a class="nav-link" aria-current="page" href="/view_apps">
         View applications
     </a>
 </li>
@@ -32,19 +32,15 @@ onload="showAllJobs()"
 
 
 {% block content %}
-<h1 class="h2 mt-3 mb-4">All Jobs</h1>
+<h1 class="h2 mt-3 mb-4">All Applications for Kitagawa Cosplay Pte Ltd</h1>
 
 <div class="container">
-  <div class="row">
-    <div class="col-md">
-        <input class="form-control" id="myInput" type="text" placeholder="Search..">    
+    <div class="row">
+        <input class="form-control" id="myInput" type="text" placeholder="Search..">
     </div>
-    <div class="col-sm">
-        <!-- filter table somehow based on values, dynamic -->
-    </div>
-  </div>
 </div>
 <br>
+
 <div class="overflow-auto mb-4" id="all_jobs"></div>
 {% endblock %}
 
@@ -108,8 +104,10 @@ onload="showAllJobs()"
                 </table>
 
                 <div class="modal-footer">
-                    <div id="acceptButton"></div>
-                    <div id="rejectButton"></div>
+                    <div id="buttons" class="row"> 
+                        <div class="col" id="acceptButton"></div>
+                        <div class="col" id="rejectButton"></div>
+                    </div>
                     <button id="closemodal" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
 
@@ -141,6 +139,7 @@ onload="showAllJobs()"
                 var datetime = jobs[job].applied_timestamp;
                 var owner_status = jobs[job].app_status;
                 console.log(owner_status);
+
                 if (owner_status === false) {
                     owner_status = 'Rejected';
                     console.log(owner_status);}
@@ -158,9 +157,10 @@ onload="showAllJobs()"
                 else {
                     user_dec = 'Accepted';}
                 
+                
                 //var date = datetime.substring(0,10); - want to show only date
 
-                temp = '<tr><th scope="row">'+name+'</th><td>'+job_title+'</td><td>'+datetime+'</td><td>'+owner_status+'</td><td>'+user_dec+'</td><td><a href="" onclick="showDetails('+"'"+job+"'"+')" class="link-primary" data-toggle="modal" data-target="#AccRej">View Details</td></tr>';
+                temp = '<tr><th scope="row">'+name+'</th><td>'+job_title+'</td><td>'+datetime+'</td><td>'+owner_status+'</td><td>'+user_dec+'</td><td><a href="" onclick="showDetails('+"'"+job+"','"+owner_status+"'"+')" class="link-primary" data-toggle="modal" data-target="#AccRej">View Details</td></tr>';
                 job_list += temp;
             }
             job_list += '</tbody></table>'
@@ -171,7 +171,7 @@ onload="showAllJobs()"
         //console.log('OPENED', request.readyState); // readyState will be 1
     }
 
-    function showDetails(AID) {
+    function showDetails(AID,app_status) {
 
         var request = new XMLHttpRequest();
         request.open('GET', 'http://localhost:5006/get_app/'+AID, true);
@@ -205,8 +205,19 @@ onload="showAllJobs()"
             document.getElementById("nationality").innerHTML=nationality;
             document.getElementById("date").innerHTML=date;
 
-            document.getElementById("acceptButton").innerHTML='<button id="accept" type="button" class="btn btn-success" data-dismiss="modal" onclick="Accept('+'\''+AID+'\''+')">Accept</button>';
-            document.getElementById("rejectButton").innerHTML='<button id="reject" type="button" class="btn btn-danger" data-dismiss="modal" onclick="Reject('+'\''+AID+'\''+')">Reject</button>';            
+            if (app_status === 'Rejected') {
+                document.getElementById("buttons").innerHTML='<p class="text-danger">You have rejected this application. We will inform the applicant.</p>';
+            }
+            else if (app_status === 'Accepted') {
+                document.getElementById("buttons").innerHTML='<p class="text-success">Thank you for accepting this application! We will inform the applicant.</p>';
+            }
+            else if (app_status === '') {
+                console.log("this is status", app_status);
+                document.getElementById("acceptButton").innerHTML='<button id="accept" type="button" class="btn btn-success" data-dismiss="modal" onclick="Accept('+'\''+AID+'\''+')">Accept</button>';
+                document.getElementById("rejectButton").innerHTML='<button id="reject" type="button" class="btn btn-danger" data-dismiss="modal" onclick="Reject('+'\''+AID+'\''+')">Reject</button>'; 
+            };
+
+                      
         };           
 
         request.send();
@@ -223,7 +234,7 @@ onload="showAllJobs()"
 
             if (json_obj.code >= 200 & json_obj.code < 400) {
                 alert('Your status has been updated!');
-                showAllJobs();
+                location.reload();
             } 
             else {
                 alert('Oops! Something went wrong...');
