@@ -27,10 +27,7 @@ firebaseConfig = {
 firebase = pb.initialize_app(firebaseConfig)
 db = firebase.database() #user realtime db
 
-# db.create_all()
-
-
-@app.route("/applications/<string:JID>",methods = ["POST"]) # create_app
+@app.route("/applications/<string:JID>",methods = ["POST"]) # create_app 
 def create_application(JID):
     try:
 
@@ -58,75 +55,8 @@ def create_application(JID):
             }
         ), 500
 
-# @app.route("/applications")
-# def get_all():
-#     try:
-#         applications = db.child("applications").get()
-#         applicationsDict = {}        
-                
-    
-#         for application in applications.each():
-#             print(type(application.key()))
-#             print("___________") 
-#             print("key:",application.key())
-#             print("value:",application.val())
-#             applicationsDict[application.key()] = application.val()
-#         # return userDict
-#         # return json.dumps(applicationsDict) #return all user data
-#         return jsonify(
-#             {
-#                 "code": 201,
-#                 "data":  json.dumps(applicationsDict)
-#             }
-#             ), 201
 
-#     except Exception as e:
-#         print(e)
-#         # return "NOT OK"
-
-#         return jsonify(
-#             {
-#                 "code": 500,
-#                 "message": "An error occurred while applying for job. " + str(e)
-#             }
-#         ), 500
-
-# @app.route("/applications/job/<string:JID>") # get all applications to certain jobs
-# def get_application_by_JID(JID):
-#     try:
-#         applications = db.child("applications").order_by_child("JID").equal_to(JID).get()
-#         applicationsDict = {}        
-                
-    
-#         for application in applications.each():
-#             print(type(application.key()))
-#             print("___________") 
-#             print("key:",application.key())
-#             print("value:",application.val())
-#             applicationsDict[application.key()] = application.val()
-#         # print("Job dict:",applicationsDict)
-#         # return userDict
-#         # return json.dumps(applicationsDict) #return all user data
-
-#         return jsonify(
-#             {
-#                 "code": 201,
-#                 "data":  json.dumps(applicationsDict)
-#             }
-#             ), 201
-
-#     except Exception as e:
-#         print(e)
-#         # return "NOT OK"
-#         return jsonify(
-#             {
-#                 "code": 500,
-#                 "message": "An error occurred while obtaining applications. " + str(e)
-#             }
-#         ), 500
-
-
-@app.route("/applications/aid/<string:AID>") # get applications based on AID
+@app.route("/applications/aid/<string:AID>") # get applications based on AID d
 def get_application_by_AID(AID):
     try:
         applications = db.child("applications/"+AID).get()
@@ -138,9 +68,6 @@ def get_application_by_AID(AID):
             print("key:",application.key())
             print("value:",application.val())
             applicationsDict[application.key()] = application.val()
-        # print("Job dict:",applicationsDict)
-        # return userDict
-        # return json.dumps(applicationsDict) #return all user data
 
         return jsonify({
                 "code": 201,
@@ -159,22 +86,18 @@ def get_application_by_AID(AID):
         ), 500
 
 
-@app.route("/applications/company/<string:CompanyName>") # get all applications to certain company
+@app.route("/applications/company/<string:CompanyName>") # get all applications to certain company d
 def get_all_applications_of_a_company(CompanyName):
     try:
         applications = db.child("applications").order_by_child("company").equal_to(CompanyName).get()
         applicationsDict = {}        
-                
-    
+            
         for application in applications.each():
             print(type(application.key()))
             print("___________") 
             print("key:",application.key())
             print("value:",application.val())
             applicationsDict[application.key()] = application.val()
-        # print("Job dict:",applicationsDict)
-        # return userDict
-        # return json.dumps(applicationsDict) #return all user data
 
         return jsonify(
             {
@@ -183,7 +106,6 @@ def get_all_applications_of_a_company(CompanyName):
             }
             ), 201
     except Exception as e:
-        # print(e)
 
         return jsonify(
             {
@@ -206,9 +128,6 @@ def get_all_applications_of_a_user(user_email):
             print("key:",application.key())
             print("value:",application.val())
             applicationsDict[application.key()] = application.val()
-        # print("Job dict:",applicationsDict)
-        # return userDict
-        # return json.dumps(applicationsDict) #return all user data
 
 
         return jsonify(

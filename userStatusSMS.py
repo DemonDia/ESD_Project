@@ -29,9 +29,7 @@ def processApplication(AID):
         data = json.loads(data) #gets
         print(data)
         db.child("applications/"+AID).update({"user_dec":data["user_dec"]})
-        # print(data["accepted"])
-        # return str(data["accepted"])
-
+        
         return jsonify({
             "code": 201,
             "data": str(data["user_dec"])

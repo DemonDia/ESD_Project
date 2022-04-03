@@ -19,10 +19,6 @@ app = Flask(__name__)
 CORS(app)
 
 
-# jobSMS = "http://127.0.0.1:5001/jobs"
-# applicatioNSMS = "http://127.0.0.1:5003/applications/"
-# ownerNotifiationSMS = "http://127.0.0.1:5010/ownerNotification/"
-# check if job is there
 jobSMS = environ.get('job_sms') or "http://localhost:5001/jobs" 
 applicationSMS = environ.get('application_sms') or "http://localhost:5003/applications/" 
 ownerNotificationSMS = environ.get('ownernotification_sms') or "http://localhost:5010/ownerNotification/" 

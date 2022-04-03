@@ -27,7 +27,7 @@ db = firebase.database() #user realtime db
 
 # db.create_all()
 
-@app.route("/jobs/all") # get all jobs 
+@app.route("/jobs/all") # get all jobs  d
 def get_all():
     try:
         jobs = db.child("jobs").get()
@@ -66,25 +66,19 @@ def get_all():
             }
         ), 500
 
-@app.route("/jobs/company/<string:CompanyName>") # get all jobs for a company
+@app.route("/jobs/company/<string:CompanyName>") # get all jobs for a company d
 def get_company_jobs(CompanyName):
     try:
         jobs = db.child("jobs").order_by_child("company_name").equal_to(CompanyName).get()
         jobsDict = {} 
         
         for job in jobs.each():
-            # print(value)
-            # if value == CompanyName:
-                # print(job.val())
+ 
             print("___________") 
             print("key:",job.key())
             print("value:",job.val())
             jobsDict[job.key()] = job.val()
-        
-        # if len(jobsDict)>1:
-        #     print("im running")
-        # print(jobsDict)
-        # return "yes"
+ 
  
         if(len(jobsDict)>0): #yes theres an existing jobs for this company
             result = json.dumps(jobsDict)
@@ -104,9 +98,7 @@ def get_company_jobs(CompanyName):
         ), 400
 
     except Exception as e:
-        # print("this iss error",e)
-        # return "no"
-        # return "NOT OK"
+ 
         return jsonify(
             {
                 "code": 500,
@@ -114,22 +106,15 @@ def get_company_jobs(CompanyName):
             }
         ), 500
 
-@app.route("/jobs/create",methods = ["POST"])
+@app.route("/jobs/create",methods = ["POST"]) #d
 def post_job():
     try:
         data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
         data = json.loads(data)
         data["posted_timestamp"] = str(datetime.now())
-        # change_type_vacancy = data["vacancy"]
-        # data["vacancy"] = int(change_type_vacancy)
+ 
         db.child("jobs").push(data)
-
-        # return jsonify(
-        #     {
-        #         "code": 201,
-        #         "data": json.dumps(data)
-        #     }
-        #     ), 201
+ 
         return jsonify(
             {
                 "code": 201,
@@ -149,7 +134,7 @@ def post_job():
         ), 500
     
 
-@app.route("/jobs/<string:JobID>", methods = ["GET"])
+@app.route("/jobs/<string:JobID>", methods = ["GET"]) 
 def get_job_by_id(JobID):
     try:
         job = db.child("jobs/"+JobID).get()
@@ -183,26 +168,22 @@ def get_job_by_id(JobID):
             }
         ), 500
 
-@app.route("/update_vacancy/<string:JID>",methods = ["PUT"]) # update vacancy
+@app.route("/update_vacancy/<string:JID>",methods = ["PUT"]) # update vacancy d
 def update_vacancy(JID):
     try:
-        # data = request.data.decode("utf-8") #decode bytes --> data received is in bytes; need to decode 
-        # data = json.loads(data)
+ 
         print('jobs/'+JID+'/vacancy')
         getGivenJob = db.child('jobs/'+JID).get()
         givenJobDict = {}        
                 
         for field in getGivenJob.each():
-            # print(type(field.key()))
-            # print("___________") 
-            # print("key:",field.key())
-            # print("value:",field.val())
+ 
             givenJobDict[field.key()] = field.val()
         print(givenJobDict)
         
         vacancy = givenJobDict["vacancy"]
         print("this is vacnacy",vacancy)
-        # return vacanciesDict
+ 
 
         if(int(vacancy) > 0):
             print("THIS IS INT",type(int(vacancy)))
