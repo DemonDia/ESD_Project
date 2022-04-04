@@ -51,7 +51,7 @@ onload="showAllJobs()"
 
             <div class="modal-header">
                 <h5 class="modal-title">Application Details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="Clear()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -108,7 +108,7 @@ onload="showAllJobs()"
                         <div class="col" id="acceptButton"></div>
                         <div class="col" id="rejectButton"></div>
                     </div>
-                    <button id="closemodal" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="closemodal" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="Clear()">Cancel</button>
                 </div>
 
             </div>
@@ -121,6 +121,10 @@ onload="showAllJobs()"
 {% block script %}
 
 <script>
+
+    function Clear() {
+        document.getElementById("buttons").innerHTML='<div class="col" id="acceptButton"></div><div class="col" id="rejectButton"></div>';
+    }
     
     function showAllJobs() {
 
