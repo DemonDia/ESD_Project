@@ -53,7 +53,7 @@ It is a platform that allows you to search for startup jobs & apply for them if 
 
 ## 5. Setup guide
 1. The link to the repo is: https://github.com/DemonDia/ESD_Project
-2. In your command prompt, type the following: https://github.com/DemonDia/ESD_Project
+2. In your command prompt, type the following: git clone https://github.com/DemonDia/ESD_Project
 3. Your command prompt should look like this: 
 <img width="567" alt="image" src="https://user-images.githubusercontent.com/47315402/161437019-2232ec1d-bc26-46e3-87c4-cdb0ce392d00.png">
 
