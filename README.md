@@ -68,7 +68,7 @@ NOTE: make sure you are in the folder destination in visual studio code as shown
 
 <img width="374" alt="image" src="https://user-images.githubusercontent.com/47315402/161437285-169381e5-446f-445e-ab7f-6b0c7721be50.png">
 
-7. Open docker-compose.yml and replace <your_id> with your docker ID
+7. Open docker-compose.yml and replace 'puturdockerid' with your docker ID
 8. Open a terminal and type "docker-compose up" (this builds and runs all the microservices as mentioned)
 9. Open another terminal and type "python main.py" 
 10. Go to http://localhost:5020/ and you should see something like this:
