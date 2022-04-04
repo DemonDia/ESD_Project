@@ -82,12 +82,14 @@ def processApplication(AID):
     except Exception as e:
         print(e)
 
-        return jsonify(
-            {
+        message = json.dumps({
                 "code": 500,
-                "message": "An error occurred while processing the application " + str(e)
-            }
-        ), 500
+                "message": "An error occurred while updating the user status. " + str(e)
+        })
+        topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="updateApp.error", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+        return json.loads(message)
 
 def updateVacancy(JID):
     try:
@@ -124,7 +126,7 @@ def owner_get_applications(user_email):
 
 def processAMQP(data,AID,JID):
     if data['code'] not in range(200, 300):
-        data['type'] = 'processApp'
+        data['message'] = 'update user decision failure'
         message = json.dumps(data)
         topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="processApp.error", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -155,6 +157,7 @@ def processAMQP(data,AID,JID):
 
         # record the activity log anyway
         # data.pop('data')
+        data['message'] = 'update user decision success'
         message = json.dumps(data)
         topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="processApp.info", 
         body=message, properties=pika.BasicProperties(delivery_mode = 2)) 

@@ -70,6 +70,7 @@ def owner_process_application(AID):
 
 
         if applications['code'] not in range(200, 300):
+            applications["message"] = "owner update status failure"
             message = json.dumps(applications)
             topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="updateApp.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
@@ -83,6 +84,7 @@ def owner_process_application(AID):
 
         else:
             # record the activity log anyway
+            applications["message"] = "owner update status success"
             message = json.dumps(applications)
             notifySeeker(AID,data)
             topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="updateApp.info", 
@@ -93,12 +95,14 @@ def owner_process_application(AID):
     except Exception as e:
         print(e)
 
-        return jsonify(
-            {
+        message = json.dumps({
                 "code": 500,
-                "message": "An error occurred while processing the application. " + str(e)
-            }
-        ), 500
+                "message": "An error occurred while updating the owner status. " + str(e)
+        })
+        topic_amqp_setup.channel.basic_publish(exchange=topic_amqp_setup.exchangename, routing_key="updateApp.error", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+        return json.loads(message)
 
 # def send_to_broker(): #for the broker
 #     pass

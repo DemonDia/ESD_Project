@@ -33,7 +33,7 @@ def owner_process_application(AID):
 
         return jsonify({
             "code": 201,
-            "data:": data["app_status"]
+            "data": data["app_status"]
         }), 201
 
     except Exception as e:
