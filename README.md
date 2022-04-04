@@ -29,12 +29,12 @@ It is a platform that allows you to search for startup jobs & apply for them if 
   - Error (errorSMS.py) : tracks error in the microservices
   - User Notification (userNotificationSMS.py) : notifies job seekers of their application outcomes
   - Owner Notification (ownerNotificationSMS.py) : notifies owners of job seekers accepting their notifications
-  - Job (jobSMS.py) : handles data relating to the jobs & updating their vacancies when assocaited applications are accepted
+  - Job (jobSMS.py) : handles data relating to the jobs & updating their vacancies when associated applications are accepted
   - Application (applicationSMS.py) : handles job applications 
   - UserStatus (userStatusSMS.py) : allows job seekers to accept and reject job offers (when their job applications are accepted) 
   - OwnerStatus (ownerStatusSMS.py) : allows startup owners to accept/reject job applications
 - Complex Microservices (CMS)
-  - Accept/Reject (accRecCMS.py) : allows startup owners to accept/reject job applications via the UI
+  - Accept/Reject (accjCMS.py) : allows startup owners to accept/reject job applications via the UI
   - Apply Job (applyJobCMS.py) : allows job seekers to apply for job positions by startup owners via the UI
   - Create Job (createJobCMS.py) : allows startup owners to create jobs via the UI for job seekers to apply 
   - User Decision (userDecisionCMS.py) : allows startup owners to accept/reject jobs should their applications get accepted
