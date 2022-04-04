@@ -29,12 +29,12 @@ It is a platform that allows you to search for startup jobs & apply for them if 
   - Error (errorSMS.py) : tracks error in the microservices
   - User Notification (userNotificationSMS.py) : notifies job seekers of their application outcomes
   - Owner Notification (ownerNotificationSMS.py) : notifies owners of job seekers accepting their notifications
-  - Job (jobSMS.py) : handles data relating to the jobs & updating their vacancies when assocaited applications are accepted
+  - Job (jobSMS.py) : handles data relating to the jobs & updating their vacancies when associated applications are accepted
   - Application (applicationSMS.py) : handles job applications 
   - UserStatus (userStatusSMS.py) : allows job seekers to accept and reject job offers (when their job applications are accepted) 
   - OwnerStatus (ownerStatusSMS.py) : allows startup owners to accept/reject job applications
 - Complex Microservices (CMS)
-  - Accept/Reject (accRecCMS.py) : allows startup owners to accept/reject job applications via the UI
+  - Accept/Reject (accRejCMS.py) : allows startup owners to accept/reject job applications via the UI
   - Apply Job (applyJobCMS.py) : allows job seekers to apply for job positions by startup owners via the UI
   - Create Job (createJobCMS.py) : allows startup owners to create jobs via the UI for job seekers to apply 
   - User Decision (userDecisionCMS.py) : allows startup owners to accept/reject jobs should their applications get accepted
@@ -53,7 +53,7 @@ It is a platform that allows you to search for startup jobs & apply for them if 
 
 ## 5. Setup guide
 1. The link to the repo is: https://github.com/DemonDia/ESD_Project
-2. In your command prompt, type the following: https://github.com/DemonDia/ESD_Project
+2. In your command prompt, type the following: git clone https://github.com/DemonDia/ESD_Project
 3. Your command prompt should look like this: 
 <img width="567" alt="image" src="https://user-images.githubusercontent.com/47315402/161437019-2232ec1d-bc26-46e3-87c4-cdb0ce392d00.png">
 
