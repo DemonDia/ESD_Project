@@ -10,7 +10,7 @@ services:
     build:
       context: ./
       dockerfile: jobSMS.Dockerfile
-    image: puturdockerid/job_sms:esd
+    image: nxndita/job_sms:esd
     restart: always
     environment:
       PYTHONUNBUFFERED: 1
@@ -21,7 +21,7 @@ services:
     build:
       context: ./
       dockerfile: ownerNotificationSMS.Dockerfile
-    image: puturdockerid/ownernotification_sms:esd
+    image: nxndita/ownernotification_sms:esd
     restart: always
     environment:
       PYTHONUNBUFFERED: 1
@@ -32,7 +32,7 @@ services:
     build:
       context: ./
       dockerfile: ownerStatusSMS.Dockerfile
-    image: puturdockerid/ownerstatus_sms:esd
+    image: nxndita/ownerstatus_sms:esd
     restart: always
     environment:
       PYTHONUNBUFFERED: 1
@@ -47,7 +47,7 @@ services:
     build:
       context: ./
       dockerfile: activitySMS.Dockerfile
-    image: puturdockerid/activity_sms:esd
+    image: nxndita/activity_sms:esd
     restart: always
     depends_on:
       - rabbitmq
@@ -65,7 +65,7 @@ services:
     build:
       context: ./
       dockerfile: applicationSMS.Dockerfile
-    image: puturdockerid/application_sms:esd
+    image: nxndita/application_sms:esd
     restart: always
     environment:
       PYTHONUNBUFFERED: 1
@@ -77,7 +77,7 @@ services:
     build:
       context: ./
       dockerfile: userNotificationSMS.Dockerfile
-    image: puturdockerid/usernotification_sms:esd
+    image: nxndita/usernotification_sms:esd
     restart: always
     environment:
       PYTHONUNBUFFERED: 1
@@ -90,7 +90,7 @@ services:
     build:
       context: ./
       dockerfile: userStatusSMS.Dockerfile
-    image: puturdockerid/userstatus_sms:esd
+    image: nxndita/userstatus_sms:esd
     restart: always
     environment:
       PYTHONUNBUFFERED: 1
@@ -109,7 +109,7 @@ services:
     build:
       context: ./
       dockerfile: accRejCMS.Dockerfile
-    image: puturdockerid/accrej_cms:esd
+    image: nxndita/accrej_cms:esd
     restart: always
     depends_on:
       - application_sms
@@ -133,7 +133,7 @@ services:
     build:
       context: ./
       dockerfile: applyJobCMS.Dockerfile
-    image: puturdockerid/applyjob_cms:esd
+    image: nxndita/applyjob_cms:esd
     restart: always
     depends_on:
       - job_sms
@@ -155,7 +155,7 @@ services:
     build:
       context: ./
       dockerfile: createJobCMS.Dockerfile
-    image: puturdockerid/createjob_cms:esd
+    image: nxndita/createjob_cms:esd
     restart: always
     depends_on:
       - job_sms
@@ -171,7 +171,7 @@ services:
     build:
       context: ./
       dockerfile: userDecisionCMS.Dockerfile
-    image: puturdockerid/userdecision_cms:esd
+    image: nxndita/userdecision_cms:esd
     restart: always
     depends_on:
       - job_sms
@@ -210,7 +210,7 @@ services:
     build:
       context: ./
       dockerfile: errorSMS.Dockerfile
-    image: puturdockerid/error_sms:esd
+    image: nxndita/error_sms:esd
     restart: always
     depends_on:
       - rabbitmq
@@ -226,7 +226,7 @@ services:
     build:
       context: ./
       dockerfile: userNoti_AMQP.Dockerfile
-    image: puturdockerid/usernoti_amqp:esd
+    image: nxndita/usernoti_amqp:esd
     restart: always
     depends_on:
       - rabbitmq
@@ -242,7 +242,7 @@ services:
     build:
       context: ./
       dockerfile: ownerNoti_AMQP.Dockerfile
-    image: puturdockerid/ownernoti_amqp:esd
+    image: nxndita/ownernoti_amqp:esd
     restart: always
     depends_on:
       - rabbitmq

@@ -26,7 +26,7 @@ header('Access-Control-Allow-Headers: *');
 
     <div class="container-fluid h-100 d-inline-block" id="app">
         <div class="row">
-            <div class="col">
+            <div class="col" id="navbarcol">
                 <nav id="sidebarMenu" class="col-md-3 col-lg-12 d-md-block bg-light h-100 d-inline-block sidebar collapse">
                     <div class="position-sticky pt-3">
                         <ul class="nav flex-column md-3">

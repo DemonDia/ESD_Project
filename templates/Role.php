@@ -27,6 +27,7 @@ Choose role
 <script>
     document.getElementById("g-in").hidden=true;
     document.getElementById("g-out").hidden=true;
+    document.getElementById("navbarcol").hidden=true;
 </script>
 <style>
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);

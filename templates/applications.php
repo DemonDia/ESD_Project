@@ -134,10 +134,11 @@ onload="showAllJobs('johnsim@gmail.com')"
 
             var json_obj = JSON.parse(request.responseText);
             var jobs = JSON.parse(json_obj.data);
-            var job_list ='<table class="table"><thead><tr><th scope="col">Name</th><th scope="col">Job Title</th><th scope="col">Datetime Applied</th><th scope="col">Owner Status</th><th scope="col">Applicant Decision</th><th scope="col">Details</th></tr></thead><tbody id="myTable">';
+            var job_list ='<table class="table"><thead><tr><th scope="col">Company</th><th scope="col">Job Title</th><th scope="col">Datetime Applied</th><th scope="col">Owner Status</th><th scope="col">Applicant Decision</th><th scope="col">Details</th></tr></thead><tbody id="myTable">';
 
             for (var job in jobs) {
                 var job_title = jobs[job].job_title;
+                var company_name = jobs[job].company;
                 var name = jobs[job].first + " " + jobs[job].last;
                 var datetime = jobs[job].applied_timestamp;
                 var owner_status = jobs[job].app_status;
@@ -162,7 +163,7 @@ onload="showAllJobs('johnsim@gmail.com')"
                 
                 //var date = datetime.substring(0,10); - want to show only date
 
-                temp = '<tr><th scope="row">'+name+'</th><td>'+job_title+'</td><td>'+datetime+'</td><td>'+owner_status+'</td><td>'+user_dec+'</td><td><a href="" onclick="showDetails(\''+jid+'\',\''+job+'\',\''+owner_status+'\',\''+user_dec+'\')" class="link-primary" data-toggle="modal" data-target="#AccRej">View Details</td></tr>';
+                temp = '<tr><th scope="row">'+company_name+'</th><td>'+job_title+'</td><td>'+datetime+'</td><td>'+owner_status+'</td><td>'+user_dec+'</td><td><a href="" onclick="showDetails(\''+jid+'\',\''+job+'\',\''+owner_status+'\',\''+user_dec+'\')" class="link-primary" data-toggle="modal" data-target="#AccRej">View Details</td></tr>';
                 job_list += temp;
             }
             job_list += '</tbody></table>'
